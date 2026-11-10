@@ -301,6 +301,10 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .pf-item{background:var(--paper);padding:12px 14px;border-left:6px solid var(--iaev-yellow)}
 .pf-item h3{margin:0 0 6px;font-size:17px}.pf-item p{margin:0;max-width:70ch}.pf-item small{color:var(--ink-soft)}
 .pf-item a{color:var(--iaev-red);font-weight:600}
+.fl-item{margin:0 0 30px}.fl-item h3{font-family:var(--display);font-weight:400;font-size:12px;line-height:1.6;margin:0 0 12px;color:var(--iaev-red)}
+.fl-img{display:block;width:100%;height:auto;image-rendering:auto;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
+.fl-pdf{display:block;width:100%;height:min(80vh,900px);border:0;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
+.fl-act{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}.fl-dl{font-size:10px;text-decoration:none}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
 .cm-note{font-size:15px;color:var(--ink-soft);margin:14px 0 0}
@@ -2619,8 +2623,26 @@ function gate(id){
   if(id==="horarios") return;
   sb.innerHTML=`<p class="cal-none">${L("Cargando…","Loading…")}</p>`;
   const db=firebase.firestore(), ref=id==="profesores"?db.collection("profesores").doc("contenido"):db.collection("horarios").doc(id.split("-")[1]);
-  ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null; sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
+  ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null;
+      if(v&&Array.isArray(v.archivos)&&v.archivos.length){ showFiles(sb,ref,v,id); return; }
+      sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
+}
+/* Archivos (PNG/JPG/PDF) guardados en Firestore en partes base64: doc.archivos=[{id,titulo,tipo,nombre,partes}], partes en <doc>/partes/<id>-<k> {d} */
+let fileURLs=[];
+function showFiles(sb,ref,v,id){
+  fileURLs.forEach(u=>URL.revokeObjectURL(u)); fileURLs=[];
+  sb.innerHTML=v.archivos.map((a,i)=>`<section class="fl-item"><h3>${esc(a.titulo||a.nombre)}</h3><div class="fl-box" id="fl${i}"><p class="cal-none">${L("Cargando archivo…","Loading file…")}</p></div></section>`).join("")
+    +(v.actualizado?`<p class="hz-upd">${L("Actualizado: ","Updated: ")}${esc(v.actualizado)}</p>`:"");
+  v.archivos.forEach(async(a,i)=>{ const box=document.getElementById("fl"+i);
+    try{ const parts=await Promise.all(Array.from({length:a.partes},(_,k)=>ref.collection("partes").doc(a.id+"-"+k).get()));
+      if(location.hash.slice(1)!==id) return;
+      const b64=parts.map(x=>x.exists?x.data().d:"").join(""), bin=atob(b64), u8=new Uint8Array(bin.length); for(let k=0;k<bin.length;k++) u8[k]=bin.charCodeAt(k);
+      const url=URL.createObjectURL(new Blob([u8],{type:a.tipo})); fileURLs.push(url);
+      const dl=`<a class="pbtn yellow fl-dl" href="${url}" download="${esc(a.nombre||"archivo")}">${L("⬇ Descargar","⬇ Download")}</a>`;
+      if(a.tipo==="application/pdf") box.innerHTML=`<iframe class="fl-pdf" src="${url}" title="${esc(a.titulo||a.nombre)}"></iframe><div class="fl-act"><a class="pbtn fl-dl" href="${url}" target="_blank" rel="noopener">${L("Abrir PDF ↗","Open PDF ↗")}</a>${dl}</div>`;
+      else box.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img class="fl-img" src="${url}" alt="${esc(a.titulo||a.nombre)}"></a><div class="fl-act">${dl}</div>`;
+    }catch(e){ box.innerHTML=`<p class="cal-none">${L("No se pudo cargar este archivo.","Couldn't load this file.")}</p>`; } });
 }
 /* horarios/{n}: { nota?, actualizado?, grupos:[{ nombre, nota?, dias:[...], filas:[{hora, celdas:[...]}] }] } */
 function horarioHTML(v){

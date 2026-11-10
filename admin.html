@@ -8,57 +8,66 @@
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Pixelify Sans",system-ui,sans-serif;font-size:17px;line-height:1.45}
 main{max-width:860px;margin:0 auto;padding:28px 16px 60px;display:grid;gap:22px}
 h1{font-family:"Press Start 2P",monospace;font-weight:400;font-size:18px;line-height:1.5;margin:0}
-h2{font-family:"Press Start 2P",monospace;font-weight:400;font-size:12px;margin:0 0 12px;color:var(--red)}
+h2{font-family:"Press Start 2P",monospace;font-weight:400;font-size:12px;line-height:1.6;margin:0 0 14px;color:var(--red)}
 .card{background:var(--card);padding:18px;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
-button,select{font:inherit}
-.btn{font-family:"Press Start 2P",monospace;font-size:10px;line-height:1.6;padding:10px 14px;border:3px solid var(--ink);background:var(--yellow);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
-.btn.red{background:var(--red);color:#fff}.btn.plain{background:#fff}
+button,select,input{font:inherit}
+.btn{font-family:"Press Start 2P",monospace;font-size:10px;line-height:1.6;padding:10px 14px;border:3px solid var(--ink);background:var(--yellow);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink);text-decoration:none;display:inline-block}
+.btn.red{background:var(--red);color:#fff}.btn.plain{background:#fff}.btn.small{font-size:8px;padding:7px 9px}
 .btn:disabled{opacity:.5;cursor:default}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-select{padding:8px;border:3px solid var(--ink);background:#fff}
-textarea{width:100%;min-height:320px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;border:3px solid var(--ink);padding:10px;background:#fff;color:var(--ink)}
+select,input[type=text]{padding:8px 10px;border:3px solid var(--ink);background:#fff;min-width:0}
+input[type=text]{flex:1 1 260px}
+.drop{border:3px dashed var(--ink);background:var(--paper);padding:22px;text-align:center;cursor:pointer}
+.drop.over{background:#fff8dc}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;background:var(--paper);padding:10px 12px;border-left:6px solid var(--yellow)}
+.item .t{flex:1;min-width:0;overflow-wrap:anywhere}.item small{color:var(--soft)}
+.item .tag{font-family:"Press Start 2P",monospace;font-size:8px;background:var(--ink);color:#fff;padding:4px 6px}
 .msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--soft)}
 .msg.ok{border-color:var(--green)}.msg.err{border-color:var(--red)}
 .muted{color:var(--soft);font-size:15px;margin:0}
+progress{width:100%;height:14px}
 [hidden]{display:none!important}
 </style></head>
 <body>
 <main>
   <h1>ANIMAPP · Administrar</h1>
-  <p class="muted">Aquí se suben los horarios y el contenido de "Sólo Profesores" a Firebase. Solo las cuentas administradoras pueden guardar cambios; las reglas de Firestore lo verifican.</p>
+  <p class="muted">Sube los horarios y los archivos de "Sólo Profesores" como imagen (PNG o JPG) o PDF. Solo las cuentas administradoras pueden guardar; las reglas de Firestore lo verifican.</p>
 
-  <section class="card" id="cfgCard" hidden>
-    <h2>Falta configurar</h2>
-    <p class="msg err">Todavía no hay configuración de Firebase en <b>firebase-config.js</b>.</p>
-  </section>
+  <section class="card" id="cfgCard" hidden><h2>Falta configurar</h2><p class="msg err">No hay configuración de Firebase en <b>firebase-config.js</b>.</p></section>
 
-  <section class="card" id="loginCard">
+  <section class="card">
     <h2>Sesión</h2>
     <div class="row"><button class="btn red" id="signIn">Iniciar sesión con Google</button><button class="btn plain" id="signOut" hidden>Cerrar sesión</button><span id="who" class="muted"></span></div>
   </section>
 
   <section class="card" id="editCard" hidden>
-    <h2>Editar contenido</h2>
+    <h2>Sección</h2>
     <div class="row">
-      <label for="target">Documento:</label>
-      <select id="target">
-        <option value="horarios/1">Horario · 1er cuatrimestre</option>
-        <option value="horarios/2">Horario · 2do cuatrimestre</option>
-        <option value="horarios/3">Horario · 3er cuatrimestre</option>
-        <option value="horarios/4">Horario · 4to cuatrimestre</option>
-        <option value="horarios/5">Horario · 5to cuatrimestre</option>
-        <option value="horarios/7">Horario · 7mo cuatrimestre</option>
-        <option value="horarios/8">Horario · 8vo cuatrimestre</option>
-        <option value="horarios/9">Horario · 9no cuatrimestre</option>
-        <option value="profesores/contenido">Sólo Profesores · avisos y recursos</option>
+      <select id="target" aria-label="Sección">
+        <option value="horarios/1">Horarios · 1er cuatrimestre</option>
+        <option value="horarios/2">Horarios · 2do cuatrimestre</option>
+        <option value="horarios/3">Horarios · 3er cuatrimestre</option>
+        <option value="horarios/4">Horarios · 4to cuatrimestre</option>
+        <option value="horarios/5">Horarios · 5to cuatrimestre</option>
+        <option value="horarios/7">Horarios · 7mo cuatrimestre</option>
+        <option value="horarios/8">Horarios · 8vo cuatrimestre</option>
+        <option value="horarios/9">Horarios · 9no cuatrimestre</option>
+        <option value="profesores/contenido">Sólo Profesores</option>
       </select>
-      <button class="btn plain" id="load">Cargar actual</button>
-      <button class="btn plain" id="tpl">Usar plantilla</button>
-      <label class="btn plain" for="file" style="display:inline-block">Abrir archivo .json</label><input type="file" id="file" accept=".json,application/json" hidden>
     </div>
-    <p class="muted" style="margin-top:12px">Contenido (JSON):</p>
-    <textarea id="json" spellcheck="false"></textarea>
-    <div class="row" style="margin-top:12px"><button class="btn" id="save">Guardar en Firebase</button><button class="btn plain" id="dl">Descargar copia .json</button></div>
+
+    <h2 style="margin-top:24px">Archivos publicados</h2>
+    <ul class="list" id="list"></ul>
+    <p class="muted" id="empty">Todavía no hay archivos en esta sección.</p>
+
+    <h2 style="margin-top:24px">Agregar archivo</h2>
+    <div class="row" style="margin-bottom:12px"><input type="text" id="title" placeholder="Título (ej. Grupo IAEV-1A)" aria-label="Título"></div>
+    <label class="drop" id="drop" for="file">Arrastra aquí un PNG, JPG o PDF<br><span class="muted">o haz clic para elegirlo (máx. 8 MB)</span></label>
+    <input type="file" id="file" accept="image/png,image/jpeg,application/pdf" hidden>
+    <p class="muted" id="picked" style="margin-top:10px"></p>
+    <div class="row" style="margin-top:12px"><button class="btn" id="upload" disabled>Subir a ANIMAPP</button></div>
+    <progress id="prog" max="1" value="0" hidden></progress>
   </section>
 
   <p class="msg" id="msg" hidden></p>
@@ -66,45 +75,61 @@ textarea{width:100%;min-height:320px;font:13px/1.45 ui-monospace,Menlo,Consolas,
 <script src="firebase-config.js"></script>
 <script>
 const CFG=window.ANIMAPP_FIREBASE||null, $=id=>document.getElementById(id);
-const TPL={
-  horario:{nota:"Aulas sujetas a cambio.",actualizado:new Date().toLocaleDateString("es-MX",{day:"numeric",month:"short",year:"numeric"}),
-    grupos:[{nombre:"IAEV-1A",dias:["Lunes","Martes","Miércoles","Jueves","Viernes"],
-      filas:[{hora:"07:00–07:55",celdas:["Narrativa\nProfesor\nAula","","","",""]},{hora:"08:00–08:55",celdas:["","Inglés I","","",""]}]}]},
-  profesores:{avisos:[{titulo:"Junta de academia",fecha:"12 de noviembre",texto:"Sala de juntas, 13:00 h."}],
-    recursos:[{titulo:"Formato de planeación",url:"https://",desc:"Descripción breve"}]}
-};
-function msg(t,kind){ const m=$("msg"); m.hidden=false; m.className="msg"+(kind?" "+kind:""); m.textContent=t; }
-function check(path,v){
-  if(path.startsWith("horarios/")){
-    if(!Array.isArray(v.grupos)) throw new Error('Falta la lista "grupos".');
-    v.grupos.forEach((g,i)=>{ if(!g.nombre) throw new Error(`El grupo ${i+1} no tiene "nombre".`);
-      if(!Array.isArray(g.filas)) throw new Error(`El grupo ${g.nombre} no tiene "filas".`);
-      g.filas.forEach((f,k)=>{ if(!Array.isArray(f.celdas)) throw new Error(`Fila ${k+1} de ${g.nombre}: falta "celdas".`); }); });
-  } else {
-    if(v.avisos&&!Array.isArray(v.avisos)) throw new Error('"avisos" debe ser una lista.');
-    if(v.recursos&&!Array.isArray(v.recursos)) throw new Error('"recursos" debe ser una lista.');
-  }
-}
-if(!CFG){ $("cfgCard").hidden=false; $("loginCard").hidden=true; }
+const CHUNK=700000, MAXB=8*1024*1024, TYPES=["image/png","image/jpeg","application/pdf"];
+let picked=null;
+function msg(t,kind){ const m=$("msg"); m.hidden=false; m.className="msg"+(kind?" "+kind:""); m.textContent=t; m.scrollIntoView({block:"nearest"}); }
+const kb=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.round(n/1024)+" KB";
+function pick(f){ if(!f) return; if(!TYPES.includes(f.type)){ msg("Solo se aceptan PNG, JPG o PDF.","err"); return; }
+  if(f.size>MAXB){ msg("El archivo pesa "+kb(f.size)+"; el máximo es 8 MB. Reduce la imagen o el PDF.","err"); return; }
+  picked=f; $("picked").textContent="Archivo: "+f.name+" ("+kb(f.size)+")"; if(!$("title").value) $("title").value=f.name.replace(/\.[^.]+$/,""); $("upload").disabled=false; }
+$("file").onchange=e=>{ pick(e.target.files[0]); e.target.value=""; };
+["dragover","dragenter"].forEach(t=>$("drop").addEventListener(t,e=>{e.preventDefault();$("drop").classList.add("over");}));
+["dragleave","drop"].forEach(t=>$("drop").addEventListener(t,e=>{e.preventDefault();$("drop").classList.remove("over");}));
+$("drop").addEventListener("drop",e=>pick(e.dataTransfer.files[0]));
+const toB64=f=>new Promise((ok,ko)=>{ const r=new FileReader(); r.onload=()=>ok(String(r.result).split(",")[1]); r.onerror=ko; r.readAsDataURL(f); });
+
+if(!CFG){ $("cfgCard").hidden=false; }
 else (async()=>{
   const B="https://cdn.jsdelivr.net/npm/firebase@10.12.2/", load=u=>new Promise((ok,ko)=>{const e=document.createElement("script");e.src=u;e.onload=ok;e.onerror=ko;document.head.appendChild(e);});
   try{ await load(B+"firebase-app-compat.js"); await Promise.all([load(B+"firebase-auth-compat.js"),load(B+"firebase-firestore-compat.js")]); }
   catch(e){ msg("No se pudo cargar Firebase. Revisa tu conexión.","err"); return; }
   firebase.initializeApp(CFG); const auth=firebase.auth(), db=firebase.firestore();
-  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; });
+  const ref=()=>{ const [c,d]=$("target").value.split("/"); return db.collection(c).doc(d); };
+  const today=()=>new Date().toLocaleDateString("es-MX",{day:"numeric",month:"long",year:"numeric"});
+  async function refresh(){
+    $("list").innerHTML=""; $("empty").hidden=true;
+    try{ const d=await ref().get(), arr=(d.exists&&d.data().archivos)||[];
+      $("empty").hidden=arr.length>0;
+      arr.forEach((a,i)=>{ const li=document.createElement("li"); li.className="item";
+        li.innerHTML=`<span class="tag">${a.tipo==="application/pdf"?"PDF":"IMG"}</span><span class="t"><b></b><br><small></small></span>`;
+        li.querySelector("b").textContent=a.titulo||a.nombre; li.querySelector("small").textContent=a.nombre+" · "+kb(a.bytes||0);
+        const up=document.createElement("button"); up.className="btn plain small"; up.textContent="▲"; up.title="Subir"; up.disabled=i===0; up.onclick=()=>move(i,-1);
+        const dn=document.createElement("button"); dn.className="btn plain small"; dn.textContent="▼"; dn.title="Bajar"; dn.disabled=i===arr.length-1; dn.onclick=()=>move(i,1);
+        const del=document.createElement("button"); del.className="btn red small"; del.textContent="Quitar"; del.onclick=()=>remove(a);
+        li.append(up,dn,del); $("list").appendChild(li); });
+    }catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para esta sección.":"Error al leer: "+e.message,"err"); }
+  }
+  async function move(i,dir){ const r=ref(); try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); const arr=[...(d.data().archivos||[])]; const [x]=arr.splice(i,1); arr.splice(i+dir,0,x); tx.update(r,{archivos:arr}); }); refresh(); }
+    catch(e){ msg("No se pudo reordenar: "+e.message,"err"); } }
+  async function remove(a){ if(!confirm('¿Quitar "'+(a.titulo||a.nombre)+'" de ANIMAPP?')) return; const r=ref();
+    try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); tx.update(r,{archivos:(d.data().archivos||[]).filter(x=>x.id!==a.id),actualizado:today()}); });
+      const b=db.batch(); for(let k=0;k<a.partes;k++) b.delete(r.collection("partes").doc(a.id+"-"+k)); await b.commit();
+      msg("Archivo quitado.","ok"); refresh(); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para modificar.":"No se pudo quitar: "+e.message,"err"); } }
+  $("upload").onclick=async()=>{ if(!picked) return; const r=ref(), f=picked, title=$("title").value.trim()||f.name;
+    $("upload").disabled=true; $("prog").hidden=false; $("prog").value=0;
+    try{ const b64=await toB64(f), n=Math.ceil(b64.length/CHUNK), id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      for(let k=0;k<n;k++){ await r.collection("partes").doc(id+"-"+k).set({d:b64.slice(k*CHUNK,(k+1)*CHUNK)}); $("prog").value=(k+1)/(n+1); }
+      const meta={id,titulo:title,nombre:f.name,tipo:f.type,bytes:f.size,partes:n};
+      await r.set({archivos:firebase.firestore.FieldValue.arrayUnion(meta),actualizado:today()},{merge:true}); $("prog").value=1;
+      msg('Listo: "'+title+'" ya se ve en ANIMAPP.',"ok"); picked=null; $("picked").textContent=""; $("title").value=""; refresh(); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar. Solo las cuentas administradoras pueden hacerlo.":"No se pudo subir: "+e.message,"err"); $("upload").disabled=false; }
+    finally{ setTimeout(()=>$("prog").hidden=true,800); } };
+  $("target").onchange=refresh;
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; if(u) refresh(); });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
   $("signOut").onclick=()=>auth.signOut();
-  const ref=()=>{ const [c,d]=$("target").value.split("/"); return db.collection(c).doc(d); };
-  $("load").onclick=async()=>{ try{ const d=await ref().get(); $("json").value=d.exists?JSON.stringify(d.data(),null,2):""; msg(d.exists?"Contenido actual cargado.":"Este documento todavía no existe. Usa la plantilla para empezar.",d.exists?"ok":""); }
-    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para leer este documento.":"Error: "+e.message,"err"); } };
-  $("tpl").onclick=()=>{ $("json").value=JSON.stringify($("target").value.startsWith("horarios/")?TPL.horario:TPL.profesores,null,2); msg("Plantilla lista: edítala y guarda."); };
-  $("file").onchange=async e=>{ const f=e.target.files[0]; if(!f) return; $("json").value=await f.text(); e.target.value=""; msg("Archivo cargado. Revisa y guarda."); };
-  $("dl").onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([$("json").value],{type:"application/json"})); a.download=$("target").value.replace("/","-")+".json"; a.click(); };
-  $("save").onclick=async()=>{ let v; try{ v=JSON.parse($("json").value); check($("target").value,v); }catch(e){ msg("El JSON no es válido: "+e.message,"err"); return; }
-    $("save").disabled=true; try{ await ref().set(v); msg("Guardado. Ya se ve en ANIMAPP.","ok"); }
-    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar. Solo las cuentas administradoras pueden hacerlo.":"No se pudo guardar: "+e.message,"err"); }
-    finally{ $("save").disabled=false; } };
 })();
 </script>
 </body></html>

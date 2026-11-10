@@ -27,11 +27,12 @@ service cloud.firestore {
     function admin() {
       return upsrj() && request.auth.token.email.lower() in ['mruiz@upsrj.edu.mx'];
     }
-    match /horarios/{cuatri} {
+    // Incluye las partes de los archivos (subcolección "partes").
+    match /horarios/{rest=**} {
       allow read: if upsrj();
       allow write: if admin();
     }
-    match /profesores/{doc} {
+    match /profesores/{rest=**} {
       allow read: if docente();
       allow write: if admin();
     }
