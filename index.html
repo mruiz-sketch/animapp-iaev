@@ -2624,7 +2624,8 @@ function gate(id){
   sb.innerHTML=`<p class="cal-none">${L("Cargando…","Loading…")}</p>`;
   const db=firebase.firestore(), ref=id==="profesores"?db.collection("profesores").doc("contenido"):db.collection("horarios").doc(id.split("-")[1]);
   ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null;
-      if(v&&Array.isArray(v.archivos)&&v.archivos.length){ showFiles(sb,ref,v,id); return; }
+      const hasF=v&&Array.isArray(v.archivos)&&v.archivos.length, hasJ=v&&(id==="profesores"?((v.avisos||[]).length||(v.recursos||[]).length):(v.grupos||[]).length);
+      if(hasF){ showFiles(sb,ref,v,id); if(hasJ) sb.insertAdjacentHTML("beforeend",id==="profesores"?profHTML(v):horarioHTML({...v,actualizado:null})); return; }
       sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
 }

@@ -17,7 +17,17 @@ button,select,input{font:inherit}
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 select,input[type=text]{padding:8px 10px;border:3px solid var(--ink);background:#fff;min-width:0}
 input[type=text]{flex:1 1 260px}
-.drop{border:3px dashed var(--ink);background:var(--paper);padding:22px;text-align:center;cursor:pointer}
+.drop{display:block;border:3px dashed var(--ink);background:var(--paper);padding:26px 16px;text-align:center;cursor:pointer;line-height:1.6}
+.drop .muted{display:block;margin-top:6px}
+.stack{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.stack .row{margin:0}
+.stack input[type=text]{flex:none;width:100%}
+.list .item .t{flex:1 1 220px}
+.sub{margin-top:30px;padding-top:24px;border-top:3px dashed var(--paper)}
+.item{flex-wrap:wrap}.item .acts{display:flex;gap:8px;flex-wrap:wrap}
+textarea{width:100%;min-height:260px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;border:3px solid var(--ink);padding:10px;background:#fff;color:var(--ink)}
+.btn{margin:0}
+@media (max-width:560px){.btn{font-size:9px;padding:9px 10px}}
 .drop.over{background:#fff8dc}
 .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .item{display:flex;align-items:center;gap:12px;background:var(--paper);padding:10px 12px;border-left:6px solid var(--yellow)}
@@ -32,7 +42,7 @@ progress{width:100%;height:14px}
 <body>
 <main>
   <h1>ANIMAPP · Administrar</h1>
-  <p class="muted">Sube los horarios y los archivos de "Sólo Profesores" como imagen (PNG o JPG) o PDF. Solo las cuentas administradoras pueden guardar; las reglas de Firestore lo verifican.</p>
+  <p class="muted">Sube los horarios y el contenido de "Sólo Profesores" como imagen (PNG o JPG), PDF o JSON. Solo las cuentas administradoras pueden guardar; las reglas de Firestore lo verifican.</p>
 
   <section class="card" id="cfgCard" hidden><h2>Falta configurar</h2><p class="msg err">No hay configuración de Firebase en <b>firebase-config.js</b>.</p></section>
 
@@ -61,13 +71,35 @@ progress{width:100%;height:14px}
     <ul class="list" id="list"></ul>
     <p class="muted" id="empty">Todavía no hay archivos en esta sección.</p>
 
-    <h2 style="margin-top:24px">Agregar archivo</h2>
-    <div class="row" style="margin-bottom:12px"><input type="text" id="title" placeholder="Título (ej. Grupo IAEV-1A)" aria-label="Título"></div>
-    <label class="drop" id="drop" for="file">Arrastra aquí un PNG, JPG o PDF<br><span class="muted">o haz clic para elegirlo (máx. 8 MB)</span></label>
-    <input type="file" id="file" accept="image/png,image/jpeg,application/pdf" hidden>
-    <p class="muted" id="picked" style="margin-top:10px"></p>
-    <div class="row" style="margin-top:12px"><button class="btn" id="upload" disabled>Subir a ANIMAPP</button></div>
-    <progress id="prog" max="1" value="0" hidden></progress>
+    <div class="sub">
+    <h2>Agregar archivo (PNG, JPG o PDF)</h2>
+    <div class="stack">
+      <input type="text" id="title" placeholder="Título (ej. Grupo IAEV-1A)" aria-label="Título">
+      <label class="drop" id="drop" for="file">Arrastra aquí un PNG, JPG o PDF<span class="muted">o haz clic para elegirlo (máx. 8 MB)</span></label>
+      <input type="file" id="file" accept="image/png,image/jpeg,application/pdf" hidden>
+      <p class="muted" id="picked" hidden></p>
+      <div class="row"><button class="btn" id="upload" disabled>Subir a ANIMAPP</button></div>
+      <progress id="prog" max="1" value="0" hidden></progress>
+    </div>
+    </div>
+
+    <div class="sub">
+    <h2>Contenido en JSON (opcional)</h2>
+    <p class="muted" style="margin-bottom:14px">Para capturar el horario como tabla (o avisos y recursos en Sólo Profesores). Se muestra debajo de los archivos.</p>
+    <div class="stack">
+      <div class="row">
+        <button class="btn plain" id="jLoad">Cargar actual</button>
+        <button class="btn plain" id="jTpl">Usar plantilla</button>
+        <label class="btn plain" for="jFile">Abrir .json</label><input type="file" id="jFile" accept=".json,application/json" hidden>
+      </div>
+      <textarea id="json" spellcheck="false" aria-label="Contenido JSON"></textarea>
+      <div class="row">
+        <button class="btn" id="jSave">Guardar JSON</button>
+        <button class="btn plain" id="jDl">Descargar copia</button>
+        <button class="btn red" id="jDel">Quitar JSON</button>
+      </div>
+    </div>
+    </div>
   </section>
 
   <p class="msg" id="msg" hidden></p>
@@ -81,7 +113,7 @@ function msg(t,kind){ const m=$("msg"); m.hidden=false; m.className="msg"+(kind?
 const kb=n=>n>1048576?(n/1048576).toFixed(1)+" MB":Math.round(n/1024)+" KB";
 function pick(f){ if(!f) return; if(!TYPES.includes(f.type)){ msg("Solo se aceptan PNG, JPG o PDF.","err"); return; }
   if(f.size>MAXB){ msg("El archivo pesa "+kb(f.size)+"; el máximo es 8 MB. Reduce la imagen o el PDF.","err"); return; }
-  picked=f; $("picked").textContent="Archivo: "+f.name+" ("+kb(f.size)+")"; if(!$("title").value) $("title").value=f.name.replace(/\.[^.]+$/,""); $("upload").disabled=false; }
+  picked=f; $("picked").hidden=false; $("picked").textContent="Archivo: "+f.name+" ("+kb(f.size)+")"; if(!$("title").value) $("title").value=f.name.replace(/\.[^.]+$/,""); $("upload").disabled=false; }
 $("file").onchange=e=>{ pick(e.target.files[0]); e.target.value=""; };
 ["dragover","dragenter"].forEach(t=>$("drop").addEventListener(t,e=>{e.preventDefault();$("drop").classList.add("over");}));
 ["dragleave","drop"].forEach(t=>$("drop").addEventListener(t,e=>{e.preventDefault();$("drop").classList.remove("over");}));
@@ -106,7 +138,7 @@ else (async()=>{
         const up=document.createElement("button"); up.className="btn plain small"; up.textContent="▲"; up.title="Subir"; up.disabled=i===0; up.onclick=()=>move(i,-1);
         const dn=document.createElement("button"); dn.className="btn plain small"; dn.textContent="▼"; dn.title="Bajar"; dn.disabled=i===arr.length-1; dn.onclick=()=>move(i,1);
         const del=document.createElement("button"); del.className="btn red small"; del.textContent="Quitar"; del.onclick=()=>remove(a);
-        li.append(up,dn,del); $("list").appendChild(li); });
+        const acts=document.createElement("span"); acts.className="acts"; acts.append(up,dn,del); li.append(acts); $("list").appendChild(li); });
     }catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para esta sección.":"Error al leer: "+e.message,"err"); }
   }
   async function move(i,dir){ const r=ref(); try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); const arr=[...(d.data().archivos||[])]; const [x]=arr.splice(i,1); arr.splice(i+dir,0,x); tx.update(r,{archivos:arr}); }); refresh(); }
@@ -122,10 +154,38 @@ else (async()=>{
       for(let k=0;k<n;k++){ await r.collection("partes").doc(id+"-"+k).set({d:b64.slice(k*CHUNK,(k+1)*CHUNK)}); $("prog").value=(k+1)/(n+1); }
       const meta={id,titulo:title,nombre:f.name,tipo:f.type,bytes:f.size,partes:n};
       await r.set({archivos:firebase.firestore.FieldValue.arrayUnion(meta),actualizado:today()},{merge:true}); $("prog").value=1;
-      msg('Listo: "'+title+'" ya se ve en ANIMAPP.',"ok"); picked=null; $("picked").textContent=""; $("title").value=""; refresh(); }
+      msg('Listo: "'+title+'" ya se ve en ANIMAPP.',"ok"); picked=null; $("picked").hidden=true; $("picked").textContent=""; $("title").value=""; refresh(); }
     catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar. Solo las cuentas administradoras pueden hacerlo.":"No se pudo subir: "+e.message,"err"); $("upload").disabled=false; }
     finally{ setTimeout(()=>$("prog").hidden=true,800); } };
-  $("target").onchange=refresh;
+  const TPL={
+    horario:{nota:"Aulas sujetas a cambio.",grupos:[{nombre:"IAEV-1A",dias:["Lunes","Martes","Miércoles","Jueves","Viernes"],
+      filas:[{hora:"07:00–07:55",celdas:["Narrativa\nProfesor\nAula","","","",""]},{hora:"08:00–08:55",celdas:["","Inglés I","","",""]}]}]},
+    profesores:{avisos:[{titulo:"Junta de academia",fecha:"12 de noviembre",texto:"Sala de juntas, 13:00 h."}],recursos:[{titulo:"Formato de planeación",url:"https://",desc:"Descripción breve"}]}};
+  const isH=()=>$("target").value.startsWith("horarios/");
+  const RESERVED=["archivos","actualizado"];
+  function checkJ(v){
+    if(typeof v!=="object"||!v||Array.isArray(v)) throw new Error("debe ser un objeto { ... }.");
+    RESERVED.forEach(k=>delete v[k]);
+    if(isH()){ if(!Array.isArray(v.grupos)) throw new Error('falta la lista "grupos".');
+      v.grupos.forEach((g,i)=>{ if(!g.nombre) throw new Error(`el grupo ${i+1} no tiene "nombre".`); if(!Array.isArray(g.filas)) throw new Error(`el grupo ${g.nombre} no tiene "filas".`);
+        g.filas.forEach((f,k)=>{ if(!Array.isArray(f.celdas)) throw new Error(`fila ${k+1} de ${g.nombre}: falta "celdas".`); }); }); }
+    else { if(v.avisos&&!Array.isArray(v.avisos)) throw new Error('"avisos" debe ser una lista.'); if(v.recursos&&!Array.isArray(v.recursos)) throw new Error('"recursos" debe ser una lista.'); }
+    return v; }
+  $("jLoad").onclick=async()=>{ try{ const d=await ref().get(), v=d.exists?{...d.data()}:{}; RESERVED.forEach(k=>delete v[k]);
+      $("json").value=Object.keys(v).length?JSON.stringify(v,null,2):""; msg(Object.keys(v).length?"Contenido JSON actual cargado.":"Esta sección no tiene contenido JSON todavía. Usa la plantilla para empezar.",Object.keys(v).length?"ok":""); }
+    catch(e){ msg("Error al leer: "+e.message,"err"); } };
+  $("jTpl").onclick=()=>{ $("json").value=JSON.stringify(isH()?TPL.horario:TPL.profesores,null,2); msg("Plantilla lista: edítala y guarda."); };
+  $("jFile").onchange=async e=>{ const f=e.target.files[0]; if(!f) return; $("json").value=await f.text(); e.target.value=""; msg("Archivo cargado. Revisa y guarda."); };
+  $("jDl").onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([$("json").value],{type:"application/json"})); a.download=$("target").value.replace("/","-")+".json"; a.click(); };
+  $("jSave").onclick=async()=>{ let v; try{ v=checkJ(JSON.parse($("json").value)); }catch(e){ msg("El JSON no es válido: "+e.message,"err"); return; }
+    const r=ref(); $("jSave").disabled=true;
+    try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); tx.set(r,{...v,archivos:(d.exists&&d.data().archivos)||[],actualizado:today()}); }); msg("JSON guardado. Ya se ve en ANIMAPP.","ok"); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); }
+    finally{ $("jSave").disabled=false; } };
+  $("jDel").onclick=async()=>{ if(!confirm("¿Quitar el contenido JSON de esta sección? Los archivos se quedan.")) return; const r=ref();
+    try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); if(!d.exists) return; tx.set(r,{archivos:d.data().archivos||[],actualizado:today()}); }); $("json").value=""; msg("Contenido JSON quitado.","ok"); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso.":"No se pudo quitar: "+e.message,"err"); } };
+  $("target").onchange=()=>{ $("json").value=""; refresh(); };
   auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; if(u) refresh(); });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
