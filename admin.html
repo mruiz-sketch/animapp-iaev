@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ANIMAPP · Administrar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600&display=swap">
+<style>
+:root{--paper:#eef1f5;--card:#fff;--ink:#26242a;--soft:#5c6070;--red:#bc2b36;--yellow:#ebc232;--green:#4f9a5e;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Pixelify Sans",system-ui,sans-serif;font-size:17px;line-height:1.45}
+main{max-width:860px;margin:0 auto;padding:28px 16px 60px;display:grid;gap:22px}
+h1{font-family:"Press Start 2P",monospace;font-weight:400;font-size:18px;line-height:1.5;margin:0}
+h2{font-family:"Press Start 2P",monospace;font-weight:400;font-size:12px;margin:0 0 12px;color:var(--red)}
+.card{background:var(--card);padding:18px;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
+button,select{font:inherit}
+.btn{font-family:"Press Start 2P",monospace;font-size:10px;line-height:1.6;padding:10px 14px;border:3px solid var(--ink);background:var(--yellow);color:var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn.red{background:var(--red);color:#fff}.btn.plain{background:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+select{padding:8px;border:3px solid var(--ink);background:#fff}
+textarea{width:100%;min-height:320px;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;border:3px solid var(--ink);padding:10px;background:#fff;color:var(--ink)}
+.msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--soft)}
+.msg.ok{border-color:var(--green)}.msg.err{border-color:var(--red)}
+.muted{color:var(--soft);font-size:15px;margin:0}
+[hidden]{display:none!important}
+</style></head>
+<body>
+<main>
+  <h1>ANIMAPP · Administrar</h1>
+  <p class="muted">Aquí se suben los horarios y el contenido de "Sólo Profesores" a Firebase. Solo las cuentas administradoras pueden guardar cambios; las reglas de Firestore lo verifican.</p>
+
+  <section class="card" id="cfgCard" hidden>
+    <h2>Falta configurar</h2>
+    <p class="msg err">Todavía no hay configuración de Firebase en <b>firebase-config.js</b>.</p>
+  </section>
+
+  <section class="card" id="loginCard">
+    <h2>Sesión</h2>
+    <div class="row"><button class="btn red" id="signIn">Iniciar sesión con Google</button><button class="btn plain" id="signOut" hidden>Cerrar sesión</button><span id="who" class="muted"></span></div>
+  </section>
+
+  <section class="card" id="editCard" hidden>
+    <h2>Editar contenido</h2>
+    <div class="row">
+      <label for="target">Documento:</label>
+      <select id="target">
+        <option value="horarios/1">Horario · 1er cuatrimestre</option>
+        <option value="horarios/2">Horario · 2do cuatrimestre</option>
+        <option value="horarios/3">Horario · 3er cuatrimestre</option>
+        <option value="horarios/4">Horario · 4to cuatrimestre</option>
+        <option value="horarios/5">Horario · 5to cuatrimestre</option>
+        <option value="horarios/7">Horario · 7mo cuatrimestre</option>
+        <option value="horarios/8">Horario · 8vo cuatrimestre</option>
+        <option value="horarios/9">Horario · 9no cuatrimestre</option>
+        <option value="profesores/contenido">Sólo Profesores · avisos y recursos</option>
+      </select>
+      <button class="btn plain" id="load">Cargar actual</button>
+      <button class="btn plain" id="tpl">Usar plantilla</button>
+      <label class="btn plain" for="file" style="display:inline-block">Abrir archivo .json</label><input type="file" id="file" accept=".json,application/json" hidden>
+    </div>
+    <p class="muted" style="margin-top:12px">Contenido (JSON):</p>
+    <textarea id="json" spellcheck="false"></textarea>
+    <div class="row" style="margin-top:12px"><button class="btn" id="save">Guardar en Firebase</button><button class="btn plain" id="dl">Descargar copia .json</button></div>
+  </section>
+
+  <p class="msg" id="msg" hidden></p>
+</main>
+<script src="firebase-config.js"></script>
+<script>
+const CFG=window.ANIMAPP_FIREBASE||null, $=id=>document.getElementById(id);
+const TPL={
+  horario:{nota:"Aulas sujetas a cambio.",actualizado:new Date().toLocaleDateString("es-MX",{day:"numeric",month:"short",year:"numeric"}),
+    grupos:[{nombre:"IAEV-1A",dias:["Lunes","Martes","Miércoles","Jueves","Viernes"],
+      filas:[{hora:"07:00–07:55",celdas:["Narrativa\nProfesor\nAula","","","",""]},{hora:"08:00–08:55",celdas:["","Inglés I","","",""]}]}]},
+  profesores:{avisos:[{titulo:"Junta de academia",fecha:"12 de noviembre",texto:"Sala de juntas, 13:00 h."}],
+    recursos:[{titulo:"Formato de planeación",url:"https://",desc:"Descripción breve"}]}
+};
+function msg(t,kind){ const m=$("msg"); m.hidden=false; m.className="msg"+(kind?" "+kind:""); m.textContent=t; }
+function check(path,v){
+  if(path.startsWith("horarios/")){
+    if(!Array.isArray(v.grupos)) throw new Error('Falta la lista "grupos".');
+    v.grupos.forEach((g,i)=>{ if(!g.nombre) throw new Error(`El grupo ${i+1} no tiene "nombre".`);
+      if(!Array.isArray(g.filas)) throw new Error(`El grupo ${g.nombre} no tiene "filas".`);
+      g.filas.forEach((f,k)=>{ if(!Array.isArray(f.celdas)) throw new Error(`Fila ${k+1} de ${g.nombre}: falta "celdas".`); }); });
+  } else {
+    if(v.avisos&&!Array.isArray(v.avisos)) throw new Error('"avisos" debe ser una lista.');
+    if(v.recursos&&!Array.isArray(v.recursos)) throw new Error('"recursos" debe ser una lista.');
+  }
+}
+if(!CFG){ $("cfgCard").hidden=false; $("loginCard").hidden=true; }
+else (async()=>{
+  const B="https://cdn.jsdelivr.net/npm/firebase@10.12.2/", load=u=>new Promise((ok,ko)=>{const e=document.createElement("script");e.src=u;e.onload=ok;e.onerror=ko;document.head.appendChild(e);});
+  try{ await load(B+"firebase-app-compat.js"); await Promise.all([load(B+"firebase-auth-compat.js"),load(B+"firebase-firestore-compat.js")]); }
+  catch(e){ msg("No se pudo cargar Firebase. Revisa tu conexión.","err"); return; }
+  firebase.initializeApp(CFG); const auth=firebase.auth(), db=firebase.firestore();
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; });
+  $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
+    try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
+  $("signOut").onclick=()=>auth.signOut();
+  const ref=()=>{ const [c,d]=$("target").value.split("/"); return db.collection(c).doc(d); };
+  $("load").onclick=async()=>{ try{ const d=await ref().get(); $("json").value=d.exists?JSON.stringify(d.data(),null,2):""; msg(d.exists?"Contenido actual cargado.":"Este documento todavía no existe. Usa la plantilla para empezar.",d.exists?"ok":""); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para leer este documento.":"Error: "+e.message,"err"); } };
+  $("tpl").onclick=()=>{ $("json").value=JSON.stringify($("target").value.startsWith("horarios/")?TPL.horario:TPL.profesores,null,2); msg("Plantilla lista: edítala y guarda."); };
+  $("file").onchange=async e=>{ const f=e.target.files[0]; if(!f) return; $("json").value=await f.text(); e.target.value=""; msg("Archivo cargado. Revisa y guarda."); };
+  $("dl").onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([$("json").value],{type:"application/json"})); a.download=$("target").value.replace("/","-")+".json"; a.click(); };
+  $("save").onclick=async()=>{ let v; try{ v=JSON.parse($("json").value); check($("target").value,v); }catch(e){ msg("El JSON no es válido: "+e.message,"err"); return; }
+    $("save").disabled=true; try{ await ref().set(v); msg("Guardado. Ya se ve en ANIMAPP.","ok"); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar. Solo las cuentas administradoras pueden hacerlo.":"No se pudo guardar: "+e.message,"err"); }
+    finally{ $("save").disabled=false; } };
+})();
+</script>
+</body></html>

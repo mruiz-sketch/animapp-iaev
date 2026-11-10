@@ -1,0 +1,39 @@
+rules_version = '2';
+// Reglas de Firestore para ANIMAPP IAEV.
+// - horarios/*  : lectura para cualquier cuenta @upsrj.edu.mx verificada.
+// - profesores/*: lectura solo para los docentes de "Nuestra Academia".
+// - Escritura (admin.html): solo cuentas administradoras.
+// Si cambia la lista de docentes en ANIMAPP, actualiza también la lista de docente() aquí.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function upsrj() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower().matches('.*@upsrj[.]edu[.]mx$');
+    }
+    function docente() {
+      return upsrj() && request.auth.token.email.lower() in [
+        'ezermeno@upsrj.edu.mx',
+        'mruiz@upsrj.edu.mx',
+        'acarrizalez@upsrj.edu.mx',
+        'chernandez@upsrj.edu.mx',
+        'ghernandez@upsrj.edu.mx',
+        'jzamora@upsrj.edu.mx',
+        'iraragon@upsrj.edu.mx',
+        'jsalgado@upsrj.edu.mx',
+        'vibarra@upsrj.edu.mx'
+      ];
+    }
+    function admin() {
+      return upsrj() && request.auth.token.email.lower() in ['mruiz@upsrj.edu.mx'];
+    }
+    match /horarios/{cuatri} {
+      allow read: if upsrj();
+      allow write: if admin();
+    }
+    match /profesores/{doc} {
+      allow read: if docente();
+      allow write: if admin();
+    }
+  }
+}
