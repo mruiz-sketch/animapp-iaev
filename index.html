@@ -336,7 +336,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .qa-item[open] summary::before{content:"−";background:var(--iaev-red);color:#fff}
 .qa-item summary:hover{background:#fff8dc}
 .qa-a{padding:4px 16px 16px 54px;font-size:17px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
-.prof-top{margin-bottom:22px}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
+.prof-top{margin-bottom:22px}.prof-top .sai-btn{text-decoration:none;display:inline-block}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:10px;text-decoration:none;display:inline-block}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
@@ -2629,8 +2629,8 @@ function renderSection(id){
   iconSVG($("readBtn").querySelector("svg"),"speak");
   $("readBtn").addEventListener("click",()=>{ if(synth&&synth.speaking){synth.cancel();return} say($("longText").innerText,true) });
   renderContent(id);
-  { const top=$("secTop"); if(id==="profesores"){ top.hidden=false; top.innerHTML=`<h2 class="sec-h2">${L("Portales docentes","Faculty portals")}</h2><div class="sai-btns">${PROF_PORTALS.map((p,k)=>`<button class="pbtn yellow portal-go-btn sai-btn" data-prof="${k}">▶ ${p.t[LANG==="en"?1:0]}</button>`).join("")}</div>`;
-      top.querySelectorAll("[data-prof]").forEach(b=>b.addEventListener("click",()=>{ sfx.select(); openExperience(PROF_PORTALS[+b.dataset.prof]); })); } else { top.hidden=true; top.innerHTML=""; } }
+  { const top=$("secTop"); if(id==="profesores"){ top.hidden=false; top.innerHTML=`<h2 class="sec-h2">${L("Portales docentes","Faculty portals")}</h2><div class="sai-btns">${PROF_PORTALS.map((p,k)=>`<a class="pbtn yellow portal-go-btn sai-btn" data-prof="${k}" href="${p.url}" target="_blank" rel="noopener">${p.t[LANG==="en"?1:0]} ↗</a>`).join("")}</div>`;
+      top.querySelectorAll("[data-prof]").forEach(b=>b.addEventListener("click",()=>sfx.select())); } else { top.hidden=true; top.innerHTML=""; } }
   gate(id);
   if(id==="mapas"){ $("secBody").innerHTML='<p class="short">'+L('Explora el campus de la UPSRJ: pasa el cursor sobre un edificio para ver su nombre y haz clic en un lugar para que los coyotes caminen hasta allá. También puedes elegir un destino en la lista de lugares.','Explore the UPSRJ campus: hover over a building to see its name and click a place so the coyotes walk there. You can also pick a destination from the list of places.')+'</p>' }
 }
