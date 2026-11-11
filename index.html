@@ -251,8 +251,8 @@ footer h2{font-family:var(--display);font-weight:400;font-size:11px;margin:0 0 1
 .cal-d:hover{background:#fff2b8}.cal-d.sel{box-shadow:0 0 0 3px var(--iaev-blue);position:relative;z-index:1}
 .cal-d.today.sel{box-shadow:0 0 0 3px var(--ink)}
 .cal-dots{display:flex;gap:3px;height:8px}.cal-dots i,.cal-legend i{display:block;width:8px;height:8px}
-.cat-ini{--cc:#62aeea}.cat-eva{--cc:#bc2b36}.cat-tra{--cc:#e3b21f}.cat-des{--cc:#5fae4a}.cat-evt{--cc:#c552b8}
-i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
+.cat-ini{--cc:#62aeea}.cat-eva{--cc:#bc2b36}.cat-tra{--cc:#e3b21f}.cat-des{--cc:#5fae4a}.cat-evt{--cc:#c552b8}.cat-cap{--cc:#2f5fb0}.cat-cum{--cc:#ff7aa8}
+i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background:var(--cc)}
 .cal-legend{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:16px;color:var(--ink-soft)}
 .cal-legend li{display:flex;align-items:center;gap:8px}.cal-legend i{width:12px;height:12px}
 .cal-h3{font-family:var(--display);font-weight:400;font-size:13px;line-height:1.6;margin:0 0 10px;text-transform:uppercase;color:var(--iaev-red)}
@@ -2333,7 +2333,7 @@ const CONTENT={
  sai:{ h:["Elige tu portal","Choose your portal"], html:()=>`<div class="sai-btns">${SAI_PORTALS.map((p,k)=>`<a class="pbtn yellow portal-go-btn sai-btn" data-sai="${k}" href="${p.url}" target="_blank" rel="noopener">${p.t[LANG==="en"?1:0]} ↗</a>`).join("")}</div>`,
    after:()=>document.querySelectorAll("[data-sai]").forEach(b=>b.addEventListener("click",()=>sfx.select())) },
  asistencia:{ h:["Portal de alumnos","Student portal"], html:()=>`<button class="pbtn yellow portal-go-btn" id="asisOpen">${L("▶ Abrir portal de asistencia","▶ Open attendance portal")}</button>`, after:()=>$("asisOpen").addEventListener("click",()=>openExperience(ASISTENCIA)) },
- calendario:{ h:["Calendario de la carrera","Program calendar"], html:calendarHTML, after:drawMonth },
+ calendario:{ h:["Calendario de la carrera","Program calendar"], html:()=>calendarHTML(), after:()=>{ CAL_SRC=CAL_EVENTS; CAL_CATS_CUR=CAL_CATS; calOffset=0; calSel=null; drawMonth(); } },
  horarios:{
   h:["Elige tu cuatrimestre","Choose your term"],
   links:["horario-1","horario-2","horario-3","horario-4","horario-5","horario-7","horario-8","horario-9"]
@@ -2432,9 +2432,24 @@ function wireEquipo(){ document.querySelectorAll(".eq-cover").forEach(b=>b.addEv
 const GCAL_ID="c_4f02422c3b0bc1d1a582fbe59729aa5cc2f19c4cfd603b33e5c77c6c82221eb8@group.calendar.google.com";
 const GCAL_CID="Y180ZjAyNDIyYzNiMGJjMWQxYTU4MmZiZTU5NzI5YWE1Y2MyZjE5YzRjZmQ2MDNiMzNlNWM3N2M2YzgyMjIxZWI4QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20";
 let calOffset=0;
-function calendarHTML(){
-  const view="https://calendar.google.com/calendar/embed?src="+encodeURIComponent(GCAL_ID)+"&ctz=America%2FMexico_City";
-  const add="https://calendar.google.com/calendar/u/0?cid="+GCAL_CID;
+const TCAL_ID="c_9db31a237526f390b5d492439c94246b40041b669b62aa231dc574cb8710efad@group.calendar.google.com";
+const TCAL_CID="Y185ZGIzMWEyMzc1MjZmMzkwYjVkNDkyNDM5Yzk0MjQ2YjQwMDQxYjY2OWI2MmFhMjMxZGM1NzRjYjg3MTBlZmFkQGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20";
+const TCAL_CATS={ini:["Inicio de cuatrimestre y labores","Term and work start"],eva:["Evaluaciones","Exams"],cap:["Captura de calificaciones y actas","Grade entry & records"],des:["Descanso y suspensiones","Days off"],evt:["Eventos y capacitación","Events & training"],cum:["Cumpleaños","Birthdays"]};
+function tcalCat(t){ const n=bnorm(t);
+  if(/cumple/.test(n)) return "cum";
+  if(/descanso|vacacion|inhabil|suspension|termino de labores/.test(n)) return "des";
+  if(/captura|acta|listas|programacion de materias|revision de captura/.test(n)) return "cap";
+  if(/inicio de cuatrimestre|dia de clases|inicio de labores|inicio de recursamiento/.test(n)) return "ini";
+  if(/evaluacion|remedial|extraordinari|especiales|parcial|corte|recuperacion|asesoria/.test(n)) return "eva";
+  return "evt"; }
+function calendarHTML(prof){
+  const view="https://calendar.google.com/calendar/embed?src="+encodeURIComponent(prof?TCAL_ID:GCAL_ID)+"&ctz=America%2FMexico_City";
+  const add="https://calendar.google.com/calendar/u/0?cid="+(prof?TCAL_CID:GCAL_CID);
+  if(prof) return `<div class="cal-wrap"><div class="cal-month" id="calMonth"></div>
+    <div class="cal-side"><div class="cal-day" id="calDay" aria-live="polite"></div><div class="cal-list" id="calList"></div>
+    <div class="cal-links"><a class="pbtn red cal-btn" href="${view}" target="_blank" rel="noopener">${L("Abrir en Google Calendar ↗","Open in Google Calendar ↗")}</a>
+    <a class="pbtn yellow cal-btn" href="${add}" target="_blank" rel="noopener">${L("Agregar a mi Google Calendar ↗","Add to my Google Calendar ↗")}</a></div>
+    <p class="cal-note">${prof.upd?L("Actualizado: ","Updated: ")+esc(prof.upd):""}</p></div></div>`;
   return `<div class="cal-wrap"><div class="cal-month" id="calMonth"></div>
     <div class="cal-side"><div class="cal-day" id="calDay" aria-live="polite"></div><div class="cal-list" id="calList"></div>
     <div class="cal-links"><a class="pbtn red cal-btn" href="${view}" target="_blank" rel="noopener">${L("Abrir en Google Calendar ↗","Open in Google Calendar ↗")}</a>
@@ -2446,7 +2461,9 @@ const CAL_EVENTS=[["20250701","20250716","Evaluación Docente y de Servicios","e
 const CAL_CATS={ini:["Inicio de cuatrimestre","Term start"],eva:["Evaluaciones","Exams"],tra:["Trámites, pagos y becas","Paperwork, payments & scholarships"],des:["Días de descanso","Days off"],evt:["Eventos","Events"]};
 let calSel=null;
 const ymd=d=>d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
-const evOn=k=>CAL_EVENTS.filter(e=>+e[0]<=k && k<+e[1]);
+/* fuente activa del calendario: el de la carrera o el docente (Sólo Profesores) */
+let CAL_SRC=CAL_EVENTS, CAL_CATS_CUR=CAL_CATS;
+const evOn=k=>CAL_SRC.filter(e=>+e[0]<=k && k<+e[1]);
 const fmtD=(s,loc)=>{const d=new Date(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8));return d.toLocaleDateString(loc,{day:"numeric",month:"short"})};
 function evRange(e){ const loc=LANG==="en"?"en-US":"es-MX"; const end=new Date(+e[1].slice(0,4),+e[1].slice(4,6)-1,+e[1].slice(6,8)-1);
   const endS=String(ymd(end)); return endS===e[0]?fmtD(e[0],loc):fmtD(e[0],loc)+" – "+fmtD(endS,loc); }
@@ -2464,12 +2481,12 @@ function drawMonth(){ const box=document.getElementById("calMonth"); if(!box) re
     cells+=`<button class="cal-d${key===todayK?" today":""}${wk?" wk":""}${evs.length?" has":""}${key===calSel?" sel":""}" data-k="${key}" aria-label="${lbl.replace(/"/g,"")}"><span>${k}</span><span class="cal-dots">${cats}</span></button>` }
   box.innerHTML=`<div class="cal-head"><button class="pbtn icon cal-nav" id="calPrev" aria-label="${L("Mes anterior","Previous month")}">◀</button><span class="cal-name">${name}</span><button class="pbtn icon cal-nav" id="calNext" aria-label="${L("Mes siguiente","Next month")}">▶</button></div>
    <div class="cal-grid">${days.map(x=>`<span class="cal-dn">${x}</span>`).join("")}${cells}</div>
-   <ul class="cal-legend">${Object.entries(CAL_CATS).map(([c,t])=>`<li><i class="cat-${c}"></i>${LANG==="en"?t[1]:t[0]}</li>`).join("")}</ul>`;
+   <ul class="cal-legend">${Object.entries(CAL_CATS_CUR).map(([c,t])=>`<li><i class="cat-${c}"></i>${LANG==="en"?t[1]:t[0]}</li>`).join("")}</ul>`;
   $("calPrev").onclick=()=>{calOffset--;calSel=null;sfx.blip();drawMonth()}; $("calNext").onclick=()=>{calOffset++;calSel=null;sfx.blip();drawMonth()};
   box.querySelectorAll(".cal-d[data-k]").forEach(b=>b.onclick=()=>{calSel=+b.dataset.k;sfx.blip();drawMonth()});
   // listas
   const mStart=y*10000+(m+1)*100+1, mEnd=y*10000+(m+1)*100+n+1;
-  const inMonth=CAL_EVENTS.filter(e=>+e[0]<mEnd && +e[1]>mStart);
+  const inMonth=CAL_SRC.filter(e=>+e[0]<mEnd && +e[1]>mStart);
   const dayBox=document.getElementById("calDay"), monBox=document.getElementById("calList");
   if(dayBox){ if(calSel){ const sd=new Date(Math.floor(calSel/10000),Math.floor(calSel/100)%100-1,calSel%100), evs=evOn(calSel);
       dayBox.innerHTML=`<h3 class="cal-h3">${sd.toLocaleDateString(loc,{weekday:"long",day:"numeric",month:"long"})}</h3>${evs.length?`<ul class="cal-evs">${evs.map(evItem).join("")}</ul>`:`<p class="cal-none">${L("Sin eventos este día.","No events on this day.")}</p>`}`; }
@@ -2704,6 +2721,7 @@ function gate(id){
   const db=firebase.firestore(), ref=id==="profesores"?db.collection("profesores").doc("contenido"):db.collection("horarios").doc(id.split("-")[1]);
   ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null;
       const hasF=v&&Array.isArray(v.archivos)&&v.archivos.length, hasJ=v&&(id==="profesores"?((v.avisos||[]).length||(v.recursos||[]).length):(v.grupos||[]).length);
+      if(id==="profesores") setTimeout(()=>loadProfCal(sb,id),0);
       if(hasF){ showFiles(sb,ref,v,id); if(hasJ) sb.insertAdjacentHTML("beforeend",id==="profesores"?profHTML(v):horarioHTML({...v,actualizado:null})); return; }
       sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
@@ -2723,6 +2741,16 @@ function showFiles(sb,ref,v,id){
       if(a.tipo==="application/pdf") box.innerHTML=`<iframe class="fl-pdf" src="${url}" title="${esc(a.titulo||a.nombre)}"></iframe><div class="fl-act"><a class="pbtn fl-dl" href="${url}" target="_blank" rel="noopener">${L("Abrir PDF ↗","Open PDF ↗")}</a>${dl}</div>`;
       else box.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img class="fl-img" src="${url}" alt="${esc(a.titulo||a.nombre)}"></a><div class="fl-act">${dl}</div>`;
     }catch(e){ box.innerHTML=`<p class="cal-none">${L("No se pudo cargar este archivo.","Couldn't load this file.")}</p>`; } });
+}
+/* Calendario docente: profesores/calendario { eventos:[{s,e,t}], actualizado } (se importa desde admin.html con el .ics) */
+function loadProfCal(sb,id){
+  firebase.firestore().collection("profesores").doc("calendario").get().then(d=>{ if(location.hash.slice(1)!==id) return;
+    sb.insertAdjacentHTML("beforeend",`<h2 class="sec-h2 sec-h2-more">${L("Calendario docente","Faculty calendar")}</h2><div id="profCal"></div>`);
+    const v=d.exists?d.data():null, ev=(v&&Array.isArray(v.eventos))?v.eventos:[];
+    if(!ev.length){ document.getElementById("profCal").innerHTML=`<p class="cal-none">${L("Aún no se ha cargado el calendario docente. Súbelo desde admin.html con el archivo .ics de Google Calendar.","The faculty calendar hasn't been uploaded yet. Upload the Google Calendar .ics file from admin.html.")}</p>`; return; }
+    document.getElementById("profCal").innerHTML=calendarHTML({upd:v.actualizado||""});
+    CAL_SRC=ev.map(x=>[x.s,x.e,x.t,tcalCat(x.t)]).sort((a,b)=>a[0]<b[0]?-1:1); CAL_CATS_CUR=TCAL_CATS; calOffset=0; calSel=null; drawMonth();
+  }).catch(()=>{});
 }
 /* horarios/{n}: { nota?, actualizado?, grupos:[{ nombre, nota?, dias:[...], filas:[{hora, celdas:[...]}] }] } */
 function horarioHTML(v){

@@ -102,6 +102,17 @@ progress{width:100%;height:14px}
     </div>
   </section>
 
+  <section class="card" id="calCard" hidden>
+    <h2>Calendario docente (Sólo Profesores)</h2>
+    <p class="muted" style="margin-bottom:14px">Exporta el calendario «ACADEMIC CALENDAR - TEACHERS» de Google Calendar como archivo .ics y súbelo aquí. Reemplaza el calendario anterior; solo lo ven los docentes de la Academia.</p>
+    <div class="stack">
+      <label class="drop" id="icsDrop" for="icsFile">Arrastra aquí el archivo .ics<span class="muted">o haz clic para elegirlo</span></label>
+      <input type="file" id="icsFile" accept=".ics,text/calendar" hidden>
+      <p class="muted" id="icsInfo"></p>
+      <div class="row"><button class="btn" id="icsSave" disabled>Guardar calendario</button></div>
+    </div>
+  </section>
+
   <p class="msg" id="msg" hidden></p>
 </main>
 <script src="firebase-config.js"></script>
@@ -185,8 +196,29 @@ else (async()=>{
   $("jDel").onclick=async()=>{ if(!confirm("¿Quitar el contenido JSON de esta sección? Los archivos se quedan.")) return; const r=ref();
     try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); if(!d.exists) return; tx.set(r,{archivos:d.data().archivos||[],actualizado:today()}); }); $("json").value=""; msg("Contenido JSON quitado.","ok"); }
     catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso.":"No se pudo quitar: "+e.message,"err"); } };
+  /* --- calendario docente (.ics) --- */
+  let icsEv=null;
+  function parseICS(txt){ const raw=txt.replace(/\r\n/g,"\n").replace(/\n[ \t]/g,""), out=[];
+    raw.split("BEGIN:VEVENT").slice(1).forEach(b=>{ b=b.split("END:VEVENT")[0];
+      const g=k=>{ const m=b.match(new RegExp("^"+k+"[^:\\n]*:(.*)$","m")); return m?m[1].trim():""; };
+      const st=g("DTSTART"); if(!st) return; let en=g("DTEND")||st; const s=st.slice(0,8); let e=en.slice(0,8);
+      if(e<=s){ const d=new Date(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8)+1); e=String(d.getFullYear())+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0"); }
+      const t=g("SUMMARY").replace(/\\,/g,",").replace(/\\;/g,";").replace(/\\n/gi," ").replace(/\s+/g," ").trim();
+      if(!/^\d{8}$/.test(s)||!t) return; out.push({s,e,t});
+      if(/FREQ=YEARLY/.test(g("RRULE"))){ const y0=+s.slice(0,4), last=new Date().getFullYear()+3; for(let y=y0+1;y<=last;y++) out.push({s:y+s.slice(4),e:(y+(+e.slice(0,4)-y0))+e.slice(4),t}); } });
+    return out.sort((a,b)=>a.s<b.s?-1:a.s>b.s?1:0); }
+  async function pickICS(f){ if(!f) return; try{ icsEv=parseICS(await f.text()); }catch(e){ icsEv=null; }
+    if(!icsEv||!icsEv.length){ $("icsInfo").textContent="No encontré eventos en ese archivo. Revisa que sea el .ics exportado de Google Calendar."; $("icsSave").disabled=true; return; }
+    $("icsInfo").textContent=`${f.name}: ${icsEv.length} eventos, del ${icsEv[0].s.slice(6)}/${icsEv[0].s.slice(4,6)}/${icsEv[0].s.slice(0,4)} al ${icsEv[icsEv.length-1].s.slice(6)}/${icsEv[icsEv.length-1].s.slice(4,6)}/${icsEv[icsEv.length-1].s.slice(0,4)}.`; $("icsSave").disabled=false; }
+  $("icsFile").onchange=e=>{ pickICS(e.target.files[0]); e.target.value=""; };
+  ["dragover","dragenter"].forEach(t=>$("icsDrop").addEventListener(t,e=>{e.preventDefault();$("icsDrop").classList.add("over");}));
+  ["dragleave","drop"].forEach(t=>$("icsDrop").addEventListener(t,e=>{e.preventDefault();$("icsDrop").classList.remove("over");}));
+  $("icsDrop").addEventListener("drop",e=>pickICS(e.dataTransfer.files[0]));
+  $("icsSave").onclick=async()=>{ if(!icsEv) return; $("icsSave").disabled=true;
+    try{ await db.collection("profesores").doc("calendario").set({eventos:icsEv,actualizado:today()}); msg(`Calendario docente guardado (${icsEv.length} eventos). Ya se ve en Sólo Profesores.`,"ok"); }
+    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); $("icsSave").disabled=false; } };
   $("target").onchange=()=>{ $("json").value=""; refresh(); };
-  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; if(u) refresh(); });
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; if(u) refresh(); });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
   $("signOut").onclick=()=>auth.signOut();
