@@ -338,6 +338,21 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .qa-a{padding:4px 16px 16px 54px;font-size:17px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
 .prof-top{margin-bottom:22px}.prof-top .sai-btn{text-decoration:none;display:inline-block}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:10px;text-decoration:none;display:inline-block}
+.bl-strip{display:flex;align-items:center;gap:16px;background:var(--paper);padding:14px;border-left:8px solid var(--cc);box-shadow:0 -3px 0 var(--ink),0 3px 0 var(--ink),-3px 0 0 var(--ink),3px 0 0 var(--ink)}
+.bl-nav{width:40px;height:40px;font-size:13px;flex:none}.bl-nav:disabled{opacity:.35;cursor:default}
+.bl-date{flex:none;width:72px;background:#fff;text-align:center;box-shadow:0 0 0 3px var(--ink)}
+.bl-date span{display:block;background:var(--iaev-red);color:#fff;font-family:var(--display);font-size:10px;padding:5px 0;text-transform:uppercase}
+.bl-date b{display:block;font-family:var(--display);font-weight:400;font-size:22px;padding:8px 0}
+.bl-ev{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}.bl-tag{font-size:15px;color:var(--ink-soft);font-weight:600}
+.bl-name{font-family:var(--display);font-size:clamp(11px,1.8vw,14px);line-height:1.6;overflow-wrap:anywhere}
+.bl-link{text-decoration:none;display:inline-block}.bl-more{margin:16px 0 0}.bl-cal{font-size:10px}
+.bl-ff{display:flex;gap:24px;align-items:center;flex-wrap:wrap}.bl-ff-img{width:180px;height:auto;display:block;box-shadow:0 0 0 4px var(--ink)}
+.bl-ff-txt{flex:1 1 260px;display:flex;flex-direction:column;gap:16px}.bl-ff-txt p{margin:0;max-width:60ch}
+.bl-intro{margin:0 0 6px;max-width:65ch}.bl-g{font-family:var(--display);font-weight:400;font-size:12px;margin:22px 0 12px;color:var(--ink)}
+.bl-fests{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.bl-fest a{display:flex;flex-direction:column;gap:6px;height:100%;padding:12px 14px;background:var(--paper);color:var(--ink);text-decoration:none;border-left:6px solid var(--iaev-blue)}
+.bl-fest a:hover{background:#fff8dc}.bl-fn{font-weight:700;font-size:17px;color:var(--iaev-red)}.bl-fd{font-size:15px;color:var(--ink-soft)}
+@media (max-width:520px){.bl-strip{flex-wrap:wrap}.bl-date{width:60px}.bl-ev{flex-basis:calc(100% - 140px)}}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
 .cm-note{font-size:15px;color:var(--ink-soft);margin:14px 0 0}
@@ -2339,6 +2354,7 @@ const CONTENT={
   links:["horario-1","horario-2","horario-3","horario-4","horario-5","horario-7","horario-8","horario-9"]
  },
  qa:{ h:["Preguntas frecuentes","Frequently asked questions"], html:qaHTML },
+ blog:{ replace:true, html:blogHTML, after:wireBlog },
  academia:{
   h:["Quiénes somos","Who we are"],
   html:teamHTML
@@ -2354,6 +2370,71 @@ function wirePlanPDF(){ document.querySelectorAll("[data-pdf]").forEach(a=>a.add
   try{ const dl=await claude.use("downloads"); const blob=await (await fetch(x.f)).blob();
     if(dl) await dl.save({filename:x.n,data:blob}); else window.open(x.f,"_blank","noopener"); }
   catch(err){ if(!(err&&err.code==="declined")) window.open(x.f,"_blank","noopener"); } })); }
+
+/* ====== BLOG: franja del calendario, bases del Coyote Film Fest y festivales ====== */
+const FESTIVALES=[
+ {g:["De México","From Mexico"],items:[
+  ["Festival Internacional de Animación Animaura","https://filmfreeway.com/Animaura","Festival internacional de animación; recibe cortometrajes por convocatoria en FilmFreeway.","International animation festival; accepts short films through FilmFreeway."],
+  ["Pixelatl","https://elfestival.mx/","El gran encuentro mexicano de animación, cómic y videojuegos: conferencias, talleres, mercado de proyectos y competencia de cortos.","Mexico's big gathering for animation, comics and games: talks, workshops, a project market and a shorts competition."],
+  ["Cut Out Fest","https://cutoutfest.com/","Festival internacional de animación y arte digital en Querétaro, con competencia de cortos, talleres y conferencias.","International animation and digital art festival in Querétaro, with a shorts competition, workshops and talks."],
+  ["Dehache","https://www.dehache.mx/","Festival mexicano de diseño en movimiento, ilustración y animación, con charlas de estudios y artistas.","Mexican festival of motion design, illustration and animation, with talks by studios and artists."],
+  ["Design Fest","https://design-fest.com/","Festival de diseño con conferencias y talleres de diseño, ilustración, animación y creatividad.","Design festival with talks and workshops on design, illustration, animation and creativity."],
+  ["Destacado","https://festivaldestacado.com/","Festival de creatividad visual con conferencias, talleres y exhibiciones de diseño e ilustración.","Visual creativity festival with talks, workshops and design and illustration showcases."],
+  ["Festival Internacional de Cine en Guadalajara","https://ficg.mx/","Uno de los festivales de cine más importantes de Iberoamérica; incluye secciones de cortometraje y animación.","One of Ibero-America's most important film festivals, with short film and animation sections."],
+  ["Festival Internacional de Cine con Medios Alternativos","https://ficmafest.org/","FICMA: cine hecho con medios alternativos y dispositivos móviles; ideal para cortos independientes.","FICMA: films made with alternative media and mobile devices; great for independent shorts."],
+  ["Festival Internacional de Cine de Monterrey","https://monterreyfilmfestival.com/","Festival de cine en Monterrey con competencias de largometraje, cortometraje y animación.","Film festival in Monterrey with feature, short and animation competitions."],
+  ["La Mole","https://lamole.com.mx/","Convención de cómics y cultura pop en la Ciudad de México, con artistas, ilustradores y paneles.","Comics and pop culture convention in Mexico City, with artists, illustrators and panels."],
+  ["Iluma Fest","https://www.ilumafest.com/","Festival de arte visual y experiencias de luz, proyección y animación.","Festival of visual art and light, projection and animation experiences."],
+  ["La Matatena","https://www.lamatatena.org/inicio.html","Festival Internacional de Cine para Niñas y Niños; incluye cortos animados hechos por y para la infancia.","International Children's Film Festival, including animated shorts made by and for kids."],
+  ["Ambulante","https://ambulante.org/","Gira de documentales que recorre México con proyecciones y actividades de formación.","Documentary film tour that travels across Mexico with screenings and training activities."],
+  ["Macabro","https://macabro.mx/","Festival Internacional de Cine de Horror de la Ciudad de México, con cortos y largos de terror, incluida animación.","Mexico City International Horror Film Festival, with horror shorts and features, including animation."],
+  ["OFFF Mx","https://www.offf.mx/","Edición mexicana de OFFF, festival de cultura digital, diseño, motion graphics y arte.","Mexican edition of OFFF, a festival of digital culture, design, motion graphics and art."]]},
+ {g:["Internacionales","International"],items:[
+  ["Berlin Music Video Awards","https://www.berlinmva.com/","Premios internacionales al video musical, con categoría de mejor animación.","International music video awards, with a best animation category."],
+  ["La Guarimba","https://www.laguarimba.com/","Festival internacional de cine en Italia dedicado a cortometrajes y animación independiente.","International film festival in Italy devoted to short films and independent animation."],
+  ["Pictoplasma","https://conference.pictoplasma.com/","Conferencia y festival en Berlín sobre diseño de personajes y arte contemporáneo de personajes.","Berlin conference and festival on character design and contemporary character art."],
+  ["Ventana Sur","https://ventana-sur.com/","Mercado de cine y animación de América Latina en Buenos Aires, con espacio para proyectos animados.","Latin America's film and animation market in Buenos Aires, with a space for animated projects."],
+  ["Animayo","https://www.animayo.com/","Festival internacional de animación, efectos visuales y videojuegos en Gran Canaria, España.","International animation, VFX and video game festival in Gran Canaria, Spain."],
+  ["Mundos Digitales","https://www.mundosdigitales.org/es/index.html","Festival internacional de animación, efectos visuales y arte digital en A Coruña, España.","International animation, VFX and digital art festival in A Coruña, Spain."],
+  ["Weird","https://weirdmarket.es/","Weird Market: mercado y encuentro profesional de animación en Valencia, España.","Weird Market: animation market and industry meeting in Valencia, Spain."],
+  ["Bucharest International Animation Film Festival","https://www.animest.ro/","Animest: festival internacional de cine de animación en Bucarest, Rumania.","Animest: international animated film festival in Bucharest, Romania."],
+  ["Escape Verse","https://www.escapestudios.ac.uk/events/escapeverse-live/","Evento de Escape Studios en Londres con charlas de estudios de animación, VFX y videojuegos.","Escape Studios event in London with talks by animation, VFX and games studios."],
+  ["Premios Quirino","https://premiosquirino.org/","Premios Quirino de la Animación Iberoamericana, con categorías de cortometraje y escuelas.","Quirino Awards for Ibero-American Animation, with short film and school categories."],
+  ["View Fest","https://www.viewconference.it/topic/viewfest","Festival de cine de la VIEW Conference en Turín, Italia, dedicada a gráficos por computadora, VFX y animación.","Film festival of the VIEW Conference in Turin, Italy, devoted to computer graphics, VFX and animation."],
+  ["Mouvo","https://mouvo.cz/","Festival de motion design en Praga, República Checa, con charlas de estudios y artistas.","Motion design festival in Prague, Czech Republic, with talks by studios and artists."],
+  ["Anima Fest","https://animafestival.be/en","Anima, festival internacional de cine de animación de Bruselas, Bélgica.","Anima, the Brussels International Animation Film Festival in Belgium."],
+  ["Annecy","https://www.annecyfestival.com/","El festival de animación más importante del mundo, en Francia: «le rendez-vous mondial de plus de 12 000 professionnels».","The world's leading animation festival, in France: «the global meeting of more than 12,000 professionals»."],
+  ["FMX","https://fmx.de/en/home","Conferencia de animación, efectos visuales, videojuegos y medios inmersivos en Stuttgart, Alemania.","Conference on animation, visual effects, games and immersive media in Stuttgart, Germany."],
+  ["Siggraph","https://www.siggraph.org/","La conferencia internacional más grande de gráficos por computadora y técnicas interactivas.","The largest international conference on computer graphics and interactive techniques."]]}
+];
+const BASES_URL="https://acrobat.adobe.com/id/urn:aaid:sc:US:7523b319-7844-433b-93d9-27167cd88007";
+const BASES_FF={html:'<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#0b0812;min-height:100%}body{display:flex;justify-content:center;padding:16px}img{max-width:100%;height:auto;display:block}</style></head><body><img src="posters/bases.png" alt="Bases del Coyote Film Fest"></body></html>',url:"posters/bases.png",t:["Bases · Coyote Film Fest","Rules · Coyote Film Fest"]};
+let blogEvIdx=0;
+function blogEvents(){ const t=ymd(new Date()); return CAL_EVENTS.filter(e=>+e[1]>t).sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0); }
+function blogStripHTML(){ const evs=blogEvents(); if(!evs.length) return `<p class="cal-none">${L("No hay próximos eventos en el calendario.","No upcoming events in the calendar.")}</p>`;
+  blogEvIdx=Math.max(0,Math.min(blogEvIdx,evs.length-1)); const e=evs[blogEvIdx], t=ymd(new Date()), now=+e[0]<=t;
+  const loc=LANG==="en"?"en-US":"es-MX", d=new Date(+e[0].slice(0,4),+e[0].slice(4,6)-1,+e[0].slice(6,8));
+  return `<div class="bl-strip cat-${e[3]}"><button class="pbtn icon bl-nav" id="blPrev" aria-label="${L("Evento anterior","Previous event")}"${blogEvIdx===0?" disabled":""}>◀</button>
+    <div class="bl-date" aria-hidden="true"><span>${d.toLocaleDateString(loc,{month:"short"}).replace(".","")}</span><b>${d.getDate()}</b></div>
+    <div class="bl-ev"><span class="bl-tag">${now?L("Ahora","Now"):L("Próximo","Next")} · ${evRange(e)}</span><span class="bl-name">${e[2]}</span></div>
+    <button class="pbtn icon bl-nav" id="blNext" aria-label="${L("Evento siguiente","Next event")}"${blogEvIdx>=evs.length-1?" disabled":""}>▶</button></div>`; }
+function blogHTML(){ const i=LANG==="en"?1:0;
+  return `<h2 class="sec-h2">${L("En el calendario","On the calendar")}</h2><div id="blStrip">${blogStripHTML()}</div>
+   <div class="bl-more"><button class="pbtn bl-cal" id="blCal">${L("Ver calendario completo ›","See full calendar ›")}</button></div>
+   <h2 class="sec-h2 sec-h2-more">Coyote Film Fest</h2>
+   <div class="bl-ff"><img src="posters/bases.png" alt="${L("Bases del Coyote Film Fest","Coyote Film Fest rules")}" class="bl-ff-img">
+    <div class="bl-ff-txt"><p>${L("Consulta las bases para participar en el Coyote Film Fest: categorías, requisitos y fechas de entrega.","Check the rules to take part in the Coyote Film Fest: categories, requirements and deadlines.")}</p>
+    <div class="portal-actions"><a class="pbtn yellow portal-go-btn bl-link" id="blBases" href="${BASES_URL}" target="_blank" rel="noopener">${L("Leer las bases (PDF) ↗","Read the rules (PDF) ↗")}</a><button class="pbtn portal-go-btn" id="blFF">${L("Ir al Film Fest ›","Go to the Film Fest ›")}</button></div></div></div>
+   <h2 class="sec-h2 sec-h2-more">${L("Festivales","Festivals")}</h2>
+   <p class="bl-intro">${L("Festivales de animación, cine y diseño donde puedes inscribir tus proyectos o aprender de la industria.","Animation, film and design festivals where you can submit your projects or learn from the industry.")}</p>
+   ${FESTIVALES.map(gr=>`<h3 class="bl-g">${gr.g[i]}</h3><ul class="bl-fests">${gr.items.map(f=>`<li class="bl-fest"><a href="${f[1]}" target="_blank" rel="noopener"><span class="bl-fn">${f[0]} ↗</span><span class="bl-fd">${f[2+i]}</span></a></li>`).join("")}</ul>`).join("")}`; }
+function wireBlog(){
+  const strip=()=>{ $("blStrip").innerHTML=blogStripHTML(); $("blPrev").onclick=()=>{blogEvIdx--;sfx.blip();strip();}; $("blNext").onclick=()=>{blogEvIdx++;sfx.blip();strip();}; };
+  blogEvIdx=0; if($("blPrev")) strip();
+  $("blCal").onclick=()=>{ sfx.select(); go("calendario"); };
+  $("blBases").addEventListener("click",()=>sfx.select());
+  $("blFF").onclick=()=>{ sfx.select(); go("filmfest"); };
+}
 
 /* ====== Q&A (Sobre Nosotros) ====== */
 const QA=[
@@ -2559,6 +2640,7 @@ async function openExperience(p){
       fbLink.textContent=p.t[LANG==="en"?1:0]+" ↗"; setTimeout(()=>fbLink.focus(),50); return; }
     fr.removeAttribute("srcdoc"); fr.src=p.src; setTimeout(()=>{ try{ fr.focus(); }catch(e){} },300); return;
   }
+  if(p.html){ fr.removeAttribute("src"); fr.srcdoc=p.html; setTimeout(()=>{ try{ fr.contentWindow.focus(); }catch(e){} },300); return; }
   try{ const r=await fetch(p.file); if(!r.ok) throw 0; fr.srcdoc=await r.text(); }
   catch(e){ fr.src=p.file; }
   setTimeout(()=>{ let ok=false; try{ const d=fr.contentDocument; ok=!!(d&&d.body&&d.body.childElementCount>0); }catch(e){ ok=true; }
