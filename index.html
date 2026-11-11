@@ -350,10 +350,10 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bl-ff{display:flex;gap:24px;align-items:center;flex-wrap:wrap}.bl-ff-img{width:180px;height:auto;display:block;box-shadow:0 0 0 4px var(--ink)}
 .bl-ff-txt{flex:1 1 260px;display:flex;flex-direction:column;gap:16px}.bl-ff-txt p{margin:0;max-width:60ch}
 .bl-intro{margin:0 0 18px;max-width:65ch}
-.news-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:16px}
-.news-it{background:var(--paper);padding:14px 16px;border-top:6px solid var(--iaev-yellow);display:flex;flex-direction:column;gap:8px}
+.news-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+.news-it{background:var(--paper);padding:14px 18px;border-left:6px solid var(--iaev-yellow);display:flex;flex-direction:column;gap:8px}
 .news-meta{font-size:14px;color:var(--ink-soft);font-weight:600}.news-t{font-weight:700;font-size:18px;line-height:1.3;color:var(--iaev-red);text-decoration:none}.news-t:hover{text-decoration:underline}
-.news-r{margin:0;font-size:16px}.news-apa summary{cursor:pointer;font-size:14px;color:var(--ink-soft)}.news-apa p{margin:6px 0 0;font-size:14px;padding-left:2em;text-indent:-2em;overflow-wrap:anywhere;user-select:all}
+.news-r{margin:0;font-size:16px;max-width:90ch}.news-apa{margin:4px 0 0;padding:8px 10px;background:#fff;border:2px dashed var(--paper-2);font-size:14px;color:var(--ink-soft);overflow-wrap:anywhere}.news-apa b{color:var(--ink)}
 .news-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:16px}.news-more{font-size:12px}.news-upd{font-size:14px;color:var(--ink-soft)}
 .fest-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:22px;padding:6px;margin-bottom:8px}
 .fest-btn{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 14px 16px;text-align:center}
@@ -2450,7 +2450,7 @@ function newsHTML(){ const box=$("newsBox"); if(!box) return;
   const list=newsAll?NEWS.items:NEWS.items.slice(0,6);
   box.innerHTML=`<ul class="news-list">${list.map((n,k)=>`<li class="news-it"><span class="news-meta">${esc(n.categoria||"")}${n.categoria?" · ":""}${esc(n.fuente)} · ${fd(n.fecha)}</span>
      <a class="news-t" href="${safeUrl(n.url)}" target="_blank" rel="noopener">${esc(n.titulo)} ↗</a><p class="news-r">${esc(n.resumen)}</p>
-     <details class="news-apa"><summary>${L("Cita APA 7","APA 7 citation")}</summary><p>${esc(n.apa)}</p></details></li>`).join("")}</ul>
+     <p class="news-apa"><b>${L("APA 7:","APA 7:")}</b> ${esc(n.apa)}</p></li>`).join("")}</ul>
    <div class="news-foot">${NEWS.items.length>6?`<button class="pbtn news-more" id="newsMore">${newsAll?L("Ver menos","Show less"):L("Ver todas","Show all")+" ("+NEWS.items.length+")"}</button>`:""}<span class="news-upd">${L("Actualizado: ","Updated: ")}${fd(NEWS.actualizado)}</span></div>`;
   const m=$("newsMore"); if(m) m.onclick=()=>{ newsAll=!newsAll; sfx.blip(); newsHTML(); };
 }
