@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#eef1f5"><link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="ANIMAPP"><meta name="apple-mobile-web-app-status-bar-style" content="default"></head><body>
 <title>ANIMAPP IAEV Pixel</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -128,7 +128,12 @@ footer h2{font-family:var(--display);font-weight:400;font-size:15px;margin:0 0 1
 .modal h2{font-family:var(--display);font-weight:400;font-size:18.5px;margin:0 0 16px}
 .modal dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0 0 18px}
 .modal dt{font-weight:700}
-.modal dd{margin:0;min-width:0;overflow-wrap:anywhere}#ctMail a{color:var(--iaev-red);font-weight:600;user-select:all}
+.modal dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.modal .in-panel{max-width:560px;max-height:calc(100dvh - 32px);overflow:auto}
+.in-lead{margin:0 0 14px}.in-plat{background:var(--paper);border-left:6px solid var(--iaev-yellow);padding:12px 14px;margin:0 0 12px}
+.in-plat h3{font-family:var(--display);font-weight:400;font-size:14px;margin:0 0 8px;color:var(--iaev-red)}
+.in-plat ol{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:4px}.in-note{font-size:15px;color:var(--ink-soft);margin:8px 0 0}
+.in-more summary{cursor:pointer;font-weight:600;margin:4px 0 10px}.in-go{display:inline-block;margin:0 0 14px;text-decoration:none}#ctMail a{color:var(--iaev-red);font-weight:600;user-select:all}
 
 #mapa-upsrj{margin:0 4px 30px}#mapa-upsrj header{display:none}#mapa-upsrj .mp-full{margin:18px 0 0}
 .sec-h2{font-family:var(--display);font-weight:400;font-size:clamp(15px,2.6vw,18.5px);line-height:1.6;margin:0 0 16px;color:var(--iaev-red);text-wrap:balance}
@@ -1728,6 +1733,7 @@ requestAnimationFrame(frame);
     <div class="contact-col">
       <h2>¿Dudas?</h2>
       <button class="pbtn red" id="contactBtn">Contáctanos</button>
+      <button class="pbtn yellow" id="installBtn" hidden>Instalar app ⬇</button>
     </div>
   </div>
   <div class="wrap copy">ANIMAPP · Ingeniería en Animación y Efectos Visuales · UPSRJ</div>
@@ -1751,6 +1757,14 @@ requestAnimationFrame(frame);
   </div>
   <iframe class="exp-frame" id="expFrame" title="Experiencia IAEV" allow="fullscreen"></iframe>
   <div class="exp-fallback" id="expFallback" hidden><div class="exp-fb-in"><p id="expFbTxt">No se pudo abrir aquí. Ábrelo en una pestaña nueva.</p><a class="pbtn yellow exp-fb-link" id="expFbLink" target="_blank" rel="noopener"></a></div></div>
+</div>
+
+<div class="modal" id="installModal" hidden role="dialog" aria-modal="true" aria-labelledby="inTitle">
+  <div class="panel in-panel">
+    <h2 id="inTitle">Instalar ANIMAPP</h2>
+    <div id="inBody"></div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:18px"><button class="pbtn" id="closeInstall">Cerrar</button></div>
+  </div>
 </div>
 
 <div class="modal" id="contactModal" hidden role="dialog" aria-modal="true" aria-labelledby="ctTitle">
@@ -1813,7 +1827,7 @@ const STATIC_TXT=[
  ["#footer .wrap > div:nth-child(2) h2","text","Dónde nos encontramos:","Where to find us:"],
  ["#mapLink","aria-label","Abrir ubicación en Google Maps","Open location in Google Maps"],
  ["#mapLink small","text","Universidad Politécnica de Santa Rosa Jáuregui · Abrir en Google Maps ↗","Universidad Politécnica de Santa Rosa Jáuregui · Open in Google Maps ↗"],
- [".contact-col h2","text","¿Dudas?","Questions?"],["#contactBtn","text","Contáctanos","Contact us"],
+ [".contact-col h2","text","¿Dudas?","Questions?"],["#contactBtn","text","Contáctanos","Contact us"],["#installBtn","text","Instalar app ⬇","Install app ⬇"],["#closeInstall","text","Cerrar","Close"],
  ["footer .copy","text","ANIMAPP · Ingeniería en Animación y Efectos Visuales · UPSRJ","ANIMAPP · Animation and Visual Effects Engineering · UPSRJ"],
  ["#ctTitle","text","Contáctanos","Contact us"],
  ["#contactModal dt:nth-of-type(1)","text","Programa","Program"],["#contactModal dd:nth-of-type(1)","text","Ingeniería en Animación y Efectos Visuales","Animation and Visual Effects Engineering"],
@@ -3109,7 +3123,8 @@ function botAnswer(q){
   if(has(/(iniciar sesion|login|log in|sign in|cuenta|contrasena|password)/)) return {t:L("Usa el botón «Iniciar sesión» de arriba y entra con tu cuenta de Google institucional (@upsrj.edu.mx). Con ella ves los Horarios; Sólo Profesores es para los docentes de la Academia.","Use the Sign in button at the top with your institutional Google account (@upsrj.edu.mx). It unlocks Schedules; Faculty Only is for Academy teachers.")};
   /* contacto y redes */
   if(has(/facebook|\bfb\b/)) return {t:"Facebook: "+CONFIG.facebook,acts:[{url:CONFIG.facebook,label:"Facebook ↗"}]};
-  if(has(/instagram|\big\b|insta/)) return {t:"Instagram: @animation_upsrj",acts:[{url:CONFIG.instagram,label:"Instagram ↗"}]};
+  if(has(/(instal|descarg(a|ar) (la )?app|app (para|en) (el )?(celular|telefono|movil|android|iphone|ios|windows|linux|computadora|compu)|pantalla de inicio|home screen)/)) return {t:L("¡Sí! ANIMAPP se puede instalar como app en Android, iPhone/iPad, Windows, Linux y Mac. Usa el botón «Instalar app» al final de la página de inicio y te digo los pasos para tu dispositivo.","Yes! ANIMAPP can be installed as an app on Android, iPhone/iPad, Windows, Linux and Mac. Use the “Install app” button at the bottom of the home page and I'll show you the steps for your device."),acts:[{url:APP_URL,label:L("Abrir ANIMAPP ↗","Open ANIMAPP ↗")}]};
+  if(has(/instagram|\big\b|\binsta\b/)) return {t:"Instagram: @animation_upsrj",acts:[{url:CONFIG.instagram,label:"Instagram ↗"}]};
   if(has(/youtube|videos? de la carrera/)) return {t:"YouTube: @animation_upsrj",acts:[{url:CONFIG.youtube,label:"YouTube ↗"}]};
   if(has(/redes|social/)) return {t:L("Nos encuentras en Facebook (IAEV.UPSRJ), Instagram y YouTube (@animation_upsrj).","Find us on Facebook (IAEV.UPSRJ), Instagram and YouTube (@animation_upsrj)."),acts:[{url:CONFIG.facebook,label:"Facebook ↗"},{url:CONFIG.instagram,label:"Instagram ↗"},{url:CONFIG.youtube,label:"YouTube ↗"}]};
   if(has(/(correo|email|mail|contact|telefono|comunicar)/)&&!has(/profe|maestr|docente|teacher/)) return {t:L(`Puedes escribirle a la Academia a ${CONFIG.correo}. También está el botón Contáctanos al final de cada página.`,`You can email the Academy at ${CONFIG.correo}. There's also a Contact us button at the bottom of every page.`)};
@@ -3196,6 +3211,41 @@ $("fbLink").href=CONFIG.facebook; $("igLink").href=CONFIG.instagram; $("ytLink")
   const col=[null,"#26242a","#bc2b36","#ffffff"];
   px.forEach((r,j)=>r.forEach((v,i)=>{ if(v){x.fillStyle=col[v];x.fillRect(44+i,18+j,1,1)} }));
 })();
+
+/* ====== Instalar app (PWA) ====== */
+const APP_URL="https://animapp-iaev.netlify.app/";
+let deferredInstall=null;
+const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const devPlat=()=>{ const u=navigator.userAgent;
+  if(/iPad|iPhone|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1)) return "ios";
+  if(/Android/.test(u)) return "android"; if(/Windows/.test(u)) return "windows"; if(/CrOS|Linux/.test(u)) return "linux"; if(/Mac/.test(u)) return "mac"; return "windows"; };
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferredInstall=e; });
+window.addEventListener("appinstalled",()=>{ deferredInstall=null; $("installBtn").hidden=true; $("installModal").hidden=true; });
+if(!inClaudeHost()&&"serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")) navigator.serviceWorker.register("sw.js").catch(()=>{});
+if(!isStandalone()) $("installBtn").hidden=false;
+function installSteps(){
+  const P={
+    android:{h:"Android",s:[L("Abre ANIMAPP en Chrome.","Open ANIMAPP in Chrome."),L("Toca el menú ⋮ (arriba a la derecha).","Tap the ⋮ menu (top right)."),L("Elige «Instalar app» o «Agregar a la pantalla principal» y confirma.","Choose “Install app” or “Add to Home screen” and confirm.")]},
+    ios:{h:"iPhone / iPad",s:[L("Abre ANIMAPP en Safari.","Open ANIMAPP in Safari."),L("Toca el botón Compartir (el cuadro con la flecha ↑).","Tap the Share button (the square with the ↑ arrow)."),L("Elige «Agregar a pantalla de inicio»; si aparece «Abrir como app web», déjalo activado.","Choose “Add to Home Screen”; if you see “Open as Web App”, leave it on."),L("Toca «Agregar». El ícono de Timo y Maya aparecerá en tu pantalla.","Tap “Add”. The Timo & Maya icon will appear on your Home Screen.")]},
+    windows:{h:"Windows",s:[L("Abre ANIMAPP en Chrome o Edge.","Open ANIMAPP in Chrome or Edge."),L("Haz clic en el ícono de instalar (⊕ o un monitor con flecha) al final de la barra de direcciones.","Click the install icon (⊕ or a monitor with an arrow) at the end of the address bar."),L("O usa el menú: Chrome ⋮ → «Transmitir, guardar y compartir» → «Instalar página como app»; Edge … → «Aplicaciones» → «Instalar este sitio como aplicación».","Or use the menu: Chrome ⋮ → “Cast, save and share” → “Install page as app”; Edge … → “Apps” → “Install this site as an app”."),L("Quedará en el menú Inicio y puedes anclarla a la barra de tareas.","It will appear in the Start menu and you can pin it to the taskbar.")]},
+    linux:{h:"Linux",s:[L("Abre ANIMAPP en Chrome, Chromium o Edge.","Open ANIMAPP in Chrome, Chromium or Edge."),L("Haz clic en el ícono de instalar ⊕ al final de la barra de direcciones, o en el menú ⋮ → «Transmitir, guardar y compartir» → «Instalar página como app».","Click the ⊕ install icon at the end of the address bar, or ⋮ menu → “Cast, save and share” → “Install page as app”."),L("La app aparecerá en tu lanzador de aplicaciones.","The app will appear in your app launcher.")],n:L("Firefox no permite instalar sitios como app; usa Chrome, Chromium o Edge.","Firefox can't install sites as apps; use Chrome, Chromium or Edge.")},
+    mac:{h:"Mac",s:[L("En Safari: menú Archivo → «Agregar al Dock».","In Safari: File menu → “Add to Dock”."),L("En Chrome o Edge: ícono de instalar ⊕ en la barra de direcciones.","In Chrome or Edge: the ⊕ install icon in the address bar.")]}
+  };
+  const box=b=>`<div class="in-plat"><h3>${b.h}</h3><ol>${b.s.map(x=>`<li>${x}</li>`).join("")}</ol>${b.n?`<p class="in-note">${b.n}</p>`:""}</div>`;
+  const me=devPlat(), rest=["android","ios","windows","linux","mac"].filter(k=>k!==me);
+  const host=inClaudeHost();
+  $("inBody").innerHTML=(host?`<p class="in-lead">${L("Para instalarla, abre ANIMAPP en su sitio web y sigue los pasos:","To install it, open ANIMAPP on its website and follow the steps:")}</p><a class="pbtn yellow in-go" href="${APP_URL}" target="_blank" rel="noopener">${L("Abrir ANIMAPP ↗","Open ANIMAPP ↗")}</a>`
+      :`<p class="in-lead">${L("Instálala en tu dispositivo para abrirla como cualquier otra app, con su propio ícono.","Install it on your device to open it like any other app, with its own icon.")}</p>`)
+    +box(P[me])+`<details class="in-more"><summary>${L("Otros dispositivos","Other devices")}</summary>${rest.map(k=>box(P[k])).join("")}</details>`;
+  $("inTitle").textContent=L("Instalar ANIMAPP","Install ANIMAPP");
+  $("installModal").hidden=false; $("closeInstall").focus();
+}
+$("installBtn").addEventListener("click",async()=>{ sfx.select();
+  if(deferredInstall){ const ev=deferredInstall; deferredInstall=null; ev.prompt(); try{ const r=await ev.userChoice; if(r.outcome==="accepted"){ $("installBtn").hidden=true; return; } }catch(e){} }
+  installSteps(); });
+$("closeInstall").addEventListener("click",()=>{ $("installModal").hidden=true; $("installBtn").focus() });
+$("installModal").addEventListener("click",e=>{ if(e.target.id==="installModal") $("installModal").hidden=true });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") $("installModal").hidden=true });
 
 $("contactBtn").addEventListener("click",()=>{ sfx.select(); $("contactModal").hidden=false; $("closeContact").focus() });
 $("closeContact").addEventListener("click",()=>{ $("contactModal").hidden=true; $("contactBtn").focus() });
