@@ -2724,11 +2724,13 @@ setTimeout(()=>{ auth.phase=FB_CFG?(inClaudeHost()?"claude":"loading"):"noconfig
    Respuestas locales a partir del contenido de ANIMAPP (secciones, docentes, calendario); funciona sin conexión a ningún servicio. */
 var botMode=false;
 /* Se encogen solo cuando terminaron de saludar: brazos abajo, sin hablar, y una pausa para verlos en grande. */
+let greetDoneAt=0;
 function shrinkAfterGreeting(){
   if(botMode) return;
-  const busy=Date.now()<st.wavingUntil||st.c.el.t>0||st.c.ella.t>0||(synth&&synth.speaking);
+  if(!greetDoneAt) greetDoneAt=Date.now();
+  const busy=Date.now()<greetDoneAt+2500||Date.now()<st.wavingUntil||st.c.el.t>0||st.c.ella.t>0||(synth&&synth.speaking);
   if(busy||current!=="menu"){ clearTimeout(shrinkAfterGreeting._t); shrinkAfterGreeting._t=setTimeout(shrinkAfterGreeting,300); return; }
-  clearTimeout(shrinkAfterGreeting._t); shrinkAfterGreeting._t=setTimeout(()=>{ if(current==="menu"&&!botMode) toBot(true); else shrinkAfterGreeting(); },1500);
+  clearTimeout(shrinkAfterGreeting._t); shrinkAfterGreeting._t=setTimeout(()=>{ if(current==="menu"&&!botMode) toBot(true); else shrinkAfterGreeting(); },2000);
 }
 function toBot(animated){
   if(botMode) return; botMode=true;
