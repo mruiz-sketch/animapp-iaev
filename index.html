@@ -2295,14 +2295,14 @@ function talk(ms){ clearInterval(talkTimer); let o=false; talkTimer=setInterval(
 var GREETING="¡Hola, coyote! ¿Qué te gustaría hacer hoy?";
 function greet(animated){
   const t=$("bubbleText"), grid=$("grid"), coy=$("coyotes");
-  if(!animated){ t.textContent=GREETING; grid.hidden=false; wave(1600); setTimeout(()=>toBot(false),900); return }
+  if(!animated){ t.textContent=GREETING; grid.hidden=false; wave(1600); shrinkAfterGreeting(); return }
   t.textContent=""; grid.hidden=true; coy.classList.remove("enter"); void coy.offsetWidth; coy.classList.add("enter"); grid.classList.remove("enter");
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   setTimeout(()=>{
     say(GREETING); wave(GREETING.length*45+1800);
     let i=0; const tick=()=>{ t.textContent=GREETING.slice(0,++i); const ch=GREETING[i-1]; if(ch!==" ") sfx.blip();
       if(i%2===0) mouthFrame(/[aeiouáéíóú]/i.test(ch)||i%4===0);
-      if(i<GREETING.length) setTimeout(tick,reduce?0:45); else { mouthStop(); setTimeout(()=>{grid.hidden=false;grid.classList.add("enter")},350); setTimeout(()=>{ if(current==="menu") toBot(true) },2200) } };
+      if(i<GREETING.length) setTimeout(tick,reduce?0:45); else { mouthStop(); setTimeout(()=>{grid.hidden=false;grid.classList.add("enter")},350); shrinkAfterGreeting() } };
     tick();
   },reduce?0:950);
 }
@@ -2723,6 +2723,13 @@ setTimeout(()=>{ auth.phase=FB_CFG?(inClaudeHost()?"claude":"loading"):"noconfig
 /* ====== CHATBOT: los coyotes se vuelven un ícono y responden preguntas ======
    Respuestas locales a partir del contenido de ANIMAPP (secciones, docentes, calendario); funciona sin conexión a ningún servicio. */
 var botMode=false;
+/* Se encogen solo cuando terminaron de saludar: brazos abajo, sin hablar, y una pausa para verlos en grande. */
+function shrinkAfterGreeting(){
+  if(botMode) return;
+  const busy=Date.now()<st.wavingUntil||st.c.el.t>0||st.c.ella.t>0||(synth&&synth.speaking);
+  if(busy||current!=="menu"){ clearTimeout(shrinkAfterGreeting._t); shrinkAfterGreeting._t=setTimeout(shrinkAfterGreeting,300); return; }
+  clearTimeout(shrinkAfterGreeting._t); shrinkAfterGreeting._t=setTimeout(()=>{ if(current==="menu"&&!botMode) toBot(true); else shrinkAfterGreeting(); },1500);
+}
 function toBot(animated){
   if(botMode) return; botMode=true;
   const stage=$("coyoStage"), coy=$("coyotes"), wrap=$("botWrap"), btn=$("botBtn"), from=stage.getBoundingClientRect();
