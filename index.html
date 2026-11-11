@@ -233,35 +233,35 @@ footer h2{font-family:var(--display);font-weight:400;font-size:11px;margin:0 0 1
 @media (prefers-reduced-motion:reduce){.eq-cover{transition:none}}
 .cal-live{margin-bottom:30px}.cal-frame{position:relative;width:100%;aspect-ratio:4/3;max-height:640px;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink);background:#fff}.cal-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (max-width:640px){.cal-frame{aspect-ratio:3/4}}
-.cal-wrap{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:32px;align-items:start}
+.cal-wrap{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:36px;align-items:start}
 .cal-month{background:var(--card);box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink);padding:16px}
 .cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;background:var(--iaev-red);margin:-16px -16px 14px;padding:12px 14px}
-.cal-name{font-family:var(--display);font-size:12px;color:#fff;text-transform:uppercase;text-align:center}
-.cal-nav{font-size:12px;width:36px;height:36px}
+.cal-name{font-family:var(--display);font-size:15px;color:#fff;text-transform:uppercase;text-align:center}
+.cal-nav{font-size:14px;width:42px;height:42px}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-.cal-dn{font-family:var(--display);font-size:9px;text-align:center;color:var(--ink-soft);padding-bottom:4px}
+.cal-dn{font-family:var(--display);font-size:11px;text-align:center;color:var(--ink-soft);padding-bottom:4px}
 .cal-d{text-align:center;background:var(--paper);font-variant-numeric:tabular-nums}
 .cal-d.wk{color:var(--ink-soft)}.cal-d.empty{background:transparent}
 .cal-d.today{background:var(--iaev-yellow);box-shadow:0 0 0 3px var(--ink)}
 .cal-side{display:flex;flex-direction:column;gap:18px;align-items:flex-start;min-width:0}
-.cal-txt{margin:0;max-width:52ch}.cal-btn{text-decoration:none;font-size:11px}
-.cal-note{margin:0;font-size:14px;color:var(--ink-soft);max-width:52ch}
+.cal-txt{margin:0;max-width:52ch}.cal-btn{text-decoration:none;font-size:12px}
+.cal-note{margin:0;font-size:16px;color:var(--ink-soft);max-width:52ch}
 @media (max-width:760px){.cal-wrap{grid-template-columns:1fr}}
-.cal-d{border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink);font:inherit;font-family:var(--display);font-size:11px;padding:7px 0 5px;min-height:40px}
+.cal-d{border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink);font:inherit;font-family:var(--display);font-size:14px;padding:9px 0 6px;min-height:52px}
 .cal-d:hover{background:#fff2b8}.cal-d.sel{box-shadow:0 0 0 3px var(--iaev-blue);position:relative;z-index:1}
 .cal-d.today.sel{box-shadow:0 0 0 3px var(--ink)}
-.cal-dots{display:flex;gap:2px;height:6px}.cal-dots i,.cal-legend i{display:block;width:6px;height:6px}
+.cal-dots{display:flex;gap:3px;height:8px}.cal-dots i,.cal-legend i{display:block;width:8px;height:8px}
 .cat-ini{--cc:#62aeea}.cat-eva{--cc:#bc2b36}.cat-tra{--cc:#e3b21f}.cat-des{--cc:#5fae4a}.cat-evt{--cc:#c552b8}
 i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
-.cal-legend{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink-soft)}
-.cal-legend li{display:flex;align-items:center;gap:6px}.cal-legend i{width:10px;height:10px}
-.cal-h3{font-family:var(--display);font-weight:400;font-size:11px;line-height:1.6;margin:0 0 10px;text-transform:uppercase;color:var(--iaev-red)}
+.cal-legend{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 16px;font-size:16px;color:var(--ink-soft)}
+.cal-legend li{display:flex;align-items:center;gap:8px}.cal-legend i{width:12px;height:12px}
+.cal-h3{font-family:var(--display);font-weight:400;font-size:13px;line-height:1.6;margin:0 0 10px;text-transform:uppercase;color:var(--iaev-red)}
 .cal-day,.cal-list{width:100%}
 .cal-evs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-.cal-ev{display:grid;grid-template-columns:108px 1fr;gap:10px;align-items:baseline;padding:8px 10px;background:var(--paper);border-left:6px solid var(--cc);font-size:14px;line-height:1.35}
-.cal-ev-d{font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;color:var(--ink)}.cal-ev-t{min-width:0;overflow-wrap:anywhere}
-.cal-none{margin:0;color:var(--ink-soft);font-size:14px}
-.cal-list{max-height:420px;overflow:auto;padding-right:4px}
+.cal-ev{display:grid;grid-template-columns:130px 1fr;gap:12px;align-items:baseline;padding:10px 12px;background:var(--paper);border-left:6px solid var(--cc);font-size:17px;line-height:1.4}
+.cal-ev-d{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}.cal-ev-t{min-width:0;overflow-wrap:anywhere}
+.cal-none{margin:0;color:var(--ink-soft);font-size:17px}
+.cal-list{max-height:520px;overflow:auto;padding-right:4px}
 .cal-links{display:flex;flex-wrap:wrap;gap:16px}
 @media (max-width:520px){.cal-ev{grid-template-columns:1fr;gap:2px}}
 .portals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:26px;margin-top:6px;padding:6px}
@@ -2435,12 +2435,9 @@ let calOffset=0;
 function calendarHTML(){
   const view="https://calendar.google.com/calendar/embed?src="+encodeURIComponent(GCAL_ID)+"&ctz=America%2FMexico_City";
   const add="https://calendar.google.com/calendar/u/0?cid="+GCAL_CID;
-  /* Google Calendar en vivo: solo funciona cuando ANIMAPP está publicada en un sitio propio (los artifacts de Claude bloquean iframes externos) */
-  const host=location.hostname, inClaude=/(^|\.)claude\.ai$|claudeusercontent\.com$|claude\.site$|^$/.test(host)||location.protocol==="file:";
-  const live=inClaude?"":`<div class="cal-live"><h3 class="cal-h3">${L("Calendario en vivo","Live calendar")}</h3><div class="cal-frame"><iframe src="${view}" title="${L("Calendario académico IAEV en Google Calendar","IAEV academic calendar on Google Calendar")}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>`;
-  return live+`<div class="cal-wrap"><div class="cal-month" id="calMonth"></div>
+  return `<div class="cal-wrap"><div class="cal-month" id="calMonth"></div>
     <div class="cal-side"><div class="cal-day" id="calDay" aria-live="polite"></div><div class="cal-list" id="calList"></div>
-    <div class="cal-links"><a class="pbtn red cal-btn" href="${view}" target="_blank" rel="noopener">${L("Ver calendario IAEV ↗","View IAEV calendar ↗")}</a>
+    <div class="cal-links"><a class="pbtn red cal-btn" href="${view}" target="_blank" rel="noopener">${L("Abrir en Google Calendar ↗","Open in Google Calendar ↗")}</a>
     <a class="pbtn yellow cal-btn" href="${add}" target="_blank" rel="noopener">${L("Agregar a mi Google Calendar ↗","Add to my Google Calendar ↗")}</a></div>
     <p class="cal-note">${L("Fechas del calendario académico oficial (actualizado al 4 de noviembre de 2026). Agrégalo a tu Google Calendar para recibir los cambios en tu celular.","Dates from the official academic calendar (updated November 4, 2026). Add it to your Google Calendar to get updates on your phone.")}</p></div></div>`;
 }
