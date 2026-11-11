@@ -2330,8 +2330,8 @@ const CONTENT={
  galeria:{ h:["Galería virtual","Virtual gallery"], html:()=>portalsHTML("galeria"), after:wirePortals },
  filmfest:{ h:["Vive el festival","Experience the festival"], html:()=>portalsHTML("filmfest"), after:wirePortals },
  juegos:{ h:["Elige un juego","Pick a game"], html:()=>portalsHTML("juegos"), after:wirePortals },
- sai:{ h:["Elige tu portal","Choose your portal"], html:()=>`<div class="sai-btns">${SAI_PORTALS.map((p,k)=>`<button class="pbtn yellow portal-go-btn sai-btn" data-sai="${k}">▶ ${p.t[LANG==="en"?1:0]}</button>`).join("")}</div>`,
-   after:()=>document.querySelectorAll("[data-sai]").forEach(b=>b.addEventListener("click",()=>{ sfx.select(); openExperience(SAI_PORTALS[+b.dataset.sai]); })) },
+ sai:{ h:["Elige tu portal","Choose your portal"], html:()=>`<div class="sai-btns">${SAI_PORTALS.map((p,k)=>`<a class="pbtn yellow portal-go-btn sai-btn" data-sai="${k}" href="${p.url}" target="_blank" rel="noopener">${p.t[LANG==="en"?1:0]} ↗</a>`).join("")}</div>`,
+   after:()=>document.querySelectorAll("[data-sai]").forEach(b=>b.addEventListener("click",()=>sfx.select())) },
  asistencia:{ h:["Portal de alumnos","Student portal"], html:()=>`<button class="pbtn yellow portal-go-btn" id="asisOpen">${L("▶ Abrir portal de asistencia","▶ Open attendance portal")}</button>`, after:()=>$("asisOpen").addEventListener("click",()=>openExperience(ASISTENCIA)) },
  calendario:{ h:["Calendario de la carrera","Program calendar"], html:calendarHTML, after:drawMonth },
  horarios:{
