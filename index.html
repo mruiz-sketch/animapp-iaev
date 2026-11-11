@@ -337,6 +337,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .qa-item summary:hover{background:#fff8dc}
 .qa-a{padding:4px 16px 16px 54px;font-size:17px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
 .sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
+.pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:10px;text-decoration:none;display:inline-block}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
 .cm-note{font-size:15px;color:var(--ink-soft);margin:14px 0 0}
@@ -2321,7 +2322,8 @@ const CONTENT={
  },
  "plan-estudios":{
   h:["Hasta IAEV-43","Through IAEV-43"],
-  html:()=>curriculumHTML()+`<h2 class="sec-h2 sec-h2-more">${L("Desde IAEV-PA-01 en adelante","From IAEV-PA-01 onward")}</h2>`+curriculumPAHTML()
+  after:wirePlanPDF,
+  html:()=>planPDFButtons()+curriculumHTML()+`<h2 class="sec-h2 sec-h2-more">${L("Desde IAEV-PA-01 en adelante","From IAEV-PA-01 onward")}</h2>`+curriculumPAHTML()
  },
  material:{ replace:true, html:equipoHTML, after:wireEquipo },
  galeria:{ h:["Galería virtual","Virtual gallery"], html:()=>portalsHTML("galeria"), after:wirePortals },
@@ -2341,6 +2343,16 @@ const CONTENT={
   html:teamHTML
  }
 };
+
+/* ====== Descarga de los planes en PDF (docs/*.pdf). En Claude usa la capacidad "downloads"; fuera, un enlace normal. ====== */
+const PLAN_PDFS=[{f:"docs/plan-hasta-IAEV-43.pdf",n:"Plan de estudios IAEV hasta IAEV-43.pdf",t:["Plan hasta IAEV-43","Plan through IAEV-43"]},
+ {f:"docs/plan-desde-IAEV-PA-01.pdf",n:"Plan de estudios IAEV desde IAEV-PA-01.pdf",t:["Plan desde IAEV-PA-01","Plan from IAEV-PA-01"]}];
+function planPDFButtons(){ return `<div class="pdf-btns">${PLAN_PDFS.map((x,k)=>`<a class="pbtn yellow pdf-btn" data-pdf="${k}" href="${x.f}" download="${x.n}">⬇ ${L("Descargar PDF","Download PDF")} · ${x.t[LANG==="en"?1:0]}</a>`).join("")}</div>`; }
+function wirePlanPDF(){ document.querySelectorAll("[data-pdf]").forEach(a=>a.addEventListener("click",async e=>{
+  if(!inClaudeHost()||!window.claude||!claude.use) return; e.preventDefault(); sfx.select(); const x=PLAN_PDFS[+a.dataset.pdf];
+  try{ const dl=await claude.use("downloads"); const blob=await (await fetch(x.f)).blob();
+    if(dl) await dl.save({filename:x.n,data:blob}); else window.open(x.f,"_blank","noopener"); }
+  catch(err){ if(!(err&&err.code==="declined")) window.open(x.f,"_blank","noopener"); } })); }
 
 /* ====== Q&A (Sobre Nosotros) ====== */
 const QA=[
