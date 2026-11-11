@@ -348,7 +348,11 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bl-link{text-decoration:none;display:inline-block}.bl-more{margin:16px 0 0}.bl-cal{font-size:10px}
 .bl-ff{display:flex;gap:24px;align-items:center;flex-wrap:wrap}.bl-ff-img{width:180px;height:auto;display:block;box-shadow:0 0 0 4px var(--ink)}
 .bl-ff-txt{flex:1 1 260px;display:flex;flex-direction:column;gap:16px}.bl-ff-txt p{margin:0;max-width:60ch}
-.bl-intro{margin:0 0 6px;max-width:65ch}.bl-g{font-family:var(--display);font-weight:400;font-size:12px;margin:22px 0 12px;color:var(--ink)}
+.bl-intro{margin:0 0 18px;max-width:65ch}
+.fest-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:22px;padding:6px;margin-bottom:8px}
+.fest-btn{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 14px 16px;text-align:center}
+.fest-btn.on{--c:var(--iaev-yellow)}.fest-ico{height:96px;width:auto;image-rendering:pixelated}
+.fest-lbl{font-family:var(--display);font-size:13px;line-height:1.5}.fest-n{font-family:var(--body);font-size:15px;color:var(--ink-soft)}.bl-g{font-family:var(--display);font-weight:400;font-size:12px;margin:22px 0 12px;color:var(--ink)}
 .bl-fests{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
 .bl-fest a{display:flex;flex-direction:column;gap:6px;height:100%;padding:12px 14px;background:var(--paper);color:var(--ink);text-decoration:none;border-left:6px solid var(--iaev-blue)}
 .bl-fest a:hover{background:#fff8dc}.bl-fn{font-weight:700;font-size:17px;color:var(--iaev-red)}.bl-fd{font-size:15px;color:var(--ink-soft)}
@@ -2427,13 +2431,47 @@ function blogHTML(){ const i=LANG==="en"?1:0;
     <div class="portal-actions"><a class="pbtn yellow portal-go-btn bl-link" id="blBases" href="${BASES_URL}" target="_blank" rel="noopener">${L("Leer las bases (PDF) ↗","Read the rules (PDF) ↗")}</a><button class="pbtn portal-go-btn" id="blFF">${L("Ir al Film Fest ›","Go to the Film Fest ›")}</button></div></div></div>
    <h2 class="sec-h2 sec-h2-more">${L("Festivales","Festivals")}</h2>
    <p class="bl-intro">${L("Festivales de animación, cine y diseño donde puedes inscribir tus proyectos o aprender de la industria.","Animation, film and design festivals where you can submit your projects or learn from the industry.")}</p>
-   ${FESTIVALES.map(gr=>`<h3 class="bl-g">${gr.g[i]}</h3><ul class="bl-fests">${gr.items.map(f=>`<li class="bl-fest"><a href="${f[1]}" target="_blank" rel="noopener"><span class="bl-fn">${f[0]} ↗</span><span class="bl-fd">${f[2+i]}</span></a></li>`).join("")}</ul>`).join("")}`; }
+   <div class="fest-btns">${FESTIVALES.map((gr,k)=>`<button class="pbtn fest-btn" data-fg="${k}" aria-expanded="false" aria-controls="fg${k}"><canvas class="px fest-ico" id="fico${k}" width="${k?40:48}" height="${k?40:34}" aria-hidden="true"></canvas><span class="fest-lbl">${gr.g[i]}</span><span class="fest-n">${gr.items.length} ${L("festivales","festivals")}</span></button>`).join("")}</div>
+   ${FESTIVALES.map((gr,k)=>`<div class="fest-group" id="fg${k}" hidden><h3 class="bl-g">${gr.g[i]}</h3><ul class="bl-fests">${gr.items.map(f=>`<li class="bl-fest"><a href="${f[1]}" target="_blank" rel="noopener"><span class="bl-fn">${f[0]} ↗</span><span class="bl-fd">${f[2+i]}</span></a></li>`).join("")}</ul></div>`).join("")}`; }
+/* Íconos animados de los botones de festivales: bandera de México ondeando y globo terráqueo girando (pixel art en canvas) */
+const WORLD="000000000000000000000000000000000000000000000000000000000000000011111000000000000000111111100000000111111111100001111000000111111111111111111111001111111111111101100000011111111111111111111111000000011111111100000001011111111111111111111000000000011111111000000001111111111111111111100000000000011111110000000001111101111111111111000000000000001111100000000001111110111111111101100000000000000111100000000011111110100111111100000000000000000011000000000011111110100010011000000000000000000000110000000011111111000010010000000000000000000000011110000000011111000000011100000000000000000000011111100000011110000000000111100000000000000000001111100000001110100000000011100000000000000000000111100000001110000000000111110000000000000000000111000000001100000000000111110000000000000000001110000000001000000000000011110001000000000000001100000000000000000000000000010000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
+let festRAF=0;
+function festIcons(){
+  cancelAnimationFrame(festRAF);
+  const fc=document.getElementById("fico0"), gc=document.getElementById("fico1"); if(!fc||!gc) return;
+  const f=fc.getContext("2d"), g=gc.getContext("2d"), gimg=g.createImageData(40,40);
+  const shade=(hex,k)=>{ const n=parseInt(hex.slice(1),16); const c=x=>Math.max(0,Math.min(255,Math.round(x*k))); return `rgb(${c(n>>16)},${c((n>>8)&255)},${c(n&255)})`; };
+  const EAGLE=[[0,-2,"#7a4a1e"],[1,-2,"#7a4a1e"],[-1,-1,"#7a4a1e"],[0,-1,"#a0672b"],[1,-1,"#a0672b"],[2,-1,"#7a4a1e"],[0,0,"#a0672b"],[1,0,"#7a4a1e"],[-1,1,"#3c8d2f"],[0,1,"#2f7a26"],[1,1,"#2f7a26"],[2,1,"#3c8d2f"],[0,2,"#3c8d2f"],[1,2,"#3c8d2f"]];
+  function flag(t){ f.clearRect(0,0,48,34); f.fillStyle="#5c5040"; f.fillRect(3,2,2,31); f.fillStyle="#d6b45a"; f.fillRect(2,1,4,2);
+    const x0=5,w=39,h=20,y0=5;
+    for(let i=0;i<w;i++){ const a=t*5-i*0.33, amp=Math.min(1,i/8)*1.8, dy=Math.round(Math.sin(a)*amp), k=1+Math.cos(a)*0.16*Math.min(1,i/8);
+      const col=i<13?"#006847":i<26?"#f4f4f0":"#ce1126";
+      f.fillStyle=shade(col,k); f.fillRect(x0+i,y0+dy,1,h); f.fillStyle="rgba(0,0,0,.35)"; f.fillRect(x0+i,y0+dy+h,1,1);
+      EAGLE.forEach(([ex,ey,c])=>{ if(x0+i===x0+19+ex){ f.fillStyle=shade(c,k); f.fillRect(x0+i,y0+dy+10+ey,1,1); } }); } }
+  function globe(t){ const d=gimg.data, R=17.5, cx=20, cy=20, rot=t*0.6;
+    for(let y=0;y<40;y++) for(let x=0;x<40;x++){ const o=(y*40+x)*4, nx=(x+0.5-cx)/R, ny=(y+0.5-cy)/R, r2=nx*nx+ny*ny;
+      const dist=Math.sqrt(r2); if(dist>1+1.1/R){ d[o+3]=0; continue; }
+      if(dist>1){ d[o]=38; d[o+1]=36; d[o+2]=42; d[o+3]=255; continue; }
+      const nz=Math.sqrt(1-r2), lat=Math.asin(-ny), lon=Math.atan2(nx,nz)+rot;
+      const mx=((Math.floor(((lon/(2*Math.PI))+0.5)*48)%48)+48)%48, my=Math.min(23,Math.max(0,Math.floor((0.5-lat/Math.PI)*24)));
+      const land=WORLD[my*48+mx]==="1", ice=my>=21||my<=0, l=0.55+0.45*Math.max(0,nx*-0.45+ny*-0.55+nz*0.7);
+      const c=ice?[236,242,248]:land?[86,170,72]:[58,128,214];
+      d[o]=c[0]*l; d[o+1]=c[1]*l; d[o+2]=c[2]*l; d[o+3]=255; }
+    g.putImageData(gimg,0,0); }
+  const t0=performance.now();
+  const loop=now=>{ if(!document.body.contains(fc)) return; const t=(now-t0)/1000; flag(t); globe(t); festRAF=requestAnimationFrame(loop); };
+  if(reduceMotion){ flag(0); globe(0); } else festRAF=requestAnimationFrame(loop);
+}
 function wireBlog(){
   const strip=()=>{ $("blStrip").innerHTML=blogStripHTML(); $("blPrev").onclick=()=>{blogEvIdx--;sfx.blip();strip();}; $("blNext").onclick=()=>{blogEvIdx++;sfx.blip();strip();}; };
   blogEvIdx=0; if($("blPrev")) strip();
   $("blCal").onclick=()=>{ sfx.select(); go("calendario"); };
   $("blBases").addEventListener("click",()=>sfx.select());
   $("blFF").onclick=()=>{ sfx.select(); go("filmfest"); };
+  document.querySelectorAll("[data-fg]").forEach(b=>b.addEventListener("click",()=>{ const k=b.dataset.fg, grp=$("fg"+k), open=grp.hidden; sfx.select();
+    document.querySelectorAll(".fest-group").forEach(x=>x.hidden=true); document.querySelectorAll("[data-fg]").forEach(x=>{ x.setAttribute("aria-expanded","false"); x.classList.remove("on"); });
+    if(open){ grp.hidden=false; b.setAttribute("aria-expanded","true"); b.classList.add("on"); grp.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"nearest"}); } }));
+  festIcons();
 }
 
 /* ====== Q&A (Sobre Nosotros) ====== */
