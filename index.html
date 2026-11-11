@@ -336,7 +336,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .qa-item[open] summary::before{content:"−";background:var(--iaev-red);color:#fff}
 .qa-item summary:hover{background:#fff8dc}
 .qa-a{padding:4px 16px 16px 54px;font-size:17px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
-.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
+.prof-top{margin-bottom:22px}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:10px;text-decoration:none;display:inline-block}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
@@ -389,6 +389,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
   <section id="section" class="screen" hidden>
     <div class="wrap">
       <div class="sec-head"><svg class="px" id="secIcon"></svg><h1 id="secTitle"></h1></div>
+      <div class="panel prof-top" id="secTop" hidden></div>
       <div class="panel" id="secBody"></div>
       <!--MAPA:START (sincronizado desde 'Mapa Pixel UPSRJ'; no editar a mano)-->
 <style>
@@ -2501,6 +2502,9 @@ function wirePortals(){ document.querySelectorAll("svg[data-portal]").forEach(s=
 /* Portal de asistencia: sitio externo. Dentro de claude.ai no se permiten sitios externos en ventanas internas,
    así que ahí se ofrece abrirlo en pestaña nueva; en otro hosting (p. ej. Netlify) se carga en la ventana interna. */
 const ASISTENCIA={src:"https://gestionacademica.tailaf0046.ts.net/coordinacion/portal_alumnos/",url:"https://gestionacademica.tailaf0046.ts.net/coordinacion/portal_alumnos/",t:["Asistencia · Portal de alumnos","Attendance · Student portal"]};
+const PROF_PORTALS=[
+ {src:"https://sai.upsrj.edu.mx/docentes.php",url:"https://sai.upsrj.edu.mx/docentes.php",t:["SAI Docentes","SAI · Faculty"]},
+ {src:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",url:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",t:["SRA","SRA"],insecure:true}];
 const SAI_PORTALS=[
  {src:"https://sai.upsrj.edu.mx/alumnos.php",url:"https://sai.upsrj.edu.mx/alumnos.php",t:["SAI de Alumnos","SAI · Students"]},
  {src:"https://sai.upsrj.edu.mx/egresados.php",url:"https://sai.upsrj.edu.mx/egresados.php",t:["SAI de Egresados","SAI · Alumni"]}];
@@ -2515,6 +2519,9 @@ async function openExperience(p){
   fbTxt.textContent=L("No se pudo abrir aquí. Ábrelo en una pestaña nueva.","It couldn't open here. Open it in a new tab.");
   fb.hidden=true; fr.hidden=false; ov.hidden=false; document.body.style.overflow="hidden"; expOpen=p;
   if(synth) synth.cancel(); sfx.start();
+  if(p.src&&p.insecure&&location.protocol==="https:"){ fr.hidden=true; fb.hidden=false;
+    fbTxt.textContent=L("Este sistema usa una conexión sin cifrar (http), y los navegadores no permiten mostrarlo dentro de una página segura como ANIMAPP. Ábrelo en una pestaña nueva.","This system uses an unencrypted (http) connection, and browsers don't allow showing it inside a secure page like ANIMAPP. Open it in a new tab.");
+    fbLink.textContent=p.t[LANG==="en"?1:0]+" ↗"; setTimeout(()=>fbLink.focus(),50); return; }
   if(p.src){
     if(inClaudeHost()){ fr.hidden=true; fb.hidden=false;
       fbTxt.textContent=L("Desde la vista de Claude el portal no puede mostrarse en esta ventana. En la versión publicada de ANIMAPP se abre aquí mismo; por ahora, ábrelo en una pestaña nueva.","In the Claude view the portal can't be shown in this window. In the published ANIMAPP it opens right here; for now, open it in a new tab.");
@@ -2625,6 +2632,8 @@ function renderSection(id){
   iconSVG($("readBtn").querySelector("svg"),"speak");
   $("readBtn").addEventListener("click",()=>{ if(synth&&synth.speaking){synth.cancel();return} say($("longText").innerText,true) });
   renderContent(id);
+  { const top=$("secTop"); if(id==="profesores"){ top.hidden=false; top.innerHTML=`<h2 class="sec-h2">${L("Portales docentes","Faculty portals")}</h2><div class="sai-btns">${PROF_PORTALS.map((p,k)=>`<button class="pbtn yellow portal-go-btn sai-btn" data-prof="${k}">▶ ${p.t[LANG==="en"?1:0]}</button>`).join("")}</div>`;
+      top.querySelectorAll("[data-prof]").forEach(b=>b.addEventListener("click",()=>{ sfx.select(); openExperience(PROF_PORTALS[+b.dataset.prof]); })); } else { top.hidden=true; top.innerHTML=""; } }
   gate(id);
   if(id==="mapas"){ $("secBody").innerHTML='<p class="short">'+L('Explora el campus de la UPSRJ: pasa el cursor sobre un edificio para ver su nombre y haz clic en un lugar para que los coyotes caminen hasta allá. También puedes elegir un destino en la lista de lugares.','Explore the UPSRJ campus: hover over a building to see its name and click a place so the coyotes walk there. You can also pick a destination from the list of places.')+'</p>' }
 }
