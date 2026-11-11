@@ -102,6 +102,17 @@ progress{width:100%;height:14px}
     </div>
   </section>
 
+  <section class="card" id="calCard2" hidden>
+    <h2>Calendario de alumnos (sección Calendario)</h2>
+    <p class="muted" style="margin-bottom:14px">Exporta el calendario académico de alumnos de Google Calendar como archivo .ics y súbelo aquí. Reemplaza las fechas de la sección Calendario de ANIMAPP (y lo que responde el chatbot); es público, lo ve cualquier visitante.</p>
+    <div class="stack">
+      <label class="drop" id="icsDrop2" for="icsFile2">Arrastra aquí el archivo .ics<span class="muted">o haz clic para elegirlo</span></label>
+      <input type="file" id="icsFile2" accept=".ics,text/calendar" hidden>
+      <p class="muted" id="icsInfo2"></p>
+      <div class="row"><button class="btn" id="icsSave2" disabled>Guardar calendario</button></div>
+    </div>
+  </section>
+
   <section class="card" id="calCard" hidden>
     <h2>Calendario docente (Sólo Profesores)</h2>
     <p class="muted" style="margin-bottom:14px">Exporta el calendario «ACADEMIC CALENDAR - TEACHERS» de Google Calendar como archivo .ics y súbelo aquí. Reemplaza el calendario anterior; solo lo ven los docentes de la Academia.</p>
@@ -197,7 +208,6 @@ else (async()=>{
     try{ await db.runTransaction(async tx=>{ const d=await tx.get(r); if(!d.exists) return; tx.set(r,{archivos:d.data().archivos||[],actualizado:today()}); }); $("json").value=""; msg("Contenido JSON quitado.","ok"); }
     catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso.":"No se pudo quitar: "+e.message,"err"); } };
   /* --- calendario docente (.ics) --- */
-  let icsEv=null;
   function parseICS(txt){ const raw=txt.replace(/\r\n/g,"\n").replace(/\n[ \t]/g,""), out=[];
     raw.split("BEGIN:VEVENT").slice(1).forEach(b=>{ b=b.split("END:VEVENT")[0];
       const g=k=>{ const m=b.match(new RegExp("^"+k+"[^:\\n]*:(.*)$","m")); return m?m[1].trim():""; };
@@ -207,18 +217,22 @@ else (async()=>{
       if(!/^\d{8}$/.test(s)||!t) return; out.push({s,e,t});
       if(/FREQ=YEARLY/.test(g("RRULE"))){ const y0=+s.slice(0,4), last=new Date().getFullYear()+3; for(let y=y0+1;y<=last;y++) out.push({s:y+s.slice(4),e:(y+(+e.slice(0,4)-y0))+e.slice(4),t}); } });
     return out.sort((a,b)=>a.s<b.s?-1:a.s>b.s?1:0); }
-  async function pickICS(f){ if(!f) return; try{ icsEv=parseICS(await f.text()); }catch(e){ icsEv=null; }
-    if(!icsEv||!icsEv.length){ $("icsInfo").textContent="No encontré eventos en ese archivo. Revisa que sea el .ics exportado de Google Calendar."; $("icsSave").disabled=true; return; }
-    $("icsInfo").textContent=`${f.name}: ${icsEv.length} eventos, del ${icsEv[0].s.slice(6)}/${icsEv[0].s.slice(4,6)}/${icsEv[0].s.slice(0,4)} al ${icsEv[icsEv.length-1].s.slice(6)}/${icsEv[icsEv.length-1].s.slice(4,6)}/${icsEv[icsEv.length-1].s.slice(0,4)}.`; $("icsSave").disabled=false; }
-  $("icsFile").onchange=e=>{ pickICS(e.target.files[0]); e.target.value=""; };
-  ["dragover","dragenter"].forEach(t=>$("icsDrop").addEventListener(t,e=>{e.preventDefault();$("icsDrop").classList.add("over");}));
-  ["dragleave","drop"].forEach(t=>$("icsDrop").addEventListener(t,e=>{e.preventDefault();$("icsDrop").classList.remove("over");}));
-  $("icsDrop").addEventListener("drop",e=>pickICS(e.dataTransfer.files[0]));
-  $("icsSave").onclick=async()=>{ if(!icsEv) return; $("icsSave").disabled=true;
-    try{ await db.collection("profesores").doc("calendario").set({eventos:icsEv,actualizado:today()}); msg(`Calendario docente guardado (${icsEv.length} eventos). Ya se ve en Sólo Profesores.`,"ok"); }
-    catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); $("icsSave").disabled=false; } };
+  function icsCard(sfx,ref,okMsg){ let ev=null; const id=k=>$(k+sfx);
+    async function pick(f){ if(!f) return; try{ ev=parseICS(await f.text()); }catch(e){ ev=null; }
+      if(!ev||!ev.length){ id("icsInfo").textContent="No encontré eventos en ese archivo. Revisa que sea el .ics exportado de Google Calendar."; id("icsSave").disabled=true; return; }
+      const d=x=>x.slice(6)+"/"+x.slice(4,6)+"/"+x.slice(0,4);
+      id("icsInfo").textContent=`${f.name}: ${ev.length} eventos, del ${d(ev[0].s)} al ${d(ev[ev.length-1].s)}.`; id("icsSave").disabled=false; }
+    id("icsFile").onchange=e=>{ pick(e.target.files[0]); e.target.value=""; };
+    ["dragover","dragenter"].forEach(t=>id("icsDrop").addEventListener(t,e=>{e.preventDefault();id("icsDrop").classList.add("over");}));
+    ["dragleave","drop"].forEach(t=>id("icsDrop").addEventListener(t,e=>{e.preventDefault();id("icsDrop").classList.remove("over");}));
+    id("icsDrop").addEventListener("drop",e=>pick(e.dataTransfer.files[0]));
+    id("icsSave").onclick=async()=>{ if(!ev) return; id("icsSave").disabled=true;
+      try{ await ref().set({eventos:ev,actualizado:today()}); msg(okMsg.replace("{n}",ev.length),"ok"); }
+      catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); id("icsSave").disabled=false; } }; }
+  icsCard("",()=>db.collection("profesores").doc("calendario"),"Calendario docente guardado ({n} eventos). Ya se ve en Sólo Profesores.");
+  icsCard("2",()=>db.collection("publico").doc("calendario"),"Calendario de alumnos guardado ({n} eventos). Ya se ve en la sección Calendario.");
   $("target").onchange=()=>{ $("json").value=""; refresh(); };
-  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; if(u) refresh(); });
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; if(u) refresh(); });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
   $("signOut").onclick=()=>auth.signOut();

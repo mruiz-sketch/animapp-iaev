@@ -33,6 +33,11 @@ service cloud.firestore {
       allow read: if upsrj();
       allow write: if admin();
     }
+    // Calendario de alumnos: público (lo lee cualquier visitante), lo editan los docentes.
+    match /publico/{rest=**} {
+      allow read: if true;
+      allow write: if admin();
+    }
     match /profesores/{rest=**} {
       allow read: if docente();
       allow write: if admin();
