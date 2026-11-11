@@ -2,14 +2,14 @@
 <title>ANIMAPP IAEV Pixel</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600;700&family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600;700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,400;0,600;0,700;0,800;1,700&display=swap">
 <style>
 /* Layout: pantallas apiladas (intro → menú con coyotes → secciones). Rejilla de píxeles tenue, tinta oscura, acentos del logo IAEV. */
 :root{
   --paper:#eef1f5; --paper-2:#e3e8ee; --card:#ffffff; --ink:#26242a; --ink-soft:#5c6070;
   --iaev-blue:#62aeea; --iaev-yellow:#ebc232; --iaev-green:#82bd6e; --iaev-red:#bc2b36; --iaev-maroon:#5e1f18;
   --display:"Press Start 2P", "Courier New", monospace;
-  --body:"Pixelify Sans", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Work Sans", "Trebuchet MS", system-ui, sans-serif;
   --px:4px; color-scheme:light;
 }
 html,body{height:100%}
@@ -48,7 +48,7 @@ button{font:inherit;color:inherit}
 .audio-btn .lbl{white-space:nowrap}
 .topbar .lang-btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;padding:8px 12px;margin-right:8px}
 .lang-btn svg{width:24px;height:24px}.lang-btn .code{color:var(--iaev-red)}
-@media (max-width:560px){.audio-btn .lbl,.lang-btn .lbl{display:none}.topbar .brand span{display:none}}
+@media (max-width:560px){.audio-btn .lbl,.lang-btn .lbl{display:none}.topbar .brand span{display:none}.topbar,.topbar .nav{gap:9px}.topbar .lang-btn{margin-right:0}}
 
 /* Pantallas */
 .screen{min-height:calc(100% - 64px)}
@@ -424,7 +424,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
   --ink:#141a35; --panel:#1e2650; --edge:#3a4685; --text:#eef1ff; --muted:#aab3e2;
   --pin:#3d8fd6; --gold:#ffcc33; --shadow:#0a0d22;
   --f-display:'Press Start 2P', ui-monospace, 'Courier New', monospace;
-  --f-body:'Pixelify Sans', ui-monospace, 'Courier New', monospace;
+  --f-body:'Work Sans', system-ui, sans-serif;
   --page:#ffffff; --page-ink:#141a35; --page-muted:#4f5778;
   color-scheme:light;
 }
