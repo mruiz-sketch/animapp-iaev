@@ -1,8 +1,8 @@
 // Service worker de ANIMAPP: permite instalar la app y abrirla sin conexión
 // (muestra la última versión guardada). Siempre intenta primero la red.
-const CACHE = "animapp-v1";
+const CACHE = "animapp-v2";
 const SHELL = ["/", "/index.html", "/manifest.webmanifest", "/firebase-config.js", "/noticias.json",
-  "/icons/icon-192.png", "/icons/icon-512.png", "/icons/apple-touch-icon.png"];
+  "/icons/icon-192.png", "/icons/icon-512.png", "/icons/apple-touch-icon.png", "/apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });
