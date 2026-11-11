@@ -306,14 +306,14 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .fl-pdf{display:block;width:100%;height:min(80vh,900px);border:0;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
 .fl-act{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}.fl-dl{font-size:10px;text-decoration:none}
 #menu.solo .stage{grid-template-columns:1fr}
-.bot-wrap{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:85;display:flex;flex-direction:column;align-items:flex-end;gap:12px;pointer-events:none}
+.bot-wrap{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:85;display:flex;flex-direction:column;align-items:flex-start;gap:12px;pointer-events:none}
 .bot-wrap>*{pointer-events:auto}
-.bot-btn{width:124px;height:66px;padding:2px 2px 0;border:0;cursor:pointer;background:var(--card);border-radius:34px 34px 10px 34px;
+.bot-btn{width:124px;height:66px;padding:2px 2px 0;border:0;cursor:pointer;background:var(--card);border-radius:34px 34px 34px 10px;
   box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink),6px 8px 0 rgba(38,36,42,.25);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
 .bot-btn canvas{width:112px;height:auto;display:block;image-rendering:pixelated}
 .bot-btn:hover{background:#fff8dc}.bot-btn:focus-visible{outline:3px dashed var(--iaev-blue);outline-offset:6px}
 .bot-hint{background:var(--ink);color:#fff;font-family:var(--display);font-size:10px;line-height:1.7;padding:10px 12px;max-width:220px;position:relative}
-.bot-hint::after{content:"";position:absolute;right:28px;bottom:-8px;border:8px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+.bot-hint::after{content:"";position:absolute;left:28px;bottom:-8px;border:8px solid transparent;border-bottom:0;border-top-color:var(--ink)}
 .bot-panel{width:min(360px,calc(100vw - 32px));height:min(520px,calc(100vh - 140px));background:var(--card);display:flex;flex-direction:column;
   box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink),8px 10px 0 rgba(38,36,42,.25)}
 .bot-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--iaev-red);color:#fff;font-family:var(--display);font-size:11px;padding:10px 12px}
@@ -336,6 +336,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt{background:var(--cc)}
 .qa-item[open] summary::before{content:"−";background:var(--iaev-red);color:#fff}
 .qa-item summary:hover{background:#fff8dc}
 .qa-a{padding:4px 16px 16px 54px;font-size:17px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
+.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:12px;padding:18px 22px}
 .portal-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .portal-tab{font-size:13px;color:var(--ink-soft)}
 .cm-note{font-size:15px;color:var(--ink-soft);margin:14px 0 0}
@@ -2326,6 +2327,8 @@ const CONTENT={
  galeria:{ h:["Galería virtual","Virtual gallery"], html:()=>portalsHTML("galeria"), after:wirePortals },
  filmfest:{ h:["Vive el festival","Experience the festival"], html:()=>portalsHTML("filmfest"), after:wirePortals },
  juegos:{ h:["Elige un juego","Pick a game"], html:()=>portalsHTML("juegos"), after:wirePortals },
+ sai:{ h:["Elige tu portal","Choose your portal"], html:()=>`<div class="sai-btns">${SAI_PORTALS.map((p,k)=>`<button class="pbtn yellow portal-go-btn sai-btn" data-sai="${k}">▶ ${p.t[LANG==="en"?1:0]}</button>`).join("")}</div>`,
+   after:()=>document.querySelectorAll("[data-sai]").forEach(b=>b.addEventListener("click",()=>{ sfx.select(); openExperience(SAI_PORTALS[+b.dataset.sai]); })) },
  asistencia:{ h:["Portal de alumnos","Student portal"], html:()=>`<button class="pbtn yellow portal-go-btn" id="asisOpen">${L("▶ Abrir portal de asistencia","▶ Open attendance portal")}</button>`, after:()=>$("asisOpen").addEventListener("click",()=>openExperience(ASISTENCIA)) },
  calendario:{ h:["Calendario de la carrera","Program calendar"], html:calendarHTML, after:drawMonth },
  horarios:{
@@ -2486,6 +2489,9 @@ function wirePortals(){ document.querySelectorAll("svg[data-portal]").forEach(s=
 /* Portal de asistencia: sitio externo. Dentro de claude.ai no se permiten sitios externos en ventanas internas,
    así que ahí se ofrece abrirlo en pestaña nueva; en otro hosting (p. ej. Netlify) se carga en la ventana interna. */
 const ASISTENCIA={src:"https://gestionacademica.tailaf0046.ts.net/coordinacion/portal_alumnos/",url:"https://gestionacademica.tailaf0046.ts.net/coordinacion/portal_alumnos/",t:["Asistencia · Portal de alumnos","Attendance · Student portal"]};
+const SAI_PORTALS=[
+ {src:"https://sai.upsrj.edu.mx/alumnos.php",url:"https://sai.upsrj.edu.mx/alumnos.php",t:["SAI de Alumnos","SAI · Students"]},
+ {src:"https://sai.upsrj.edu.mx/egresados.php",url:"https://sai.upsrj.edu.mx/egresados.php",t:["SAI de Egresados","SAI · Alumni"]}];
 const inClaudeHost=()=>/(^|\.)claude\.ai$|claudeusercontent\.com$|claude\.site$|^$/.test(location.hostname)||location.protocol==="file:";
 let expOpen=null;
 async function openExperience(p){
@@ -2500,7 +2506,7 @@ async function openExperience(p){
   if(p.src){
     if(inClaudeHost()){ fr.hidden=true; fb.hidden=false;
       fbTxt.textContent=L("Desde la vista de Claude el portal no puede mostrarse en esta ventana. En la versión publicada de ANIMAPP se abre aquí mismo; por ahora, ábrelo en una pestaña nueva.","In the Claude view the portal can't be shown in this window. In the published ANIMAPP it opens right here; for now, open it in a new tab.");
-      fbLink.textContent=L("Abrir portal de asistencia ↗","Open attendance portal ↗"); setTimeout(()=>fbLink.focus(),50); return; }
+      fbLink.textContent=p.t[LANG==="en"?1:0]+" ↗"; setTimeout(()=>fbLink.focus(),50); return; }
     fr.removeAttribute("srcdoc"); fr.src=p.src; setTimeout(()=>{ try{ fr.focus(); }catch(e){} },300); return;
   }
   try{ const r=await fetch(p.file); if(!r.ok) throw 0; fr.srcdoc=await r.text(); }
@@ -2787,31 +2793,152 @@ function botEvents(q){
   if(!hits.length&&qt.some(w=>/pago|beca|inscripcion|tramite/.test(w))) hits=up.filter(e=>e[3]==="tra");
   return {hits:hits.slice(0,4),next:up.slice(0,3)};
 }
-function botAnswer(q){
-  const n=bnorm(q).trim();
-  if(!n) return null;
-  if(/^(hola|buen[oa]s|hey|que tal|hi|hello)\b/.test(n)&&n.length<25) return {t:L("¡Hola, coyote! Pregúntanos lo que quieras sobre la carrera: horarios, calendario, profesores, el campus, el material…","Hi, coyote! Ask us anything about the program: schedules, calendar, teachers, campus, equipment…"),chips:true};
-  if(/gracias|thank/.test(n)) return {t:L("¡De nada! Aquí estamos si necesitas algo más. 🐾","You're welcome! We're here if you need anything else. 🐾")};
-  if(/ayuda|que puedes|que sabes|help|what can you/.test(n)) return {t:L("Podemos llevarte a cualquier sección, decirte quién es cada profesor y su correo, y contarte las próximas fechas del calendario.","We can take you to any section, tell you who each teacher is and their email, and share upcoming calendar dates."),chips:true};
-  const teach=botTeacher(q);
-  if(teach.length){ return {t:teach.map(p=>`${p.n} — ${p.mail}\n${p.d[LANG==="en"?1:0]}`).join("\n\n"),go:["academia"]}; }
-  if(/(correo|email|mail|contact|telefono|comunicar)/.test(n)&&!/profe|maestr|docente|teacher/.test(n)) return {t:L(`Puedes escribirle a la Academia a ${CONFIG.correo}. También está el botón Contáctanos al final de cada página.`,`You can email the Academy at ${CONFIG.correo}. There's also a Contact us button at the bottom of every page.`)};
-  { const qt=btoks(q); let best=null,bs=0; QA.forEach(x=>{ const kt=btoks(x.k+" "+x.q[0]); let sc=0; qt.forEach(w=>{ if(kt.includes(w)) sc++; }); if(sc>bs){bs=sc;best=x;} });
-    if(best&&bs>=2){ const i=LANG==="en"?1:0; return {t:best.q[i]+"\n"+best.a[i].map(a=>best.a[i].length>1?"• "+a:a).join("\n"),go:["qa"]}; } }
-  const calQ=/(cuando|fecha|calendario|vacacion|descanso|examen|evaluacion|parcial|remedial|inscripcion|reinscripcion|pago|beca|inicio|termina|when|date|holiday|exam)/.test(n);
-  if(calQ){ const {hits,next}=botEvents(q), list=(hits.length?hits:next);
-    if(list.length) return {t:(hits.length?L("Esto encontré en el calendario:","Here's what I found in the calendar:"):L("Estas son las próximas fechas del calendario:","These are the next calendar dates:"))+"\n"+list.map(e=>`• ${botFmtD(e[0])}${e[1]!==e[0]?" – "+botFmtD(e[1]):""}: ${e[2]}`).join("\n"),go:["calendario"]}; }
-  const secs=botSecs(q);
-  if(secs.length){ const s=secs[0]; return {t:`${secT(s)}: ${secD(s)}`,go:secs.slice(0,3).map(x=>x.id)}; }
-  return {t:L("Mmm, no estamos seguros de eso. Prueba con otras palabras o elige un tema:","Hmm, we're not sure about that. Try other words or pick a topic:"),chips:true};
+/* --- Conocimiento del sitio (se arma al primer uso, leyendo el contenido de ANIMAPP y del mapa) --- */
+const KB={places:[],rooms:[],courses:[],ready:false};
+const bnum=s=>bnorm(s).split(/[^a-z0-9ñ]+/).filter(Boolean);
+const NUMW={primer:1,primero:1,primera:1,"1er":1,"1ro":1,"1o":1,segundo:2,segunda:2,"2do":2,"2o":2,tercer:3,tercero:3,tercera:3,"3er":3,"3ro":3,"3o":3,cuarto:4,cuarta:4,"4to":4,"4o":4,quinto:5,quinta:5,"5to":5,"5o":5,sexto:6,sexta:6,"6to":6,septimo:7,septima:7,"7mo":7,octavo:8,octava:8,"8vo":8,noveno:9,novena:9,"9no":9,decimo:10,"10mo":10,first:1,second:2,third:3,fourth:4,fifth:5,sixth:6,seventh:7,eighth:8,ninth:9,"1st":1,"2nd":2,"3rd":3,"4th":4,"5th":5,"6th":6,"7th":7,"8th":8,"9th":9};
+const ROOM_SKIP=/^(escaleras|vestibulo|vacio|elevador|cuarto de|balcon|entrada|conexion|bodega|almacen$)/;
+function kbBuild(){
+  if(KB.ready) return; KB.ready=true;
+  const src=[...document.scripts].map(s=>s.textContent).find(t=>t.includes("const DESC=")&&t.includes("const LOC="))||"";
+  let desc={}; try{ const m=src.match(/const DESC=(\{[\s\S]*?\});/); if(m) desc=JSON.parse(m[1]); }catch(e){}
+  for(const m of src.matchAll(/\{n:(\d+),[^{}]*?name:'([^']+)'/g)) if(!KB.places.some(p=>p.n===+m[1])) KB.places.push({n:+m[1],name:m[2],d:desc[m[1]]||""});
+  const bi=src.indexOf("const BLD={");
+  if(bi>=0){ const seg=src.slice(bi); let bld=null,floor="";
+    for(const m of seg.matchAll(/(\d+):\{title:'([^']+)'|\{name:'(Planta[^']*)'|\['([^']+)',\d+,/g)){
+      if(m[1]){ bld={key:+m[1],title:m[2]}; continue; } if(m[3]){ floor=m[3]; continue; }
+      if(m[4]&&bld&&!ROOM_SKIP.test(bnorm(m[4]))){ const ex=KB.rooms.find(r=>r.name===m[4]&&r.key===bld.key&&r.floor===floor); if(!ex) KB.rooms.push({name:m[4],key:bld.key,bld:bld.title,floor}); } } }
+  CURRICULUM.forEach((col,k)=>col.slice(0,7).forEach(([n])=>KB.courses.push({n,term:k+1,plan:"IAEV-43"})));
+  PA_PLAN.forEach(cy=>cy.cols.forEach(col=>(col.items||[]).forEach(([n])=>KB.courses.push({n,termT:col.t,plan:"PA"}))));
 }
-const BCHIPS=["horarios","calendario","mapas","academia","plan-estudios","material"];
+const placeName=n=>{ const p=KB.places.find(x=>x.n===n); return p?p.name:""; };
+const titleCase=s=>s.toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
+function termOf(q){ for(const w of bnum(q)){ if(NUMW[w]) return NUMW[w]; } const m=bnorm(q).match(/\b(\d{1,2})\s*(?:er|ro|do|to|mo|vo|no|o|°|º)?\s*(?:cuatri|term)/); return m?+m[1]:0; }
+/* lugares y salones */
+function findPlaces(q){
+  const qn=bnum(q), qs=new Set(qn), out=[];
+  KB.places.forEach(p=>{ const nt=bnum(p.name), sig=nt.filter(w=>w.length>2||/^\d+$/.test(w));
+    const nums=sig.filter(w=>/^\d+$/.test(w)), words=sig.filter(w=>!/^\d+$/.test(w));
+    if(nums.length&&!nums.every(x=>qs.has(x))) return;
+    let sc=words.filter(w=>qs.has(w)||qn.some(x=>x.length>4&&(x.startsWith(w.slice(0,5))))).length*3+nums.length*2;
+    if(!words.length&&!nums.length) return;
+    if(words.length&&!words.some(w=>qs.has(w)||qn.some(x=>x.length>4&&x.startsWith(w.slice(0,5))))) sc=0;
+    const dt=btoks(p.d), dh=btoks(q).filter(w=>w.length>4&&dt.some(x=>x.startsWith(w.slice(0,6)))).length;
+    if(sc>=2||dh>=1) out.push({p,sc:sc+dh*0.6,name:sc,dh}); });
+  return out.sort((a,b)=>b.sc-a.sc);
+}
+function findRooms(q){
+  const qn=bnum(q), qs=new Set(qn), out=[];
+  KB.rooms.forEach(r=>{ const nt=bnum(r.name).filter(w=>w.length>2||/^\d+$/.test(w)); if(!nt.length) return;
+    const hit=nt.filter(w=>qs.has(w)||(w.length>4&&qn.some(x=>x.length>4&&x.slice(0,5)===w.slice(0,5))));
+    const nums=nt.filter(w=>/^\d+$/.test(w)); if(nums.length&&!nums.every(x=>qs.has(x))) return;
+    if(hit.length===nt.length||(hit.length>=2&&hit.length/nt.length>=.6)) out.push({r,sc:hit.length/nt.length+hit.length*.1}); });
+  return out.sort((a,b)=>b.sc-a.sc);
+}
+function findCourses(q){
+  const qn=new Set(bnum(q)); return KB.courses.map(c=>{ const nt=btoks(c.n); const hit=nt.filter(w=>qn.has(w)||[...qn].some(x=>x.length>4&&x.slice(0,5)===w.slice(0,5)));
+    return {c,sc:nt.length?hit.length/nt.length:0,hits:hit.length}; }).filter(x=>x.sc>=.99||(x.hits>=2&&x.sc>=.6)).sort((a,b)=>b.sc-a.sc||b.hits-a.hits); }
+const termName=k=>LANG==="en"?TERMS_EN[k-1]+" term":TERMS_ES[k-1]+" cuatrimestre";
+
+const BEXP=[[/\b(comer|comida|almorzar|desayunar|lonche|hambre)\b/,"comida hambre platillos"],[/\b(doctor|doctora|medico|enfermeria|enfermo)\b/,"doctor malestar consultorio"],
+ [/\b(psicolog\w*|terapia psico\w*)\b/,"psicologo psicologico"],[/\b(futbol|soccer)\b/,"futbol"],[/\b(basquet\w*|basket\w*|voley\w*|voli\w*)\b/,"basquetbol voleibol"],
+ [/\b(estacionar\w*|carro|coche|auto|vehiculo)\b/,"estacionarte vehiculo gafete"],[/\b(mocap|captura de movimiento|motion capture)\b/,"mocap motion capture"],
+ [/\b(prestamo|prestan|prestar|pedir prestad\w*)\b/,"prestamo equipo tecnico"],[/\b(bateria|tocar)\b/,"bateria bandas"],[/\b(mariposa|naturaleza|flora|fauna)\b/,"ecosistema flora fauna"],
+ [/\b(evento|eventos|concurso|festival)\b/,"eventos escenario"],[/\b(robotica|robots?)\b/,"robotica"],[/\b(sostenib\w*|reciclaje)\b/,"sostenibilidad"],[/\b(seguridad|guardia|vigilancia|entrada)\b/,"guardias seguridad ingresar"]];
+function botAnswer(q){
+  kbBuild();
+  { const nq=bnorm(q); let extra=""; BEXP.forEach(([re,w])=>{ if(re.test(nq)) extra+=" "+w; }); if(extra) q=q+" "+extra; }
+  const n=bnorm(q).trim(), i=LANG==="en"?1:0; if(!n) return null;
+  const has=re=>re.test(n);
+  if(/^(hola|buen[oa]s|hey|que tal|hi|hello)\b/.test(n)&&n.length<25) return {t:L("¡Hola, coyote! Pregúntanos lo que quieras: dónde está un salón, tus materias, el calendario, los profesores, el material…","Hi, coyote! Ask us anything: where a room is, your courses, the calendar, teachers, equipment…"),chips:true};
+  if(has(/gracias|thank/)) return {t:L("¡De nada! Aquí estamos si necesitas algo más. 🐾","You're welcome! We're here if you need anything else. 🐾")};
+  if(has(/ayuda|que puedes|que sabes|que te puedo preguntar|que puedo preguntar|help|what can (you|i)/)) return {t:L("Puedes preguntarnos, por ejemplo:\n• ¿Dónde está Servicios Escolares?\n• ¿Dónde queda el Edificio 1?\n• ¿Qué materias llevo en 3er cuatrimestre?\n• ¿En qué cuatrimestre se ve Storyboard?\n• ¿Qué laptop necesito?\n• ¿Cuándo son las vacaciones?\n• ¿Cuál es el correo de Aziz?\n• ¿Cuántas horas de servicio universitario son?","You can ask us, for example:\n• Where is Servicios Escolares?\n• Where is Edificio 1?\n• What courses are in the 3rd term?\n• Which term has Storyboard?\n• What laptop do I need?\n• When are the holidays?\n• What's Aziz's email?\n• How many hours of university service?"),chips:true};
+  /* Q&A */
+  { const qt=btoks(q); let best=null,bs=0; QA.forEach(x=>{ const kt=btoks(x.k+" "+x.q[0]); let sc=0; qt.forEach(w=>{ if(kt.includes(w)) sc++; }); if(sc>bs){bs=sc;best=x;} });
+    if(best&&bs>=2) return {t:best.q[i]+"\n"+best.a[i].map(a=>best.a[i].length>1?"• "+a:a).join("\n"),acts:[{sec:"qa"}]}; }
+  /* profesores */
+  const teach=botTeacher(q);
+  if(teach.length) return {t:teach.map(p=>`${p.n} — ${p.mail}\n${p.d[i]}`).join("\n\n"),acts:[{sec:"academia"}]};
+  if(has(/(quien|quienes|que profe|que maestr|who) .*(da|imparte|ensena|teach)/)){ const qt=btoks(q).filter(w=>!/^(quien|quienes|imparte|ensena|profesor|profesora|maestro|maestra|teach|teaches)$/.test(w));
+    const t=TEAM.filter(p=>qt.some(w=>w.length>4&&btoks(p.d[0]).some(x=>x.startsWith(w.slice(0,6)))));
+    if(t.length) return {t:L("Según sus presentaciones en Nuestra Academia:\n","According to their bios in Our Academy:\n")+t.map(p=>`• ${p.n} — ${p.mail}`).join("\n"),acts:[{sec:"academia"}]}; }
+  /* lugares del campus y salones dentro de los edificios */
+  const whereQ=has(/(donde|ubica|ubicacion|encuentro|encontrar|llego|llegar|queda|esta el|esta la|esta en|como voy|mapa|where|find|located)/);
+  if(whereQ&&has(/\bbanos?\b|sanitario|restroom|bathroom/)&&!has(/canchas?/)) return {t:L("Hay baños en cada edificio: Edificio 1, Edificio 2, Edificio 3, Learning Center y Metra Center, además de los Baños de Canchas. En el plano de cada edificio están marcados con su ícono.","There are restrooms in every building (Edificio 1, 2, 3, Learning Center and Metra Center) plus the court restrooms; each floor plan marks them with an icon."),acts:[{map:2,plan:2,label:L("Plano del Edificio 1","Edificio 1 floor plan")},{map:11,plan:11,label:L("Plano del Learning Center","Learning Center floor plan")},{map:20,label:L("Baños de Canchas","Court restrooms")}]};
+  const rooms=findRooms(q), places=findPlaces(q);
+  if(rooms.length&&(whereQ||rooms[0].sc>=1)&&!(places.length&&places[0].sc>=5&&rooms[0].sc<1)){
+    const best=rooms.filter(x=>x.r.name===rooms[0].r.name).slice(0,4);
+    const lines=best.map(x=>`• ${x.r.name}: ${titleCase(x.r.bld)}${x.r.floor?", "+x.r.floor:""}`).join("\n");
+    const r0=best[0].r;
+    return {t:L(`${r0.name} está en:\n${lines}\nTe llevamos al mapa para que veas el edificio y su plano por dentro.`,`${r0.name} is in:\n${lines}\nWe'll take you to the map so you can see the building and its floor plan.`),
+      acts:[{map:r0.key,plan:r0.key,label:L("Ver plano de ","See floor plan of ")+titleCase(r0.bld)},{map:r0.key,label:L("Ver en el mapa","See on the map")}]}; }
+  if(places.length&&(places[0].name>=2&&(whereQ||places[0].sc>=3)||whereQ&&places[0].dh>=1)){
+    const p=places[0].p, hasPlan=KB.rooms.some(r=>r.key===p.n);
+    return {t:L(`📍 ${p.name} es el punto ${p.n} del mapa del campus.`,`📍 ${p.name} is point ${p.n} on the campus map.`)+(p.d?"\n"+p.d:""),
+      acts:[{map:p.n,label:L("Ver en el mapa","See on the map")}].concat(hasPlan?[{map:p.n,plan:p.n,label:L("Ver plano por dentro","See floor plan")}]:[])}; }
+  if(whereQ&&has(/bano|banos|restroom|bathroom/)) return {t:L("Hay baños en cada edificio (Edificio 1, Edificio 2, Edificio 3, Learning Center y Metra Center) y junto a las canchas. En el plano de cada edificio los ves marcados con su ícono.","There are restrooms in every building and next to the sports courts; each building's floor plan marks them."),acts:[{map:20,label:L("Baños de Canchas","Court restrooms")},{sec:"mapas"}]};
+  /* plan de estudios */
+  const courses=findCourses(q);
+  if(courses.length&&!has(/material|equipo|laptop|computadora/)){
+    const byPlan={}; courses.slice(0,6).forEach(({c})=>{ const k=c.n+"|"+c.plan; if(!byPlan[k]) byPlan[k]=c; });
+    const list=Object.values(byPlan).slice(0,4).map(c=>c.plan==="PA"?`• ${c.n}: ${c.termT[i]} ${L("(plan IAEV-PA-01 en adelante)","(plan IAEV-PA-01 onward)")}`:`• ${c.n}: ${termName(c.term)} ${L("(plan hasta IAEV-43)","(plan through IAEV-43)")}`).join("\n");
+    return {t:L("Esto encontré en el Plan de estudios:\n","Here's what I found in the curriculum:\n")+list,acts:[{sec:"plan-estudios"}]}; }
+  const term=termOf(q);
+  if(term&&has(/materia|asignatura|curso|llevo|veo|plan|clases|course|subject/)){
+    const pa=PA_PLAN.flatMap(cy=>cy.cols).filter(c=>c.items&&!/propedeutic|preparatory/i.test(bnorm(c.t[0]+c.t[1])))[term-1];
+    const old=CURRICULUM[term-1];
+    let t=L(`Materias del ${termName(term)}:`,`Courses in the ${termName(term)}:`);
+    if(pa) t+="\n"+L("Plan IAEV-PA-01 en adelante:","Plan IAEV-PA-01 onward:")+"\n"+pa.items.map(([x])=>"• "+x).join("\n");
+    if(old) t+="\n"+L("Plan hasta IAEV-43:","Plan through IAEV-43:")+"\n"+old.slice(0,7).map(([x])=>"• "+x).join("\n");
+    if(pa||old) return {t,acts:[{sec:"plan-estudios"}]}; }
+  /* material y equipo */
+  const eq=EQUIPO.filter(e=>btoks(e.t[0]+" "+e.t[1]+" "+e.id).some(w=>btoks(q).some(x=>x.length>3&&(x.startsWith(w.slice(0,5))||w.startsWith(x.slice(0,5))))));
+  if(eq.length||has(/(material|equipo|que necesito|que debo comprar|lista de material|computadora|equipment|what do i need)/)){
+    if(eq.length){ const e=eq[0]; return {t:`${e.t[i]} — ${L("se pide desde el","needed from the")} ${termName(e.cu)}\n`+e.li.map(p=>`• ${p[i][0]}: ${p[i][1]}`).join("\n")+`\n${L("Costo aproximado","Approx. cost")}: ${e.cost}`,acts:[{sec:"material"}]}; }
+    return {t:L("Material y equipo que se pide en la carrera:\n","Equipment required in the program:\n")+EQUIPO.map(e=>`• ${e.t[i]} — ${termName(e.cu)}`).join("\n"),acts:[{sec:"material"}]}; }
+  /* horarios y acceso */
+  if(has(/(subir|cargar|publicar|admin|administrar).*(horario|archivo|aviso)|upload/)) return {t:L("Los docentes de la Academia suben horarios, avisos y archivos desde la página admin.html del sitio publicado, iniciando sesión con su cuenta institucional.","Academy faculty upload schedules, announcements and files from the site's admin.html page, signing in with their institutional account.")};
+  if(has(/(horario|schedule|timetable)/)) return {t:L("Los horarios están en la sección Horarios, por cuatrimestre. Para verlos inicia sesión con tu cuenta institucional @upsrj.edu.mx (botón «Iniciar sesión» arriba).","Schedules are in the Schedules section, by term. To see them, sign in with your @upsrj.edu.mx account (Sign in button at the top)."),acts:[{sec:"horarios"}]};
+  if(has(/(iniciar sesion|login|log in|sign in|cuenta|contrasena|password)/)) return {t:L("Usa el botón «Iniciar sesión» de arriba y entra con tu cuenta de Google institucional (@upsrj.edu.mx). Con ella ves los Horarios; Sólo Profesores es para los docentes de la Academia.","Use the Sign in button at the top with your institutional Google account (@upsrj.edu.mx). It unlocks Schedules; Faculty Only is for Academy teachers.")};
+  /* contacto y redes */
+  if(has(/facebook|\bfb\b/)) return {t:"Facebook: "+CONFIG.facebook,acts:[{url:CONFIG.facebook,label:"Facebook ↗"}]};
+  if(has(/instagram|\big\b|insta/)) return {t:"Instagram: @animation_upsrj",acts:[{url:CONFIG.instagram,label:"Instagram ↗"}]};
+  if(has(/youtube|videos? de la carrera/)) return {t:"YouTube: @animation_upsrj",acts:[{url:CONFIG.youtube,label:"YouTube ↗"}]};
+  if(has(/redes|social/)) return {t:L("Nos encuentras en Facebook (IAEV.UPSRJ), Instagram y YouTube (@animation_upsrj).","Find us on Facebook (IAEV.UPSRJ), Instagram and YouTube (@animation_upsrj)."),acts:[{url:CONFIG.facebook,label:"Facebook ↗"},{url:CONFIG.instagram,label:"Instagram ↗"},{url:CONFIG.youtube,label:"YouTube ↗"}]};
+  if(has(/(correo|email|mail|contact|telefono|comunicar)/)&&!has(/profe|maestr|docente|teacher/)) return {t:L(`Puedes escribirle a la Academia a ${CONFIG.correo}. También está el botón Contáctanos al final de cada página.`,`You can email the Academy at ${CONFIG.correo}. There's also a Contact us button at the bottom of every page.`)};
+  /* uso de la app */
+  if(has(/(idioma|ingles|english|language|espanol|spanish)/)) return {t:L("Cambia el idioma con el botón «Idioma» de arriba (ES/EN).","Switch language with the Language button at the top (ES/EN).")};
+  if(has(/(audio|voz|sonido|silencio|leer en voz|narrar|voice|sound)/)) return {t:L("El botón «Audio» de arriba activa o apaga el audio descriptivo. En textos largos aparece el botón «Leer texto».","The Audio button at the top turns the audio description on or off. Long texts include a Read text button.")};
+  /* calendario */
+  if(has(/(cuando|fecha|calendario|vacacion|descanso|examen|evaluacion|parcial|remedial|inscripcion|reinscripcion|pago|beca|inicio|termina|when|date|holiday|exam)/)){
+    const {hits,next}=botEvents(q), list=(hits.length?hits:next);
+    if(list.length) return {t:(hits.length?L("Esto encontré en el calendario:","Here's what I found in the calendar:"):L("Estas son las próximas fechas del calendario:","These are the next calendar dates:"))+"\n"+list.map(e=>`• ${botFmtD(e[0])}${e[1]!==e[0]?" – "+botFmtD(e[1]):""}: ${e[2]}`).join("\n"),acts:[{sec:"calendario"}]}; }
+  /* experiencias y juegos */
+  const portals=Object.entries(PORTALS).flatMap(([sec,arr])=>arr.map((p,k)=>({sec,k,p}))).filter(({p})=>btoks(p.t[0]+" "+p.t[1]).some(w=>w.length>3&&btoks(q).includes(w)));
+  if(portals.length){ const {sec,k,p}=portals[0]; return {t:`${p.t[i]}: ${p.d[i]}`,acts:[{portal:sec+":"+k,label:L("▶ Entrar","▶ Enter")},{sec}]}; }
+  /* secciones */
+  const secs=botSecs(q);
+  if(secs.length){ const s=secs[0]; return {t:`${secT(s)}: ${secD(s)}`,acts:secs.slice(0,3).map(x=>({sec:x.id}))}; }
+  if(places.length) { const p=places[0].p; return {t:L(`¿Buscas ${p.name}? Es el punto ${p.n} del mapa.`,`Looking for ${p.name}? It's point ${p.n} on the map.`)+(p.d?"\n"+p.d:""),acts:[{map:p.n,label:L("Ver en el mapa","See on the map")}]}; }
+  return {t:L("Mmm, no estamos seguros de eso. Prueba con otras palabras, escribe «ayuda» para ver ejemplos o elige un tema:","Hmm, we're not sure about that. Try other words, type «help» for examples, or pick a topic:"),chips:true};
+}
+function botMap(n,plan){
+  go("mapas");
+  setTimeout(()=>{ const b=[...document.querySelectorAll("#mapa-upsrj .mp-legend button")].find(x=>{ const s=x.querySelector(".mp-n"); return s&&s.textContent.trim()===String(n); });
+    if(b){ b.scrollIntoView({block:"center"}); b.click(); }
+    if(plan){ const e=document.getElementById("e1open"); if(e){ e.dataset.b=plan; setTimeout(()=>e.click(),300); } } },450);
+}
+const BCHIPS=["horarios","calendario","mapas","academia","plan-estudios","material","qa"];
 function botMsg(text,who,acts){
   const log=$("botLog"), m=document.createElement("div"); m.className="bot-msg "+(who==="me"?"me":"them");
   const p=document.createElement("p"); p.textContent=text; m.appendChild(p);
   if(acts&&acts.length){ const r=document.createElement("div"); r.className="bot-acts";
-    acts.forEach(id=>{ const s=byId[id]; if(!s) return; const b=document.createElement("button"); b.type="button"; b.className="pbtn bot-go"; b.textContent=L("Ir a ","Go to ")+secT(s)+" ›";
-      b.addEventListener("click",()=>{ sfx.select(); botClose(); if(id==="asistencia") openExperience(ASISTENCIA); else go(id); }); r.appendChild(b); });
+    acts.forEach(a=>{ if(typeof a==="string") a={sec:a}; const b=document.createElement("button"); b.type="button"; b.className="pbtn bot-go"; let run;
+      if(a.sec){ const s=byId[a.sec]; if(!s) return; b.textContent=a.label||L("Ir a ","Go to ")+secT(s)+" ›"; run=()=>{ if(a.sec==="asistencia") openExperience(ASISTENCIA); else go(a.sec); }; }
+      else if(a.map){ b.textContent=a.label||L("Ver en el mapa","See on the map"); run=()=>botMap(a.map,a.plan); }
+      else if(a.portal){ b.textContent=a.label; run=()=>{ const [s,k]=a.portal.split(":"); openExperience(PORTALS[s][+k]); }; }
+      else if(a.url){ const l=document.createElement("a"); l.className="pbtn bot-go"; l.href=a.url; l.target="_blank"; l.rel="noopener"; l.textContent=a.label; r.appendChild(l); return; }
+      b.addEventListener("click",()=>{ sfx.select(); botClose(); run(); }); r.appendChild(b); });
     m.appendChild(r); }
   log.appendChild(m); log.scrollTop=log.scrollHeight;
 }
@@ -2821,7 +2948,7 @@ function botChips(on){ const c=$("botChips"); c.innerHTML=""; if(!on) return;
 function botAsk(q){
   q=q.trim(); if(!q) return; botMsg(q,"me"); $("botIn").value=""; botChips(false);
   const a=botAnswer(q); talk(1400); wave(1400);
-  setTimeout(()=>{ botMsg(a.t,"them",a.go); if(a.chips) botChips(true); say(a.t.replace(/\n/g,". "),false); },380);
+  setTimeout(()=>{ botMsg(a.t,"them",a.acts); if(a.chips) botChips(true); say(a.t.replace(/\n/g,". "),false); },380);
 }
 function botOpen(){ sfx.select(); $("botHint").hidden=true; const p=$("botPanel"); p.hidden=false; $("botBtn").setAttribute("aria-expanded","true");
   if(!$("botLog").childElementCount){ botMsg(L("¡Hola! Somos Timo y Maya. ¿En qué te ayudamos? Puedes escribir tu pregunta o elegir un tema.","Hi! We're Timo and Maya. How can we help? Type your question or pick a topic."),"them"); botChips(true); }
