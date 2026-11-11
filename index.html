@@ -352,8 +352,9 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bl-intro{margin:0 0 18px;max-width:65ch}
 .news-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
 .news-it{background:var(--paper);padding:14px 18px;border-left:6px solid var(--iaev-yellow);display:flex;flex-direction:column;gap:8px}
+.panel .news-sum{max-width:none}.news-sum{margin:0 0 16px;background:#fff8dc;padding:12px 14px;border-left:6px solid var(--iaev-red)}
 .news-meta{font-size:14px;color:var(--ink-soft);font-weight:600}.news-t{font-weight:700;font-size:18px;line-height:1.3;color:var(--iaev-red);text-decoration:none}.news-t:hover{text-decoration:underline}
-.news-r{margin:0;font-size:16px;max-width:90ch}.news-apa{margin:4px 0 0;padding:8px 10px;background:#fff;border:2px dashed var(--paper-2);font-size:14px;color:var(--ink-soft);overflow-wrap:anywhere}.news-apa b{color:var(--ink)}
+.news-r{margin:0;font-size:16px}.panel .news-apa{max-width:none}.news-apa{margin:4px 0 0;padding:8px 10px 8px calc(10px + 2em);text-indent:-2em;background:#fff;border:2px dashed var(--paper-2);font-size:14px;color:var(--ink-soft);overflow-wrap:anywhere}.news-apa b{color:var(--ink)}
 .news-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:16px}.news-more{font-size:12px}.news-upd{font-size:14px;color:var(--ink-soft)}
 .fest-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:22px;padding:6px;margin-bottom:8px}
 .fest-btn{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 14px 16px;text-align:center}
@@ -1236,7 +1237,7 @@ const BLD={2:{title:'EDIFICIO 1',cell:8,floors:[
    ['Elevador',477,347,515,385,'yellow','tlbr',[[490,347]],'L'],
    ['Baño de mujeres',415,385,464,447,'yellow','tlbr',[[415,420]]],
    ['Baño de hombres',464,385,515,447,'yellow','tlbr',[[515,420]]],
-   ['Super Q',515,187,662,250,'tan','tlbr',[[588,250]]],
+   ['Sala de juntas',515,187,662,250,'tan','tlbr',[[588,250]]],
    ['Sistemas',662,187,745,250,'red','tlbr',[[730,250]]],
    ['Salón 1',745,187,828,250,'red','tlbr',[[812,250]]],
    ['Salón 2',828,187,910,250,'red','tlbr',[[894,250]]],
@@ -2436,7 +2437,7 @@ function blogHTML(){ const i=LANG==="en"?1:0;
     <div class="bl-ff-txt"><p>${L("Consulta las bases para participar en el Coyote Film Fest: categorías, requisitos y fechas de entrega.","Check the rules to take part in the Coyote Film Fest: categories, requirements and deadlines.")}</p>
     <div class="portal-actions"><a class="pbtn yellow portal-go-btn bl-link" id="blBases" href="${BASES_URL}" target="_blank" rel="noopener">${L("Leer las bases (PDF) ↗","Read the rules (PDF) ↗")}</a><button class="pbtn portal-go-btn" id="blFF">${L("Ir al Film Fest ›","Go to the Film Fest ›")}</button></div></div></div>
    <h2 class="sec-h2 sec-h2-more">${L("Noticias de la industria","Industry news")}</h2>
-   <p class="bl-intro">${L("Animación, cine y televisión: lo más reciente de medios especializados, con su cita en APA 7.","Animation, film and TV: the latest from industry outlets, with APA 7 citations.")}</p>
+   <p class="bl-intro">${L("Animación, cine y televisión: lo más reciente de medios especializados.","Animation, film and TV: the latest from industry outlets.")}</p>
    <div id="newsBox"><p class="cal-none">${L("Cargando noticias…","Loading news…")}</p></div>
    <h2 class="sec-h2 sec-h2-more">${L("Festivales","Festivals")}</h2>
    <p class="bl-intro">${L("Festivales de animación, cine y diseño donde puedes inscribir tus proyectos o aprender de la industria.","Animation, film and design festivals where you can submit your projects or learn from the industry.")}</p>
@@ -2448,9 +2449,9 @@ function newsHTML(){ const box=$("newsBox"); if(!box) return;
   if(!NEWS||!NEWS.items||!NEWS.items.length){ box.innerHTML=`<p class="cal-none">${L("Todavía no hay noticias publicadas.","No news yet.")}</p>`; return; }
   const loc=LANG==="en"?"en-US":"es-MX", fd=x=>{ const d=new Date(+x.slice(0,4),+x.slice(5,7)-1,+x.slice(8,10)); return d.toLocaleDateString(loc,{day:"numeric",month:"long",year:"numeric"}); };
   const list=newsAll?NEWS.items:NEWS.items.slice(0,6);
-  box.innerHTML=`<ul class="news-list">${list.map((n,k)=>`<li class="news-it"><span class="news-meta">${esc(n.categoria||"")}${n.categoria?" · ":""}${esc(n.fuente)} · ${fd(n.fecha)}</span>
+  box.innerHTML=(NEWS.resumen?`<p class="news-sum"><b>${L("Resumen de la semana:","This week:")}</b> ${esc(NEWS.resumen)}</p>`:"")+`<ul class="news-list">${list.map((n,k)=>`<li class="news-it"><span class="news-meta">${esc(n.categoria||"")}${n.categoria?" · ":""}${esc(n.fuente)} · ${fd(n.fecha)}</span>
      <a class="news-t" href="${safeUrl(n.url)}" target="_blank" rel="noopener">${esc(n.titulo)} ↗</a><p class="news-r">${esc(n.resumen)}</p>
-     <p class="news-apa"><b>${L("APA 7:","APA 7:")}</b> ${esc(n.apa)}</p></li>`).join("")}</ul>
+     <p class="news-apa"><b>APA 7:</b> ${esc(n.apa).replace(/&lt;(\/?)i&gt;/g,"<$1i>")}</p></li>`).join("")}</ul>
    <div class="news-foot">${NEWS.items.length>6?`<button class="pbtn news-more" id="newsMore">${newsAll?L("Ver menos","Show less"):L("Ver todas","Show all")+" ("+NEWS.items.length+")"}</button>`:""}<span class="news-upd">${L("Actualizado: ","Updated: ")}${fd(NEWS.actualizado)}</span></div>`;
   const m=$("newsMore"); if(m) m.onclick=()=>{ newsAll=!newsAll; sfx.blip(); newsHTML(); };
 }
@@ -3223,8 +3224,5 @@ applyLang(); buildGrid();
   else show("intro");
 })();
 </script>
-
-
-
 
 </body></html>

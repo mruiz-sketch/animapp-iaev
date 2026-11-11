@@ -1,5 +1,6 @@
 {
   "actualizado": "2026-11-11",
+  "resumen": "Semana de cambios en la cúpula de los estudios: Pixar nombra nuevo presidente y James Gunn y Peter Safran dejan la dirección de DC Studios tras la compra de Skydance. En taquilla, Godzilla Minus Zero abre en primer lugar, The Cat in the Hat debuta por debajo de otras adaptaciones de Seuss y el stop-motion Wildwood de Laika supera los 40 MDD. Japón anuncia los Nippon Anime Awards para 2027, sigue el debate sobre el uso de IA en el anuncio de Dior de Sylvain Chomet y arranca el American Film Market en Las Vegas.",
   "items": [
     {
       "titulo": "Young Animator of the Year 2026 premia a jóvenes animadores del Reino Unido",
@@ -8,25 +9,16 @@
       "fecha": "2026-11-10",
       "categoria": "Animación",
       "url": "https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation",
-      "apa": "Skwigly. (2026, 10 de noviembre). Young Animator of The Year 2026 celebrates the future of UK animation. Skwigly Animation Magazine. https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation"
+      "apa": "Skwigly. (2026, 10 de noviembre). <i>Young Animator of The Year 2026 celebrates the future of UK animation</i>. Skwigly Animation Magazine. https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation"
     },
     {
-      "titulo": "James Gunn y Peter Safran dejan la dirección de DC Studios tras la reestructuración de Paramount",
-      "resumen": "Gunn y Safran dejan sus cargos al frente de DC Studios durante la reestructuración de Paramount; Jeremy Latcham tomará el mando y Gunn dice sentirse aliviado de volver a dirigir.",
+      "titulo": "Godzilla Minus Zero lidera la taquilla; The Cat in the Hat abre en segundo lugar y Wildwood supera los 40 MDD",
+      "resumen": "The Cat in the Hat debutó con 20.5 MDD en Norteamérica (30.5 MDD mundiales), detrás de Godzilla Minus Zero (31.6 MDD), y lejos de The Lorax y The Grinch. El stop-motion Wildwood de Laika cayó solo 20 % en su tercer fin de semana y suma unos 40 MDD domésticos.",
       "fuente": "Cartoon Brew",
       "fecha": "2026-11-09",
-      "categoria": "Cine",
-      "url": "https://www.cartoonbrew.com/executives/james-gunn-peter-safran-step-down-dc-studios-269220.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). James Gunn 'incredibly relieved' to return to filmmaking as he, Peter Safran step down as DC Studios chiefs amid Paramount shakeup. Cartoon Brew. https://www.cartoonbrew.com/executives/james-gunn-peter-safran-step-down-dc-studios-269220.html"
-    },
-    {
-      "titulo": "Taquilla: 'The Cat in the Hat' supera pronósticos y 'Wildwood' se mantiene fuerte",
-      "resumen": "La adaptación de Dr. Seuss de Warner Bros. abrió por debajo de sus antecesoras, aunque arriba de lo esperado, mientras la película en stop-motion de Laika 'Wildwood' sostuvo buenas cifras en su tercer fin de semana.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-09",
-      "categoria": "Animación",
+      "categoria": "Taquilla",
       "url": "https://www.cartoonbrew.com/box-office-report/cat-in-the-hat-box-office-opening-wildwood-269213.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). 'The Cat in the Hat' beats predictions but opens below Seuss predecessors as 'Wildwood' holds strong in week three. Cartoon Brew. https://www.cartoonbrew.com/box-office-report/cat-in-the-hat-box-office-opening-wildwood-269213.html"
+      "apa": "Lang, J. (2026, 9 de noviembre). <i>'The Cat in the Hat' beats predictions but opens below Seuss predecessors as 'Wildwood' holds strong in week three</i>. Cartoon Brew. https://www.cartoonbrew.com/box-office-report/cat-in-the-hat-box-office-opening-wildwood-269213.html"
     },
     {
       "titulo": "Rumbo al Óscar 2027: la directora Matea Radic habla de su corto 'Paradaïz'",
@@ -35,25 +27,43 @@
       "fecha": "2026-11-09",
       "categoria": "Animación",
       "url": "https://www.cartoonbrew.com/awards/paradaiz-matea-radic-director-oscar-interview-269199.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). 2027 Oscars short film contenders: 'Paradaïz' director Matea Radic. Cartoon Brew. https://www.cartoonbrew.com/awards/paradaiz-matea-radic-director-oscar-interview-269199.html"
+      "apa": "Lang, J. (2026, 9 de noviembre). <i>2027 Oscars short film contenders: 'Paradaïz' director Matea Radic</i>. Cartoon Brew. https://www.cartoonbrew.com/awards/paradaiz-matea-radic-director-oscar-interview-269199.html"
     },
     {
-      "titulo": "Kid Koala debuta en el largometraje animado con 'Space Cadet'",
-      "resumen": "El DJ Eric San (Kid Koala) cuenta cómo trabajó con 16 animadores, construyó un mundo CG de apariencia artesanal y usó tornamesas para darle un toque humano a su personaje robot.",
+      "titulo": "James Gunn y Peter Safran dejan la dirección de DC Studios; Jeremy Latcham toma el mando",
+      "resumen": "Skydance reemplaza a los codirectores con el exejecutivo de Marvel Jeremy Latcham, presidente y director creativo desde el 1 de diciembre. Gunn y Safran seguirán como productores de proyectos como The Batman Part II, y Gunn dirigirá Man of Tomorrow (verano de 2027).",
+      "fuente": "Forbes",
+      "fecha": "2026-11-09",
+      "categoria": "Cine · Estudios",
+      "url": "https://www.forbes.com/sites/timlammers/2026/11/09/what-james-gunns-exit-means-for-dc-studios-movies-and-tv-shows/",
+      "apa": "Lammers, T. (2026, 9 de noviembre). <i>What James Gunn's exit means for DC Studios' movies and TV shows</i>. Forbes. https://www.forbes.com/sites/timlammers/2026/11/09/what-james-gunns-exit-means-for-dc-studios-movies-and-tv-shows/"
+    },
+    {
+      "titulo": "Arranca el American Film Market 2026 en Las Vegas, del 10 al 15 de noviembre",
+      "resumen": "El AFM reúne a productores, distribuidores y compradores para financiar, vender y licenciar cine independiente. Delegaciones como la de Creative BC (Canadá) asisten para buscar socios de coproducción y compradores internacionales.",
+      "fuente": "Creative BC",
+      "fecha": "2026-11-09",
+      "categoria": "Industria · Mercados",
+      "url": "https://creativebc.com/2026/11/british-columbia-canada-at-the-american-film-market-2026/",
+      "apa": "Creative BC. (2026, 9 de noviembre). <i>British Columbia, Canada at the American Film Market 2026</i>. https://creativebc.com/2026/11/british-columbia-canada-at-the-american-film-market-2026/"
+    },
+    {
+      "titulo": "Kid Koala debuta como director de animación con Space Cadet, que llega a cines de EE. UU. el 13 de noviembre",
+      "resumen": "El DJ Eric San adapta su novela gráfica de 2011 en un largometraje canadiense sin diálogos, producido por Outsiders Films. Se estrenó en la sección Generation de Berlín y pasó por Annecy y Toronto.",
       "fuente": "Cartoon Brew",
       "fecha": "2026-11-07",
-      "categoria": "Animación",
+      "categoria": "Animación · Estrenos",
       "url": "https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html",
-      "apa": "Lang, J. (2026, 7 de noviembre). Scratch DJ Kid Koala learned to speak in frames for his animated feature debut 'Space Cadet'. Cartoon Brew. https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html"
+      "apa": "Lang, J. (2026, 7 de noviembre). <i>Scratch DJ Kid Koala learned to speak in frames for his animated feature debut 'Space Cadet'</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html"
     },
     {
-      "titulo": "Sylvain Chomet defiende que su anuncio para Dior fue dibujado a mano, pero admite 'interpolación automatizada'",
-      "resumen": "El director y su productor defienden el trabajo detrás del comercial, aunque dan pocos detalles técnicos sobre las herramientas usadas para generar los cuadros intermedios: un caso para discutir el uso de IA en la animación.",
+      "titulo": "Sylvain Chomet defiende que el anuncio de Dior fue dibujado a mano, pero admite «interpolación automatizada»",
+      "resumen": "El director y su productor afirman que 20 artistas trabajaron siete meses en el corto, pero reconocen un sistema de interpolación automática en una parte del proceso. No revelaron el software usado, por lo que persisten las dudas sobre el uso de IA.",
       "fuente": "Cartoon Brew",
       "fecha": "2026-11-07",
-      "categoria": "Animación",
+      "categoria": "Animación · IA",
       "url": "https://www.cartoonbrew.com/artificial-intelligence/sylvain-chomet-dior-ad-automated-interpolation-269167.html",
-      "apa": "Lang, J. (2026, 7 de noviembre). Sylvain Chomet insists Dior ad was hand-drawn, but acknowledges 'automated interpolation'. Cartoon Brew. https://www.cartoonbrew.com/artificial-intelligence/sylvain-chomet-dior-ad-automated-interpolation-269167.html"
+      "apa": "Lang, J. (2026, 7 de noviembre). <i>Sylvain Chomet insists Dior ad was hand-drawn, but acknowledges 'automated interpolation'</i>. Cartoon Brew. https://www.cartoonbrew.com/artificial-intelligence/sylvain-chomet-dior-ad-automated-interpolation-269167.html"
     },
     {
       "titulo": "Rumbo al Óscar 2027: 'Daffy Season', el corto de los Looney Tunes con toques de horror",
@@ -62,7 +72,34 @@
       "fecha": "2026-11-06",
       "categoria": "Animación",
       "url": "https://www.cartoonbrew.com/awards/daffy-season-hamish-grieve-todd-wilderman-269158.html",
-      "apa": "Lang, J. (2026, 6 de noviembre). 2027 Oscars short film contenders: 'Daffy Season' directors Hamish Grieve and Todd Wilderman. Cartoon Brew. https://www.cartoonbrew.com/awards/daffy-season-hamish-grieve-todd-wilderman-269158.html"
+      "apa": "Lang, J. (2026, 6 de noviembre). <i>2027 Oscars short film contenders: 'Daffy Season' directors Hamish Grieve and Todd Wilderman</i>. Cartoon Brew. https://www.cartoonbrew.com/awards/daffy-season-hamish-grieve-todd-wilderman-269158.html"
+    },
+    {
+      "titulo": "Ray Gunn, la cinta animada de Brad Bird para Netflix, tiene función especial con preguntas al director",
+      "resumen": "El 10 de noviembre se proyectó en el Netflix Home Theater de Los Ángeles. La película, un noir de ciencia ficción ambientado en la ciudad futurista de Metropia, marca el regreso del director de Los Increíbles y El gigante de hierro a la animación.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-06",
+      "categoria": "Animación · Streaming",
+      "url": "https://www.cartoonbrew.com/feature-film/netflix-ray-gunn-free-screening-los-angeles-269151.html",
+      "apa": "Lang, J. (2026, 6 de noviembre). <i>You're invited to a free 'Ray Gunn' screening and Q&A with Brad Bird in Los Angeles</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/netflix-ray-gunn-free-screening-los-angeles-269151.html"
+    },
+    {
+      "titulo": "Jonathan Garson será el nuevo presidente de Pixar; Jonas Rivera asume un rol creativo ampliado",
+      "resumen": "Garson sustituirá a Jim Morris el 4 de enero de 2027; Morris será presidente emérito. Rivera, como vicepresidente ejecutivo creativo, trabajará de tiempo completo junto a Pete Docter, mientras Garson supervisa producción y operaciones.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-05",
+      "categoria": "Animación · Estudios",
+      "url": "https://www.cartoonbrew.com/executives/pixar-jim-morris-jonathan-garson-jonas-rivera-269116.html",
+      "apa": "Lang, J. (2026, 5 de noviembre). <i>Jonathan Garson to succeed Jim Morris as Pixar president; Jonas Rivera takes expanded creative role</i>. Cartoon Brew. https://www.cartoonbrew.com/executives/pixar-jim-morris-jonathan-garson-jonas-rivera-269116.html"
+    },
+    {
+      "titulo": "Japón crea los Nippon Anime Awards; la primera ceremonia será el 21 de noviembre de 2027",
+      "resumen": "La Asociación Japonesa de Animación, con el Gobierno Metropolitano de Tokio, lanza un premio que reconocerá tanto a las obras como a las personas que las crean. La gala será en el SGC Hall Ariake de Tokio e incluirá programas de negocio y formación de talento.",
+      "fuente": "GameBusiness.jp",
+      "fecha": "2026-11-05",
+      "categoria": "Anime · Premios",
+      "url": "https://www.gamebusiness.jp/article/2026/11/05/28546.html",
+      "apa": "Branc. (2026, 5 de noviembre). <i>新アニメ賞「日本アニメアワード」、2027年11月21日に開催。東京都と組みビジネス創出・人材育成も</i> [New anime award \"Nippon Anime Awards\" to be held on November 21, 2027]. GameBusiness.jp. https://www.gamebusiness.jp/article/2026/11/05/28546.html"
     }
   ]
 }
