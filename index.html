@@ -85,7 +85,7 @@ button{font:inherit;color:inherit}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:22px;padding:6px}
 .tile{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 10px 16px;text-align:center;min-height:150px;justify-content:center}
 .tile svg{width:64px;height:64px}
-.tile .t{font-family:var(--display);font-size:14px;line-height:1.6;text-wrap:balance}
+.tile .t{font-family:var(--display);font-size:14px;line-height:1.6;text-wrap:balance;max-width:100%;min-width:0}
 .tile:hover{--c:var(--iaev-yellow)}
 .tile.pro{--c:var(--ink);--t:#fff}
 .tile.pro:hover{--c:var(--iaev-maroon)}
@@ -3215,6 +3215,12 @@ $("fbLink").href=CONFIG.facebook; $("igLink").href=CONFIG.instagram; $("ytLink")
 })();
 
 /* ====== Instalar app (PWA) ====== */
+/* Ajusta el texto de los botones-tile para que ninguna palabra se salga del recuadro (p. ej. «cuatrimestre» en celular) */
+function fitTiles(){ document.querySelectorAll(".tile .t").forEach(t=>{ t.style.fontSize=""; const w=t.parentElement.clientWidth-20; if(w<=0) return;
+  let fs=parseFloat(getComputedStyle(t).fontSize), guard=0; while(t.scrollWidth>w&&fs>8&&guard++<12){ fs-=1; t.style.fontSize=fs+"px"; } }); }
+let fitRaf=0; const fitSoon=()=>{ cancelAnimationFrame(fitRaf); fitRaf=requestAnimationFrame(fitTiles); };
+new MutationObserver(fitSoon).observe(document.body,{childList:true,subtree:true}); addEventListener("resize",fitSoon);
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitSoon);
 const APP_URL="https://animapp-iaev.netlify.app/";
 if(/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("on-netlify"); // deja espacio a la etiqueta «Powered by Netlify»
 let deferredInstall=null;
