@@ -1,0 +1,8 @@
+{
+  "name": "animapp-iaev",
+  "private": true,
+  "description": "ANIMAPP IAEV — dependencias de las funciones de Netlify (avisos push).",
+  "dependencies": {
+    "firebase-admin": "^12.7.0"
+  }
+}

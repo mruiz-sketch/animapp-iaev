@@ -1736,6 +1736,7 @@ requestAnimationFrame(frame);
       <h2>¿Dudas?</h2>
       <button class="pbtn red" id="contactBtn">Contáctanos</button>
       <button class="pbtn yellow" id="installBtn" hidden>Instalar app ⬇</button>
+      <button class="pbtn" id="avisosBtn" aria-pressed="false">🔔 Activar avisos</button>
     </div>
   </div>
   <div class="wrap copy">ANIMAPP · Ingeniería en Animación y Efectos Visuales · UPSRJ</div>
@@ -3128,6 +3129,7 @@ function botAnswer(q){
   if(has(/(iniciar sesion|login|log in|sign in|cuenta|contrasena|password)/)) return {t:L("Usa el botón «Iniciar sesión» de arriba y entra con tu cuenta de Google institucional (@upsrj.edu.mx). Con ella ves los Horarios; Sólo Profesores es para los docentes de la Academia.","Use the Sign in button at the top with your institutional Google account (@upsrj.edu.mx). It unlocks Schedules; Faculty Only is for Academy teachers.")};
   /* contacto y redes */
   if(has(/facebook|\bfb\b/)) return {t:"Facebook: "+CONFIG.facebook,acts:[{url:CONFIG.facebook,label:"Facebook ↗"}]};
+  if(has(/(notificacion|aviso|alerta|push|enterarme|me avisen|avisar)/)) return {t:L("¡Claro! Toca «🔔 Activar avisos» al final de la página de inicio y te llegará una notificación cuando haya noticias o novedades de IAEV. En iPhone primero instala ANIMAPP en tu pantalla de inicio.","Sure! Tap “🔔 Turn on alerts” at the bottom of the home page and you'll get a notification when there's IAEV news or updates. On iPhone, add ANIMAPP to your Home Screen first.")};
   if(has(/(instal|descarg(a|ar) (la )?app|app (para|en) (el )?(celular|telefono|movil|android|iphone|ios|windows|linux|computadora|compu)|pantalla de inicio|home screen)/)) return {t:L("¡Sí! ANIMAPP se puede instalar como app en Android, iPhone/iPad, Windows, Linux y Mac. Usa el botón «Instalar app» al final de la página de inicio y te digo los pasos para tu dispositivo.","Yes! ANIMAPP can be installed as an app on Android, iPhone/iPad, Windows, Linux and Mac. Use the “Install app” button at the bottom of the home page and I'll show you the steps for your device."),acts:[{url:APP_URL,label:L("Abrir ANIMAPP ↗","Open ANIMAPP ↗")}]};
   if(has(/instagram|\big\b|\binsta\b/)) return {t:"Instagram: @animation_upsrj",acts:[{url:CONFIG.instagram,label:"Instagram ↗"}]};
   if(has(/youtube|videos? de la carrera/)) return {t:"YouTube: @animation_upsrj",acts:[{url:CONFIG.youtube,label:"YouTube ↗"}]};
@@ -3252,6 +3254,45 @@ function installSteps(){
   $("inTitle").textContent=L("Instalar ANIMAPP","Install ANIMAPP");
   $("installModal").hidden=false; $("closeInstall").focus();
 }
+/* ====== AVISOS (notificaciones push con Firebase Cloud Messaging) ======
+   El servidor (funciones de Netlify) suscribe cada dispositivo al tema «animapp»;
+   los avisos llegan por sw.js. Noticias nuevas: automático. Otros avisos: admin.html. */
+const AV_KEY="animapp-avisos", AV_FN="/.netlify/functions/avisos-suscribir";
+const avGet=k=>{ try{ return localStorage.getItem(k)||"" }catch(e){ return "" } };
+const avSet=(k,v)=>{ try{ v?localStorage.setItem(k,v):localStorage.removeItem(k) }catch(e){} };
+const avSupported=()=>"Notification" in window&&"serviceWorker" in navigator&&"PushManager" in window;
+const avIsOn=()=>avGet(AV_KEY)==="on"&&"Notification" in window&&Notification.permission==="granted";
+function renderAvisos(){ const b=$("avisosBtn"); if(!b) return; const on=avIsOn();
+  b.textContent=on?L("🔔 Avisos activados","🔔 Alerts on"):L("🔔 Activar avisos","🔔 Turn on alerts");
+  b.classList.toggle("yellow",on); b.setAttribute("aria-pressed",String(on));
+  b.title=on?L("Toca para desactivar los avisos en este dispositivo","Tap to turn off alerts on this device"):L("Recibe una notificación cuando haya noticias o novedades","Get a notification when there's news or new content"); }
+async function avMessaging(){ await fb(); if(!firebase.messaging) await loadJS(FB_BASE+"firebase-messaging-compat.js"); return firebase.messaging(); }
+async function avToken(){ const reg=await navigator.serviceWorker.register("sw.js"); await navigator.serviceWorker.ready;
+  const m=await avMessaging(); const t=await m.getToken({vapidKey:FB_CFG.vapidKey,serviceWorkerRegistration:reg}); if(!t) throw new Error("sin token"); return t; }
+async function avPost(token,accion){ const r=await fetch(AV_FN,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({token,accion,lang:LANG})});
+  if(!r.ok){ let e=""; try{ e=(await r.json()).error }catch(_){} throw new Error("servidor "+r.status+" "+e); } }
+async function avOn(){ const t=await avToken(); await avPost(t,"alta"); avSet(AV_KEY,"on"); avSet(AV_KEY+"-t",t); }
+async function avOff(){ const t=avGet(AV_KEY+"-t"); avSet(AV_KEY,""); avSet(AV_KEY+"-t","");
+  try{ if(t) await avPost(t,"baja"); }catch(e){} try{ const m=await avMessaging(); await m.deleteToken(); }catch(e){} }
+$("avisosBtn").addEventListener("click",async()=>{ sfx.select(); const b=$("avisosBtn");
+  if(inClaudeHost()){ toast(L("Los avisos se activan en la app publicada: abre ANIMAPP en animapp-iaev.netlify.app.","Alerts work in the published app: open ANIMAPP at animapp-iaev.netlify.app.")); return; }
+  if(!FB_CFG||!FB_CFG.vapidKey){ toast(L("Los avisos todavía no están configurados. ¡Pronto!","Alerts aren't set up yet. Coming soon!")); return; }
+  if(!avSupported()){
+    if(devPlat()==="ios"&&!isStandalone()){ installSteps(); toast(L("En iPhone y iPad, primero instala ANIMAPP en tu pantalla de inicio y ábrela desde su ícono; ahí podrás activar los avisos.","On iPhone and iPad, first add ANIMAPP to your Home Screen and open it from its icon; then you can turn on alerts.")); }
+    else toast(L("Este navegador no permite avisos. Prueba con Chrome, Edge o Firefox.","This browser doesn't support alerts. Try Chrome, Edge or Firefox."));
+    return; }
+  if(avIsOn()){ if(!confirm(L("¿Desactivar los avisos en este dispositivo?","Turn off alerts on this device?"))) return;
+    b.disabled=true; await avOff(); b.disabled=false; renderAvisos(); toast(L("Avisos desactivados.","Alerts turned off.")); return; }
+  let perm=Notification.permission; if(perm==="default") perm=await Notification.requestPermission();
+  if(perm!=="granted"){ toast(L("No se dio permiso para los avisos. Puedes activarlo en la configuración del navegador o del celular.","Notification permission wasn't granted. You can allow it in your browser or phone settings.")); return; }
+  b.disabled=true; b.textContent=L("🔔 Activando…","🔔 Turning on…");
+  try{ await avOn(); toast(L("¡Listo! Te avisaremos cuando haya noticias y novedades de IAEV.","Done! We'll let you know when there's IAEV news and updates.")); }
+  catch(e){ console.warn("avisos",e); toast(L("No se pudieron activar los avisos. Intenta de nuevo en un momento.","Couldn't turn on alerts. Please try again in a moment.")); }
+  finally{ b.disabled=false; renderAvisos(); } });
+renderAvisos();
+// Si el navegador renovó el token, vuelve a registrarlo sin molestar a la persona.
+if(avIsOn()&&FB_CFG&&FB_CFG.vapidKey&&!inClaudeHost()&&avSupported()) setTimeout(async()=>{ try{ const t=await avToken(); if(t!==avGet(AV_KEY+"-t")){ await avPost(t,"alta"); avSet(AV_KEY+"-t",t); } }catch(e){} },5000);
+
 $("installBtn").addEventListener("click",async()=>{ sfx.select();
   if(deferredInstall){ const ev=deferredInstall; deferredInstall=null; ev.prompt(); try{ const r=await ev.userChoice; if(r.outcome==="accepted"){ $("installBtn").hidden=true; return; } }catch(e){} }
   installSteps(); });
@@ -3275,9 +3316,10 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&expOpen) closeExpe
 $("langBtn").addEventListener("click",()=>{ LANG=LANG==="es"?"en":"es"; try{localStorage.setItem("animapp-lang",LANG)}catch(e){}
   sfx.select(); if(synth) synth.cancel(); applyLang(); buildGrid();
   if(current==="section") renderSection(location.hash.slice(1));
+  renderAvisos();
   if(current==="menu"&&!$("grid").hidden) $("bubbleText").textContent=GREETING;
   say(L("Idioma: español","Language: English"),false); lastEl=$("langBtn") });
-applyLang(); buildGrid();
+applyLang(); buildGrid(); renderAvisos();
 /* ====== ARRANQUE ====== */
 (function boot(){
   const h=location.hash.slice(1);

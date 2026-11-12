@@ -38,6 +38,11 @@ textarea{width:100%;min-height:260px;font:13px/1.45 ui-monospace,Menlo,Consolas,
 .muted{color:var(--soft);font-size:15px;margin:0}
 progress{width:100%;height:14px}
 [hidden]{display:none!important}
+.fld{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.fld input,.fld textarea,.fld select{font-weight:400}
+textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
+.av-prev{background:#26242a;color:#fff;padding:12px 14px;border-radius:12px;display:flex;gap:12px;align-items:flex-start;max-width:420px}
+.av-prev img{width:40px;height:40px;border-radius:8px;flex:none}.av-prev b{display:block}.av-prev span{opacity:.85;font-size:15px}
 </style></head>
 <body>
 <main>
@@ -121,6 +126,25 @@ progress{width:100%;height:14px}
       <input type="file" id="icsFile" accept=".ics,text/calendar" hidden>
       <p class="muted" id="icsInfo"></p>
       <div class="row"><button class="btn" id="icsSave" disabled>Guardar calendario</button></div>
+    </div>
+  </section>
+
+  <section class="card" id="avCard" hidden>
+    <h2>Enviar aviso (notificación)</h2>
+    <p class="muted" style="margin-bottom:14px">Llega como notificación a los celulares y computadoras que activaron «🔔 Activar avisos» en ANIMAPP. Las noticias nuevas del Blog se avisan solas; usa esto para todo lo demás (horarios, calendario, Film Fest, avisos de la carrera…).</p>
+    <div class="stack">
+      <label class="fld">Título <input type="text" id="avT" maxlength="60" placeholder="Ej. Ya están los horarios del 3er cuatrimestre"></label>
+      <label class="fld">Mensaje <textarea class="short" id="avB" maxlength="180" placeholder="Ej. Entra a ANIMAPP → Horarios para ver el de tu grupo."></textarea></label>
+      <label class="fld">Al tocar el aviso, abrir
+        <select id="avU">
+          <option value="/#inicio">Inicio</option><option value="/#blog">Blog</option><option value="/#calendario">Calendario</option>
+          <option value="/#horarios">Horarios</option><option value="/#filmfest">Coyote Film Fest</option><option value="/#galeria">Galería</option>
+          <option value="/#material">Material y Equipo</option><option value="/#reglamento">Reglamento</option><option value="/#titulacion">Titulación</option>
+          <option value="/#juegos">Juegos</option><option value="/#profesores">Sólo Profesores</option>
+        </select></label>
+      <div><p class="muted" style="margin-bottom:6px">Así se verá:</p><div class="av-prev"><img src="icons/icon-192.png" alt=""><div><b id="avPT">ANIMAPP IAEV</b><span id="avPB"></span></div></div></div>
+      <p class="muted" id="avInfo"></p>
+      <div class="row"><button class="btn red" id="avSend" disabled>Enviar aviso</button></div>
     </div>
   </section>
 
@@ -227,12 +251,28 @@ else (async()=>{
     ["dragleave","drop"].forEach(t=>id("icsDrop").addEventListener(t,e=>{e.preventDefault();id("icsDrop").classList.remove("over");}));
     id("icsDrop").addEventListener("drop",e=>pick(e.dataTransfer.files[0]));
     id("icsSave").onclick=async()=>{ if(!ev) return; id("icsSave").disabled=true;
-      try{ await ref().set({eventos:ev,actualizado:today()}); msg(okMsg.replace("{n}",ev.length),"ok"); }
+      try{ await ref().set({eventos:ev,actualizado:today()}); msg(okMsg.replace("{n}",ev.length),"ok"); if(sfx==="2"&&window.avPrefill) avPrefill("📅 Calendario escolar actualizado","Ya están las fechas nuevas del calendario de alumnos en ANIMAPP.","/#calendario"); }
       catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); id("icsSave").disabled=false; } }; }
+  /* --- avisos (notificaciones push) --- */
+  const AVF="/.netlify/functions/avisos-enviar";
+  async function avCall(method,body){ const t=await auth.currentUser.getIdToken();
+    const r=await fetch(AVF,{method,headers:{authorization:"Bearer "+t,"content-type":"application/json"},body:body?JSON.stringify(body):undefined});
+    let j={}; try{ j=await r.json(); }catch(e){} if(!r.ok) throw new Error(j.error||("Error "+r.status)); return j; }
+  function avPrev(){ $("avPT").textContent=$("avT").value.trim()||"ANIMAPP IAEV"; $("avPB").textContent=$("avB").value.trim(); $("avSend").disabled=!$("avT").value.trim(); }
+  ["avT","avB"].forEach(k=>$(k).addEventListener("input",avPrev));
+  async function avCount(){ $("avInfo").textContent="Revisando cuántos dispositivos tienen los avisos activados…";
+    try{ const j=await avCall("GET"); $("avInfo").textContent=`Dispositivos con avisos activados: ${j.suscritos}.`; }
+    catch(e){ $("avInfo").textContent=/FIREBASE_SERVICE_ACCOUNT|404|Failed to fetch/.test(e.message)?"Los avisos aún no están conectados en Netlify (falta la clave de cuenta de servicio).":"No se pudo consultar: "+e.message; } }
+  $("avSend").onclick=async()=>{ const title=$("avT").value.trim(); if(!title) return;
+    if(!confirm(`¿Enviar este aviso a todos los dispositivos suscritos?\n\n${title}\n${$("avB").value.trim()}`)) return;
+    $("avSend").disabled=true;
+    try{ await avCall("POST",{title,body:$("avB").value.trim(),url:$("avU").value}); msg("Aviso enviado. Llegará en unos segundos a quienes activaron los avisos.","ok"); $("avT").value=""; $("avB").value=""; avPrev(); }
+    catch(e){ msg("No se pudo enviar el aviso: "+e.message,"err"); $("avSend").disabled=false; } };
+  window.avPrefill=(t,b,u)=>{ $("avT").value=t; $("avB").value=b; $("avU").value=u; avPrev(); };
   icsCard("",()=>db.collection("profesores").doc("calendario"),"Calendario docente guardado ({n} eventos). Ya se ve en Sólo Profesores.");
-  icsCard("2",()=>db.collection("publico").doc("calendario"),"Calendario de alumnos guardado ({n} eventos). Ya se ve en la sección Calendario.");
+  icsCard("2",()=>db.collection("publico").doc("calendario"),"Calendario de alumnos guardado ({n} eventos). Ya se ve en la sección Calendario. Si quieres avisar a la comunidad, el aviso ya quedó listo abajo en «Enviar aviso».");
   $("target").onchange=()=>{ $("json").value=""; refresh(); };
-  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; if(u) refresh(); });
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; $("avCard").hidden=!u; if(u){ refresh(); avCount(); } });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
   $("signOut").onclick=()=>auth.signOut();
