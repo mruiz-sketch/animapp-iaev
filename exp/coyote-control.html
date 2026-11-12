@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a0f2e">
+<title>Coyote Party · Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#fff7e6;--gold:#ffd84a;--pink:#ff4fa3;--cyan:#46e0ff;--dk:#2a0f3a;--pc:#ff4fa3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#1a0f2e;color:var(--ink);font-family:'VT323',monospace;font-size:22px;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:manipulation;overscroll-behavior:none}
+body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#hdr{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--dk);border-bottom:5px solid var(--pc);min-height:56px}
+#hdr .j{font-family:'Press Start 2P';font-size:14px;color:var(--pc)}
+#hdr .n{font-family:'Press Start 2P';font-size:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hdr .st{font-size:22px;white-space:nowrap}
+#top{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+h1,h2,h3{font-family:'Press Start 2P';font-weight:normal;line-height:1.35;margin:.2em 0}
+h1{font-size:20px;color:var(--gold);text-shadow:3px 3px 0 #b3361f}h2{font-size:14px;color:var(--gold)}h3{font-size:12px}
+p{margin:.2em 0}.sm{font-size:18px;opacity:.85}
+button{font-family:'Press Start 2P';font-size:13px;border:0;padding:16px 14px;background:var(--gold);color:var(--dk);box-shadow:0 5px 0 #a8740f,0 0 0 4px var(--dk);cursor:pointer;width:100%;max-width:420px;line-height:1.4}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #a8740f,0 0 0 4px var(--dk)}
+button.alt{background:var(--cyan);box-shadow:0 5px 0 #1b7f99,0 0 0 4px var(--dk)}
+button.go{background:var(--pink);color:#fff;box-shadow:0 5px 0 #9a1f5c,0 0 0 4px var(--dk)}
+button:disabled{opacity:.45}
+button small{display:block;font-family:'VT323';font-size:18px;margin-top:4px}
+button.vote{text-align:left}button.vote.sel{background:var(--cyan)}
+.row{display:flex;gap:10px;width:100%;max-width:420px}.row button{flex:1}
+.pickrow{display:flex;gap:10px;align-items:stretch;width:100%;max-width:420px}
+.pickrow .arrow{width:72px;flex:none;font-size:22px;padding:10px}
+.pickname{flex:1;background:#2a1748;border:4px solid var(--ink);padding:10px;font-family:'Press Start 2P';font-size:11px;line-height:1.5;display:flex;flex-direction:column;justify-content:center}
+.pickname small{font-family:'VT323';font-size:18px;opacity:.85}
+.wait{font-family:'Press Start 2P';font-size:11px;line-height:1.6;color:#ffd23f;animation:bl 1.4s infinite}
+@keyframes bl{50%{opacity:.5}}
+.ok{color:#2ed16b;font-family:'Press Start 2P';font-size:11px}
+.place{font-family:'Press Start 2P';font-size:54px;color:var(--gold);text-shadow:4px 4px 0 #b3361f}
+.dicev{font-family:'Press Start 2P';font-size:46px;background:var(--ink);color:var(--dk);width:110px;height:110px;display:flex;align-items:center;justify-content:center;border:5px solid var(--dk);box-shadow:0 0 0 5px var(--ink)}
+button.dice{font-size:26px;padding:34px 10px;background:var(--pink);color:#fff;box-shadow:0 8px 0 #9a1f5c,0 0 0 5px var(--dk);animation:pulse 1s infinite}
+@keyframes pulse{50%{filter:brightness(1.25)}}
+#bigwrap{padding:12px 14px 18px;display:none}
+#big{width:100%;max-width:none;height:min(52vh,380px);border-radius:28px;font-size:22px;background:var(--pc);color:#1a1020;box-shadow:0 12px 0 #0008,0 0 0 6px var(--dk);touch-action:none}
+#big.on{transform:translateY(8px);box-shadow:0 4px 0 #0008,0 0 0 6px var(--dk);filter:brightness(1.3)}
+input{font-family:'Press Start 2P';font-size:14px;padding:12px;width:100%;max-width:420px;text-align:center;border:4px solid var(--dk);background:var(--ink);color:var(--dk)}
+.err{color:#ff9c9c}
+.tag{font-family:'Press Start 2P';font-size:9px;padding:4px 6px;background:var(--cyan);color:var(--dk);display:inline-block;margin:2px}
+</style>
+</head>
+<body>
+<div id="hdr"><span class="j" id="hj">📱</span><span class="n" id="hn">COYOTE PARTY · CONTROL</span><span class="st" id="hs"></span></div>
+<div id="top"></div>
+<div id="bigwrap"><button id="big">¡ACCIÓN!<small id="bigl"></small></button></div>
+<script>
+'use strict';
+/* ===================== UTILIDADES ===================== */
+const $=s=>document.querySelector(s);
+const R=Math.random,rnd=(a,b)=>a+R()*(b-a),ri=(a,b)=>Math.floor(rnd(a,b+1)),pick=a=>a[Math.floor(R()*a.length)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function mulberry(a){a=a>>>0;return function(){a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+// Estado local (por dispositivo) y estado compartido S (lo controla el anfitrión)
+const G={fast:false,mute:false,dlgN:0,run:0,res:{},lastSeq:{},acts:[],seq:0};
+let S=null;
+const spd=()=>S&&S.fast?0.4:1;
+const W=ms=>sleep(ms*spd());
+function tween(d,fn){d*=spd();return new Promise(r=>{const t0=performance.now();function f(n){const k=Math.min(1,(n-t0)/(d*1000||1));fn(k);k<1?requestAnimationFrame(f):r()}requestAnimationFrame(f)})}
+const ease=k=>k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+
+/* ===================== AUDIO (chiptune) ===================== */
+let AC=null;
+function audio(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}}
+function tone(f,d=.08,type='square',v=.045,slide=0){if(!AC||G.mute)return;try{const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(40,f+slide),t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+d+.02)}catch(e){}}
+const SFX={blip:()=>tone(660,.05),type:()=>tone(880+R()*200,.02,'square',.018),sel:()=>{tone(523,.06);setTimeout(()=>tone(784,.08),60)},coin:()=>{tone(988,.06);setTimeout(()=>tone(1319,.12),60)},bad:()=>tone(240,.22,'sawtooth',.05,-140),dice:()=>tone(rnd(300,700),.03,'square',.03),
+  star:()=>[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>tone(f,.16,'square',.06),i*100)),go:()=>tone(880,.25,'square',.06),step:()=>tone(440,.05,'triangle',.07),
+  cheer:()=>{for(let i=0;i<14;i++)setTimeout(()=>tone(rnd(400,1200),.05,'triangle',.02),i*35)},fan:()=>[392,523,659,784,659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.14,'square',.05),i*110)),boom:()=>tone(90,.5,'sawtooth',.07,-50)};
+
+/* ===================== DATOS ===================== */
+const PCOL=['#ff4d4d','#3b8bff','#2ed16b','#ffd23f','#c27bff'];
+// Disfraces: solo personajes de dominio público o arquetipos genéricos
+const COSTUMES=[
+{n:'Detective de Baker Street',src:'Sherlock Holmes · relatos de Conan Doyle (dominio público)',cat:'Cine',body:'#7b5d3f',body2:'#5e4a33',hat:'deerstalker',h1:'#8b7355',h2:'#5e4a33',cape:'#6a4f35'},
+{n:'Conde de Transilvania',src:'Drácula · novela de Bram Stoker, 1897',cat:'Cine',body:'#1d1d2b',body2:'#f0f0f0',cape:'#8b0f1f',hat:'none'},
+{n:'Conde Orlok',src:'Nosferatu · película muda de 1922',cat:'Cine',body:'#262626',body2:'#3a3a3a',fur:'#bdb7a6',hat:'none'},
+{n:'Criatura de Frankenstein',src:'Novela de Mary Shelley, 1818',cat:'Cine',body:'#3b3b46',body2:'#2a2a33',fur:'#8fa77a',hat:'bolts'},
+{n:'Arquero de Sherwood',src:'Robin Hood · leyenda medieval inglesa',cat:'Cine',body:'#2f7a34',body2:'#5a3d1e',hat:'feather',h1:'#2f7a34',h2:'#e33'},
+{n:'Rey de Camelot',src:'Rey Arturo · leyenda artúrica',cat:'Cine',body:'#2b3f8c',body2:'#d9b44a',hat:'crown',h1:'#ffd23f',cape:'#9b1b30'},
+{n:'Hombre de la Luna',src:'Viaje a la Luna · Georges Méliès, 1902',cat:'Cine',body:'#2a2f5a',body2:'#3a4070',fur:'#ece6c8',hat:'moon'},
+{n:'Viajera de Oz',src:'Dorothy · libro de L. Frank Baum, 1900',cat:'Cine',body:'#5b8fd6',body2:'#ffffff',hat:'bow',h1:'#5b8fd6'},
+{n:'Leñador de Hojalata',src:'El Mago de Oz · libro de L. Frank Baum, 1900',cat:'Cine',body:'#a9b3bd',body2:'#8e98a3',fur:'#c4ccd4',hat:'funnel',h1:'#a9b3bd'},
+{n:'Alicia',src:'Alicia en el País de las Maravillas · ilustración de Tenniel, 1865',cat:'Animación',body:'#6fa8dc',body2:'#ffffff',hat:'bow',h1:'#222222'},
+{n:'Sombrerero',src:'Alicia en el País de las Maravillas · Lewis Carroll, 1865',cat:'Animación',body:'#6b3fa0',body2:'#e8c547',hat:'tophat',h1:'#3b2a1a',h2:'#e8c547'},
+{n:'Muñeco de Madera',src:'Pinocho · novela de Carlo Collodi, 1883',cat:'Animación',body:'#d9452b',body2:'#f2e3c4',hat:'pointy',h1:'#e9d9a8',nose:1},
+{n:'Soñador de Slumberland',src:'Little Nemo · cómic de Winsor McCay, 1905',cat:'Animación',body:'#f1f1f1',body2:'#d8d8ff',hat:'nightcap',h1:'#f1f1f1'},
+{n:'Dinosaurio de 1914',src:'Gertie the Dinosaur · animación de Winsor McCay, 1914',cat:'Animación',body:'#5f9e4a',body2:'#8bc46d',fur:'#6fb055',hat:'dino',h1:'#3d7a2c'},
+{n:'Caballero 8-bit',src:'Arquetipo clásico de videojuegos',cat:'Videojuegos',body:'#8c96a3',body2:'#6c7480',hat:'helmet',h1:'#aab3be',h2:'#e33'},
+{n:'Mago Pixel',src:'Arquetipo clásico de RPG',cat:'Videojuegos',body:'#3a4fb5',body2:'#26357a',hat:'wizard',h1:'#3a4fb5',cape:'#26357a'},
+{n:'Ninja Arcade',src:'Arquetipo clásico de arcade',cat:'Videojuegos',body:'#22232b',body2:'#33343f',hat:'ninja',h1:'#c62828'},
+{n:'Astronauta Retro',src:'Arquetipo de ciencia ficción',cat:'Videojuegos',body:'#e9e9e9',body2:'#ff7a1a',hat:'astro'},
+{n:'Robot de Feria',src:'Arquetipo retrofuturista',cat:'Videojuegos',body:'#9aa7b0',body2:'#7d8a94',fur:'#b9c3ca',hat:'robot',h1:'#ff4d4d'}
+];
+// Vestuario oficial de los turnarounds: Timo (sudadera roja) y Maya (sudadera verde menta, mechón rosa)
+const HOSTS={timo:{n:'TIMO',fur:'#d9a766',body:'#b02a38',body2:'#931f2c',arms:'#b02a38',hood:1,legs:'#4a3d33',shoes:'#f4f4f4',sole:'#3a2e26',dot:'#c0303a',eye:'#8a4a12',brows:'#4a3226',hat:'none'},
+  maya:{n:'MAYA',fur:'#eba066',body:'#4fbf9a',body2:'#3fa583',arms:'#4fbf9a',hood:1,legs:'#b5617f',shoes:'#eaa6c2',sole:'#d48aa8',eye:'#2a9a78',lash:1,hair:'#e8197a',hat:'none'}};
+const BENEF={coins:'Gana 10 monedas',double:'Tira DOS dados en tu siguiente turno',steal:'Roba 7 monedas al rival con más monedas',warp:'Teletransporte a 2 casillas del Coyoscar'};
+const BOARDS=[
+{name:'Estudio de Animación 2D',short:'Animación 2D',min:30,rounds:3,tiles:24,th:0,sky:0x8f8068,ground:0xa8946c,acc:'#e85d3a',desc:'Un estudio de animación tradicional: mesas de luz, hojas de papel gigantes y lápices del tamaño de un poste. Aquí todo se hace cuadro por cuadro.',areas:[['Mesa de Luz','coins'],['Cámara Multiplano','double'],['Tinta y Pintura','steal'],['Bóveda de Flipbooks','warp']]},
+{name:'Set de Live Action',short:'Live Action',min:50,rounds:5,tiles:32,th:1,sky:0x17171f,ground:0x3a3a44,acc:'#ffd23f',desc:'Un foro de filmación en plena producción: reflectores, claquetas y sillas de director. ¡Silencio en el set… y acción!',areas:[['Camerino Estelar','coins'],['Grúa de Cámara','double'],['Catering','steal'],['Sala de Edición','warp']]},
+{name:'Granja de Render 3D',short:'Animación 3D',min:70,rounds:7,tiles:40,th:2,sky:0x0e1730,ground:0x2a3b6b,acc:'#46e0ff',desc:'Un mundo de primitivas, wireframes y luces de render. Cada casilla es un polígono recién modelado y texturizado.',areas:[['Lab de Rigging','coins'],['Render Farm','double'],['Sala de Texturas','steal'],['Estudio de Mocap','warp']]},
+{name:'Arcade de Videojuegos',short:'Videojuegos',min:90,rounds:9,tiles:48,th:3,sky:0x0c0620,ground:0x2a1650,acc:'#ff3df2',desc:'Un arcade neón con gabinetes gigantes, monedas flotantes y bloques. ¡Inserta moneda para continuar!',areas:[['Salón de Gabinetes','coins'],['Estudio Indie','double'],['Lab de QA','steal'],['Pista de Speedrun','warp']]},
+{name:'Estudio de Efectos Visuales',short:'Efectos Visuales',min:110,rounds:11,tiles:56,th:4,sky:0x08200f,ground:0x1f7a3c,acc:'#7dff4f',desc:'Pantallas verdes, explosiones congeladas en el aire y partículas flotando. El tablero más largo: en postproducción todo es posible.',areas:[['Pantalla Verde','coins'],['Sala de Composición','double'],['Simulación de Fluidos','steal'],['Bóveda de Explosiones','warp']]}
+];
+const THEMES=[
+{n:'Animación 2D',bg:'#f4ead2',l:['#efe2c3','#f8f0de'],ink:'#3a2f25',acc:'#e85d3a',ob:'#5a4632',pat:'paper'},
+{n:'Live Action',bg:'#1c1c22',l:['#25252d','#2e2e38'],ink:'#f5f5f5',acc:'#ffd23f',ob:'#ffd23f',pat:'film'},
+{n:'Animación 3D',bg:'#16203d',l:['#1f2b52','#26356a'],ink:'#e8f0ff',acc:'#46e0ff',ob:'#46e0ff',pat:'grid'},
+{n:'Videojuegos',bg:'#120a2a',l:['#1d1240','#25174f'],ink:'#ffffff',acc:'#ff3df2',ob:'#7dff4f',pat:'scan'},
+{n:'Efectos Visuales',bg:'#0d3b1f',l:['#135228','#186332'],ink:'#eafff0',acc:'#ff8a1a',ob:'#ff8a1a',pat:'track'}
+];
+const FLAV=['en el estudio de animación 2D','en el set de live action','en la granja de render 3D','en el arcade','en el estudio de efectos visuales'];
+const MECH_INFO={
+mash:{r:'Presiona tu botón lo más rápido que puedas para avanzar. ¡El primero en llegar a la meta gana!',c:'Toques rápidos',tip:'Alterna dos dedos sobre la misma tecla.'},
+stopbar:{r:'Un marcador recorre la barra. Presiona para detenerlo justo en la zona dorada. Tienes 3 intentos y cada uno es más rápido.',c:'Un toque para detener',tip:'Anticipa: presiona un poquito antes de llegar.'},
+reaction:{r:'Espera la señal y presiona en cuanto aparezca. Si presionas antes, ¡te penalizamos! Son 5 rondas; gana el tiempo total más bajo.',c:'Un toque a tiempo',tip:'No te adelantes: la paciencia paga.'},
+jump:{r:'Corres sin parar. Presiona para saltar los obstáculos. Gana quien choque menos veces.',c:'Toque para saltar',tip:'Salta cuando el obstáculo esté cerca, no lejos.'},
+flip:{r:'Tu personaje corre por el techo o por el piso. Presiona para invertir la gravedad y esquivar los picos.',c:'Toque para invertir',tip:'Fíjate de qué lado viene cada pico.'},
+charge:{r:'Mantén presionado para cargar potencia y suelta para lanzar. ¡Cae lo más cerca posible de la bandera! 3 lanzamientos.',c:'Mantener y soltar',tip:'La barra sube y baja: suelta en el momento exacto.'},
+rhythm:{r:'Las notas avanzan hacia la línea. Presiona justo cuando lleguen. Perfecto = 3 pts, bien = 2, casi = 1. Presionar al aire resta.',c:'Toques al ritmo',tip:'Escucha el ritmo y no presiones de más.'},
+count:{r:'Observa y cuenta los objetos que cruzan la pantalla. Después, presiona tu botón tantas veces como objetos viste. Son 2 rondas.',c:'Contar y tocar',tip:'Cuenta en voz baja… ¡que no te escuchen!'},
+catch:{r:'Tu atrapador se mueve solo de lado a lado. Presiona para cambiar de dirección y atrapa los objetos antes de que desaparezcan.',c:'Toque para girar',tip:'Gira temprano para no perder tiempo.'},
+balance:{r:'El viento empuja la aguja hacia la derecha. Mantén presionado para empujarla a la izquierda y quédate en la zona verde el mayor tiempo posible.',c:'Mantener / soltar',tip:'Pequeños toques funcionan mejor que mantener todo el tiempo.'},
+redlight:{r:'Presiona para avanzar mientras la luz esté verde. Si presionas en ROJO… ¡CORTE! y retrocedes. Amarillo es advertencia.',c:'Toques rápidos',tip:'Al ver amarillo, suelta.'},
+fuse:{r:'Mantén presionado mientras la mecha se quema. Suelta antes de que explote: cuanto más cerca de la explosión sueltes, más puntos. Si explota en tu mano, 0 puntos. 3 rondas.',c:'Mantener y soltar',tip:'La bomba está escondida en la nube… calcula.'},
+aim:{r:'La mira recorre tu carril sola. Presiona para disparar cuando esté sobre un blanco. Cada disparo tiene recarga.',c:'Toque para disparar',tip:'No dispares al aire: pierdes tiempo de recarga.'},
+stack:{r:'Un bloque se mueve sobre tu torre. Presiona para soltarlo: lo que sobresale se corta. ¡Construye la torre más alta!',c:'Toque para soltar',tip:'Si lo alineas perfecto, conserva su tamaño.'},
+whack:{r:'El selector salta entre 4 agujeros. Presiona cuando esté sobre el objetivo para golpearlo. Si fallas, quedas aturdido un momento.',c:'Toque a tiempo',tip:'Mira el selector, no el objetivo.'},
+colormatch:{r:'A la izquierda de tu carril está el color objetivo; a la derecha, una muestra que cambia. Presiona cuando coincidan. Fallar resta un punto.',c:'Toque a tiempo',tip:'Más vale lento y seguro.'}
+};
+const NAMES={
+mash:['Lápiz Veloz','Dolly Desbocado','Barra de Render','Turbo Pixel','Cohete en Croma'],
+stopbar:['Fotograma Clave','Foco Perfecto','Keyframe Exacto','Golpe Crítico','Frame de Impacto'],
+reaction:['¡Lápiz Arriba!','¡Acción!','¡Render Listo!','¡Press Start!','¡Detonación!'],
+jump:['Salto de Boceto','Doble de Riesgo','Salto de Polígono','Plataformero 8-bit','Salto entre Escombros'],
+flip:['Hoja Volteada','Cámara Invertida','Normales Invertidas','Gravedad Retro','Antigravedad VFX'],
+charge:['Lanzamiento de Goma','Lanza la Claqueta','Disparo de Partícula','Tiro Parabólico','Proyectil de Plasma'],
+rhythm:['Ritmo de Exposición','Ritmo de Claqueta','Ritmo de Timeline','Ritmo Chiptune','Ritmo de Explosiones'],
+count:['Cuenta Cuadros','Cuenta Extras','Cuenta Vértices','Cuenta Monedas','Cuenta Chispas'],
+catch:['Atrapa Bocetos','Atrapa Utilería','Atrapa Texturas','Atrapa Power-ups','Atrapa Partículas'],
+balance:['Mesa de Luz Estable','Steadicam','Equilibrio de Rig','Cuerda Floja Pixel','Balance de Simulación'],
+redlight:['¡Lápiz Quieto!','¡Corte y Acción!','Render en Pausa','Luz Roja Arcade','Cámara Lenta'],
+fuse:['Tinta Explosiva','Efecto Práctico','Caché que Explota','Bomba de Tiempo','Pirotecnia Digital'],
+aim:['Tiro al Garabato','Tiro al Reflector','Tiro al Vértice','Tiro al Alien','Tiro al Dron'],
+stack:['Pila de Cels','Torre de Utilería','Torre de Primitivas','Torre de Bloques','Torre de Capas'],
+whack:['Pega al Borrón','Pega al Micrófono','Pega al Glitch','Pega al Bug','Pega al Artefacto'],
+colormatch:['Paleta Exacta','Gel de Color','Shader Correcto','Paleta 8-bit','Corrección de Color']
+};
+const MINIGAMES=[];
+Object.keys(NAMES).forEach(m=>NAMES[m].forEach((n,t)=>MINIGAMES.push({id:MINIGAMES.length,name:n,mech:m,theme:t,sp:[.85,1,1.12,1.25,1.38][t]})));
+// Niveles de bots: unos juegan mejor y otros peor
+const BOT_LV=[['Novato',.12,.32],['Aprendiz',.3,.5],['Regular',.45,.65],['Hábil',.62,.8],['Experto',.8,.97]];
+/* ===================== CONTROL DE CELULAR ===================== */
+const cleanName=s=>String(s||'').replace(/[^\p{L}\p{N} ._-]/gu,'').trim().slice(0,12);
+const qs=new URLSearchParams(location.search);let CODE=(qs.get('s')||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+const SIG=new URL('/.netlify/functions/cp-signal',location.href).href;
+const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}]};
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let pid=null,pc=null,ch=null,mySlot=-1,ST=null,lastHtml='',closing=false,tries=0,wake=null,awSeen=-1;
+const top_=$('#top');
+async function sig(body){const r=await fetch(SIG,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j}
+async function sigGet(q){const r=await fetch(SIG+'?'+new URLSearchParams(q),{cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j}
+function iceDone(p,ms=3000){return new Promise(r=>{if(p.iceGatheringState==='complete')return r();const t=setTimeout(r,ms);p.addEventListener('icegatheringstatechange',()=>{if(p.iceGatheringState==='complete'){clearTimeout(t);r()}})})}
+function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+async function keepAwake(){try{if('wakeLock' in navigator&&!wake){wake=await navigator.wakeLock.request('screen');wake.addEventListener('release',()=>wake=null)}}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){keepAwake();if(!ch&&pid&&!closing)connect()}});
+function setTop(h){if(h!==lastHtml){lastHtml=h;top_.innerHTML=h}}
+function joinScreen(err){$('#bigwrap').style.display='none';
+  setTop(`<h1>COYOTE PARTY</h1><div><span class="tag">📱 CONTROL</span></div>${err?`<p class="err">${esc(err)}</p>`:''}
+    ${CODE?'':'<p>Código de sala (está en la pantalla de la PC):</p><input id="cd" maxlength="6" placeholder="ABC123" style="text-transform:uppercase;letter-spacing:6px">'}
+    <p>Tu nombre:</p><input id="nm" maxlength="12" placeholder="Tu nombre" value="${esc(LS.get('cp_name')||'')}"><button class="go" id="cn">CONECTAR ▶</button><p class="sm">Tu celular debe estar en la misma red wifi que la computadora.</p>`);
+  $('#cn').onclick=()=>{audio();keepAwake();if(!CODE){const c=($('#cd').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(c.length!==6){vib(80);return}CODE=c}
+    const n=cleanName($('#nm').value);if(!n){$('#nm').focus();vib(80);return}LS.set('cp_name',n);G.name=n;
+    pid=LS.get('cp_pid_'+CODE)||Array.from({length:12},()=>'abcdefghijkmnpqrstuvwxyz23456789'[Math.floor(Math.random()*32)]).join('');LS.set('cp_pid_'+CODE,pid);connect()}}
+function status(t,btn){$('#bigwrap').style.display='none';setTop(`<h2>COYOTE PARTY</h2><p class="wait">${t}</p>${btn?'<button class="alt" id="rt">↻ REINTENTAR</button>':''}`);if(btn)$('#rt').onclick=()=>{tries=0;connect()}}
+async function connect(){closing=false;try{ch&&ch.close()}catch(e){}try{pc&&pc.close()}catch(e){}ch=null;tries++;
+  status(tries>1?'Reconectando…':'Conectando con la PC…');
+  try{pc=new RTCPeerConnection(ICE);const mine=pc;const c=pc.createDataChannel('cp',{ordered:true});
+    c.onopen=()=>{if(pc!==mine)return;ch=c;tries=0;vib([30,40,30]);c.send(JSON.stringify({t:'n',v:G.name}));render()};
+    c.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(m.t==='s'){ST=m.S;render()}};
+    c.onclose=()=>{if(pc!==mine)return;ch=null;if(!closing)setTimeout(()=>{if(!ch&&pc===mine)connect()},1500)};
+    const of=await pc.createOffer();await pc.setLocalDescription(of);await iceDone(pc);
+    await sig({op:'offer',code:CODE,pid,name:G.name,sdp:pc.localDescription.sdp});
+    let ans=null;for(let k=0;k<45&&!ans;k++){await sleep(800);if(pc!==mine)return;const j=await sigGet({op:'poll',code:CODE,pid});
+      if(j.err==='full'){closing=true;joinScreen('Esa sala ya está completa o la partida ya empezó.');return}if(j.answer){ans=j;break}}
+    if(!ans)throw new Error('La PC no respondió. ¿Sigue abierta la pantalla del QR?');
+    mySlot=ans.slot;await pc.setRemoteDescription({type:'answer',sdp:ans.answer});
+    await sleep(12000);if(pc===mine&&!ch){throw new Error('No se pudo conectar directo con la PC. Verifica que ambos estén en la misma red wifi (algunas redes escolares bloquean la conexión entre dispositivos; un hotspot de celular sí funciona).')}
+  }catch(e){if(/no encontrada/.test(e.message)){closing=true;joinScreen('No encontramos la sala '+CODE+'. Escanea de nuevo el QR de la PC.');return}status(esc(e.message),true)}}
+function send(o){if(ch&&ch.readyState==='open')try{ch.send(JSON.stringify(o))}catch(e){}}
+function act(k,v){send({t:'a',k,v});vib(12);SFX.blip()}
+// Botón grande (minijuegos)
+const big=$('#big');let held=false;
+big.addEventListener('pointerdown',e=>{e.preventDefault();try{big.setPointerCapture(e.pointerId)}catch(x){}if(!held){held=true;big.classList.add('on');send({t:'d'});vib(8)}});
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>big.addEventListener(ev,()=>{if(held){held=false;big.classList.remove('on');send({t:'u'})}}));
+big.addEventListener('contextmenu',e=>e.preventDefault());
+top_.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a;let v=b.dataset.v;if(v!==undefined)v=(a==='ans')?v==='1':+v;act(a,v)});
+function render(){if(!ST||!ch)return;const S=ST;mySlot=S.pl.findIndex(p=>p.pe===pid);if(mySlot<0){status('Esperando un lugar en la partida…');return}
+  const me=mySlot,p=S.pl[me],J1=me===0,col=PCOL[me];document.documentElement.style.setProperty('--pc',col);
+  $('#hj').textContent='J'+(me+1);$('#hn').textContent=p.n;$('#hs').textContent=['board','round','vote','rank','final','bintro'].includes(S.ph)?`🏆${p.st} 🪙${p.co}`:'';
+  const W=t=>`<div class="wait">${t}</div>`,dlg=(J1&&S.dlg)?`<div class="row"><button data-a="dlg">▶ SIGUIENTE</button><button data-a="skip" class="alt">⏭ SALTAR</button></div>`:'';
+  let h='',bigOn=false,bigL='';
+  switch(S.ph){
+    case 'lobby':h=`<div class="ok" style="font-size:16px">✔ ¡CONECTADO!</div><p>Eres <b style="color:${col}">J${me+1}</b>. Mira la pantalla de la PC.</p>`+(J1?'<button class="go" data-a="next">▶ COMENZAR</button><p class="sm">Como J1, tú inicias la partida cuando todos estén conectados.</p>':W('J1 iniciará la partida…'));break;
+    case 'intro':h=W('📺 Timo y Maya presentan el show…')+dlg;break;
+    case 'cos':if(S.cosTurn===me){const c=COSTUMES[S.cosSel];h=`<h2>¡ELIGE TU DISFRAZ!</h2><div class="pickrow"><button class="arrow" data-a="cosmv" data-v="-1">◀</button><div class="pickname">${esc(c.n)}<small>${c.cat} · ${esc(c.src)}</small></div><button class="arrow" data-a="cosmv" data-v="1">▶</button></div><button class="go" data-a="cos">✔ ¡ESTE!</button><p class="sm">Mira cómo se ve en la pantalla.</p>`}
+      else if(p.c>=0)h=`<p>Tu disfraz:</p><div class="pickname">${esc(COSTUMES[p.c].n)}</div>`+W('Esperando a los demás…');else h=W(`Está eligiendo J${S.cosTurn+1}…<br>¡ya casi es tu turno!`);h+=dlg;break;
+    case 'cast':h=`<p>Eres</p><div class="pickname">${esc(COSTUMES[p.c].n)}</div>`+(J1?'<button class="go" data-a="next">ELEGIR TABLERO ▶</button>':W('Mira la pantalla 📺'))+dlg;break;
+    case 'bsel':if(J1){const B=BOARDS[S.bsel];h=`<h2>ELIGE EL TABLERO</h2><div class="pickrow"><button class="arrow" data-a="bsel" data-v="${S.bsel-1}">◀</button><div class="pickname">${B.short}<small>⏱ ${B.min} min · ${B.rounds} rondas</small></div><button class="arrow" data-a="bsel" data-v="${S.bsel+1}">▶</button></div><button class="go" data-a="bpick">✔ ¡A JUGAR!</button>`}else h=W('J1 está eligiendo el tablero…');h+=dlg;break;
+    case 'bintro':case 'round':h=W(S.ph==='round'?`RONDA ${S.rd} DE ${BOARDS[S.bi].rounds}`:'📺 Mira el tablero…')+dlg;break;
+    case 'vote':{const V=S.vote,mv=V.v[me];h=`<h2>VOTA EL MINIJUEGO</h2>`+V.o.map((id,k)=>{const m=MINIGAMES[id];return`<button class="vote ${mv===k?'sel':''} ${V.w===k?'go':''}" data-a="vote" data-v="${k}" ${mv>=0||V.w>=0?'disabled':''}>${k+1}. ${esc(m.name)}<small>${THEMES[m.theme].n} · ${MECH_INFO[m.mech].c}</small></button>`}).join('')+(V.w>=0?`<div class="ok">¡GANÓ ${esc(MINIGAMES[V.o[V.w]].name)}!</div>`:mv>=0?W('Esperando los demás votos…'):'');break}
+    case 'preview':{const m=MINIGAMES[S.mg.id];h=`<h2>${esc(m.name)}</h2><p>${esc(MECH_INFO[m.mech].r)}</p><p class="sm">🎮 ${MECH_INFO[m.mech].c} con el botón grande</p>`+dlg;break}
+    case 'practice':{bigOn=true;bigL='PRÁCTICA';const m=MINIGAMES[S.mg.id];h=`<h3>${esc(m.name)}</h3><p class="sm">${MECH_INFO[m.mech].c}</p>`+(S.ready[me]?'<div class="ok">✔ ¡LISTO! Esperando a los demás…</div>':'<button class="alt" data-a="ready">✔ ¡ESTOY LISTO!</button>');break}
+    case 'play':{bigOn=true;bigL='¡VA EN SERIO!';const m=MINIGAMES[S.mg.id];h=`<h3>${esc(m.name)}</h3><p class="sm">${MECH_INFO[m.mech].c}</p>`;break}
+    case 'rank':{const k=S.rank.findIndex(r=>r[0]===me);h=`<p>Tu lugar</p><div class="place">${k+1}°</div><p>${esc(S.rank[k][1])} · +${S.rank[k][2]} 🪙</p>`+(J1?'<button class="go" data-a="next">AL TABLERO ▶</button>':W('Mira los resultados 📺'));break}
+    case 'board':{const aw=S.aw;if(aw&&aw.s===me){if(aw.id!==awSeen){awSeen=aw.id;vib([60,40,60])}
+        if(aw.k==='roll')h=`<h2>¡TU TURNO!</h2><button class="dice" data-a="roll" data-v="1">🎲<br>¡TIRAR!</button>`;
+        else{const q=aw.d;h=`<h2>${esc(q.t)}</h2><p>${esc(q.h)}</p>${q.y?`<button class="go" data-a="ans" data-v="1">${esc(q.y)}</button>`:''}<button class="alt" data-a="ans" data-v="0">${esc(q.n)}</button>`}}
+      else{h=(S.dice&&S.dice.s!==me)?`<div class="dicev">${S.dice.r?'🎲':S.dice.v}</div>`:'';h+=W(S.turn>=0?`Turno de ${esc(S.pl[S.turn].n)}`:'Mira el tablero 📺');if(S.dice&&S.dice.s===me&&!S.dice.r)h=`<p>Sacaste</p><div class="dicev">${S.dice.v}</div>`}
+      h+=dlg;break}
+    case 'final':{const k=S.order.indexOf(me);h=`<h1>¡FIN DEL SHOW!</h1><p>Quedaste en</p><div class="place">${k+1}°</div><p>🏆 ${p.st} Coyoscar${p.st===1?'':'es'} · 🪙 ${p.co}</p>`+(J1?'<button class="go" data-a="again">↻ JUGAR OTRA VEZ</button>':'')+dlg;break}
+    default:h=W('Mira la pantalla 📺')+dlg}
+  setTop(h);$('#bigwrap').style.display=bigOn?'block':'none';$('#bigl').textContent=bigL;if(!bigOn&&held){held=false;big.classList.remove('on');send({t:'u'})}}
+if(!window.RTCPeerConnection)joinScreen('Este navegador no permite la conexión. Usa Chrome o Safari actualizados.');else joinScreen();
+
+</script>
+</body>
+</html>

@@ -278,6 +278,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .portal-txt{display:flex;flex-direction:column;gap:8px;min-width:0}
 .portal-t{font-family:var(--display);font-size:17px;line-height:1.5;color:var(--iaev-red)}
 .portal-d{color:var(--ink-soft)}
+.portal-badge{display:inline-block;align-self:flex-start;font-family:var(--display);font-size:11px;line-height:1.5;background:#ffd84a;color:#26242a;padding:3px 8px;border:2px solid #26242a;box-shadow:2px 2px 0 #26242a;margin:2px 0 6px}
 .exp-overlay[hidden],.exp-fallback[hidden],.exp-frame[hidden]{display:none!important}
 .exp-overlay{position:fixed;inset:0;z-index:90;background:#0b0812;display:flex;flex-direction:column}
 .exp-bar{display:flex;align-items:center;gap:14px;padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));background:var(--paper);border-bottom:4px solid var(--ink)}
@@ -1856,7 +1857,7 @@ const SEC_EN={blog:["Blog","News, articles and updates about the program, writte
  titulacion:["Graduation","Graduation options, requirements and steps."],
  asistencia:["Attendance","Record and check attendance for classes, labs and program events."],
  render:["Render Farm","Request and check render farm slots to process your animation and VFX projects."],
- juegos:["Games","Pixel art games made for IAEV: coyote kart racing, a wetland full of hidden animals and a mystery at the Learning Center."],
+ juegos:["Games","Games made for IAEV: a party game with Timo and Maya played with your phone, coyote kart racing, a wetland full of hidden animals and a mystery at the Learning Center."],
  profesores:["Faculty Only","Resources and announcements just for teaching staff."]};
 const secT=s=>LANG==="en"?SEC_EN[s.id][0]:s.t, secD=s=>LANG==="en"?SEC_EN[s.id][1]:s.d;
 /* Textos fijos de la página: [selector, propiedad, español, inglés] */
@@ -2084,6 +2085,9 @@ PAL.earIn="#e6b58e";
 Object.assign(ICONS32,{
  juegos:[[["e","r",9,18,7,8],["e","r",23,18,7,8],["r","r",9,11,14,13],
    ["r","w",5,16,7,3],["r","w",7,14,3,7],["e","y",23,14.5,1.7,1.7],["e","g",26.5,18,1.7,1.7],["e","b",19.5,18,1.7,1.7],["e","w",23,21.5,1.7,1.7],["r","m",14,13,4,1]]],
+ party:[[["r","m",8,26,16,4],["r","d",11,22,10,4],["r","y",14,13,4,9],["r","d",12,15,8,2]],
+   [["e","y",16,10,4.6,3.6],["p","y",[[11,9],[12.5,2.5],[15,8]]],["p","y",[[17,8],[19.5,2.5],[21,9]]],["r","d",14,11,4,2],["r","k",14,9,1,1],["r","k",18,9,1,1]],
+   [["r","w",4,6,2,2],["r","w",26,12,2,2],["r","w",6,18,1,1],["r","w",25,4,1,1]]],
  kart:[[["p","r",[[3,23],[6,16],[21,16],[28,19],[29,23]]],["r","y",7,18,12,2],["r","w",22,19,4,2]],
    [["e","o",13,10,4.2,4.2],["p","o",[[9.5,8],[10,2],[13.5,7]]],["p","o",[[13,7],[17,2],[17,9]]],["p","o",[[15,9],[22,10.5],[16,13.5]]],["r","k",13,9,1,1],["r","k",21,10,1,1]],
    [["e","n",8.5,25,3.6,3.6],["e","l",8.5,25,1.3,1.3],["e","n",24,25,3.6,3.6],["e","l",24,25,1.3,1.3]],
@@ -2132,7 +2136,7 @@ const SECTIONS=[
  {id:"titulacion",t:"Titulación",d:"Modalidades, requisitos y pasos para tu proceso de titulación."},
  {id:"asistencia",t:"Asistencia",d:"Registro y consulta de asistencia a clases, prácticas y eventos de la carrera."},
  {id:"render",t:"Granja de Render",d:"Solicita y consulta turnos en la granja de render para procesar tus proyectos de animación y efectos visuales."},
- {id:"juegos",t:"Juegos",d:"Juegos en pixel art hechos para IAEV: carreras de coyotes, un humedal lleno de animales escondidos y un misterio en el Learning Center."},
+ {id:"juegos",t:"Juegos",d:"Juegos hechos para IAEV: una fiesta de minijuegos con Timo y Maya que se juega con el celular, carreras de coyotes, un humedal lleno de animales escondidos y un misterio en el Learning Center."},
  {id:"profesores",t:"Sólo Profesores",d:"Espacio de recursos y avisos exclusivo para el personal docente.",pro:true}
 ];
 
@@ -2718,6 +2722,7 @@ function drawMonth(){ const box=document.getElementById("calMonth"); if(!box) re
 /* ====== ACCESOS A OTRAS EXPERIENCIAS (artifacts vinculados) ====== */
 const PORTALS={
  juegos:[
+  {url:"https://animapp-iaev.netlify.app/exp/coyote-party.html",file:"exp/coyote-party.html",icon:"party",pc:1,t:["Coyote Party","Coyote Party"],d:["El reality show de IAEV con Timo y Maya: hasta 5 jugadores (los lugares libres son bots) compiten en 80 minijuegos y 5 tableros temáticos en 3D por los Coyoscares. La pantalla se juega en la PC y cada quien usa su celular como control escaneando un código QR.","IAEV's reality show hosted by Timo and Maya: up to 5 players (empty seats are bots) compete in 80 minigames and 5 themed 3D boards for the Coyoscars. The screen runs on a PC and everyone uses their phone as the controller by scanning a QR code."]},
   {url:"https://claude.ai/artifact/Emwa6QuPEsyn6DJCxrQP7W",file:"exp/kart.html",icon:"kart",t:["Coyote Kart","Coyote Kart"],d:["Carreras en pixel art por la Copa IAEV: elige entre 6 coyotes y tu vehículo, arma un torneo en 6 pistas temáticas y usa comodines como el turbo, el cactus o la tinta de pluma.","Pixel art racing for the IAEV Cup: pick one of 6 coyotes and a vehicle, build a tournament across 6 themed tracks and use power-ups like the turbo, the cactus or the pen ink."]},
   {url:"https://claude.ai/artifact/AXA2FsYVfnNhYc74nXBKrs",file:"exp/humedal.html",icon:"humedal",t:["Humedal Escondido","Hidden Wetland"],d:["Explora en primera persona el humedal de la universidad y encuentra a los animales escondidos guiándote por sus sonidos. Puedes meterte al estanque, pero ahí caminas más lento.","Explore the university wetland in first person and find the hidden animals by following their sounds. You can wade into the pond, but you'll move slower there."]},
   {url:"https://claude.ai/artifact/Enk9tDRCtHYuYipbZS7XMV",file:"exp/render.html",icon:"render",t:["¿Quién canceló el render?","Who canceled the render?"],d:["Juego de misterio tipo Clue: es la noche antes del Coyote Film Fest y alguien canceló el render final. Recorre el campus con tu detective, haz sugerencias y descubre quién lo canceló, dónde y cómo antes que los demás.","A Clue-style mystery: it's the night before the Coyote Film Fest and someone canceled the final render. Move your detective around campus, make suggestions and find out who did it, where and how before the others."]}],
@@ -2729,7 +2734,7 @@ const PORTALS={
 };
 function portalsHTML(id){ const i=LANG==="en"?1:0;
   return `<div class="portals">${PORTALS[id].map((p,k)=>`<div class="pbtn portal" role="group">
-    <svg class="px" data-portal="${p.icon}"></svg><span class="portal-txt"><span class="portal-t">${p.t[i]}</span><span class="portal-d">${p.d[i]}</span>
+    <svg class="px" data-portal="${p.icon}"></svg><span class="portal-txt"><span class="portal-t">${p.t[i]}</span>${p.pc?`<span class="portal-badge">${L("🖥️ Solo para PC · 📱 los controles son tu celular","🖥️ PC only · 📱 your phone is the controller")}</span>`:""}<span class="portal-d">${p.d[i]}</span>
     <span class="portal-actions"><button class="pbtn yellow portal-go-btn" data-portal-open="${id}:${k}">${L("▶ Entrar","▶ Enter")}</button><a class="portal-tab" href="${p.url}" target="_blank" rel="noopener">${L("Abrir en pestaña nueva ↗","Open in new tab ↗")}</a></span></span></div>`).join("")}</div>`; }
 function wirePortals(){ document.querySelectorAll("svg[data-portal]").forEach(s=>drawIcon32(s,s.dataset.portal));
   document.querySelectorAll("[data-portal-open]").forEach(b=>b.addEventListener("click",()=>{ const [sec,k]=b.dataset.portalOpen.split(":"); openExperience(PORTALS[sec][+k]); })); }
@@ -3133,7 +3138,7 @@ const BSYN={
  academia:"profesor profesores profesora profesoras maestro maestros maestra maestras docente docentes academia teacher teachers faculty",
  filmfest:"film fest festival cortos cortometraje cortometrajes coyote_film_fest shorts",
  galeria:"galeria museo trabajos exposicion obras portafolio gallery museum",
- juegos:"juego juegos jugar kart humedal misterio game games play",
+ juegos:"juego juegos jugar kart humedal misterio coyote party fiesta minijuegos coyoscar celular control qr game games play",
  asistencia:"asistencia asistencias faltas falta retardos attendance",
  render:"render granja renderizar turnos farm",
  titulacion:"titulacion titularme titulo tesis estadia graduation degree",
