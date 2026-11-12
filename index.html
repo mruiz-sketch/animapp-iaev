@@ -2123,7 +2123,7 @@ const sfx={
 };
 
 /* ====== AUDIO DESCRIPTIVO ====== */
-let audioOn=true; try{const v=localStorage.getItem("animapp-audio"); if(v==="0") audioOn=false}catch(e){}
+let audioOn=false; try{const v=localStorage.getItem("animapp-audio"); if(v==="1") audioOn=true}catch(e){}
 const synth=window.speechSynthesis; let voice=null;
 /* Voz juvenil y animada: prioriza voces naturales en español de México, tono más alto y ritmo ágil */
 const VOICE_PREF=[/dalia/i,/paulina/i,/google.*espa[ñn]ol.*(estados|unidos|us)/i,/google.*espa[ñn]ol/i,/sabina/i,/elvira/i,/helena/i,/m[oó]nica/i,/natural|online|neural/i];
