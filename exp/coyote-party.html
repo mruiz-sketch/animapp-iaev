@@ -3031,7 +3031,7 @@ function runMG(def,cv,mode,o={}){
       const mood=(mulberry(seed+i*31)()-.5)*.3;return{i,kind,snd:kind==='local'||(CON.on&&kind==='remote'),c:pl.c,col:PCOL[i],skill:clamp((pl.b?pl.sk:.55)+mood,.05,.98),prev:false,lastN:null}});
     s={t:0,sp:def.sp,thi:def.theme,done:false,R:mulberry(seed),L:P.map((p,i)=>mulberry(seed*7+i*131)),loud:mode!=='preview'};M.init(s,P);phase='count';cd=mode==='preview'?1:3;endT=0;PC[0]=0;localN=0}
   reset();last=performance.now();
-  function inputFor(p,dt,first){if(p.snd){const n=first?PC[0]:0;if(first)PC[0]=0;const h=!!HELD[0];if(phase==='play'){localN+=n;if(mode==='real'&&o.run)netInput({r:o.run,h:h?1:0,n:localN})}return{n:phase==='play'?n:0,h}}
+  function inputFor(p,dt,first){if(p.kind==='local'){const n=first?PC[0]:0;if(first)PC[0]=0;const h=!!HELD[0];if(phase==='play'){localN+=n;if(mode==='real'&&o.run)netInput({r:o.run,h:h?1:0,n:localN})}return{n:phase==='play'?n:0,h}}
     if(p.kind==='remote'&&CON.on){const ci=CON.inp[p.i];if(p.base==null)p.base=ci.n;const n=ci.n-p.base;p.base=ci.n;return{n:phase==='play'?n:0,h:!!ci.h}}
     if(p.kind==='remote'){const ri=NET.inp[p.i];if(!ri||ri.r!==o.run)return{n:0,h:false};if(p.lastN==null)p.lastN=0;const n=Math.max(0,ri.n-p.lastN);p.lastN=ri.n;return{n:phase==='play'?n:0,h:!!ri.h}}
     const h=phase==='play'?!!M.bot(s,p,dt):false;const n=h&&!p.prev?1:0;p.prev=h;return{n,h}}
