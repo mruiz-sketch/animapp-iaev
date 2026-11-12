@@ -127,6 +127,10 @@ h2{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;margin:0;col
 .log li{border-left:4px solid var(--c);padding-left:8px;--c:var(--edge)}
 .log li b{font-weight:600}
 
+.speed{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.speed span{font-family:var(--f-display);font-size:8px;letter-spacing:.08em;color:var(--muted);margin-right:4px}
+.speed .btn{font-size:8px;padding:7px 9px}
+.speed .btn[aria-pressed="true"]{background:var(--gold);color:var(--paper-ink);border-color:var(--paper-ink)}
 /* intro */
 .intro{display:grid;gap:12px}
 .istage{position:relative;width:100%;aspect-ratio:1600/820;max-width:100%;border:3px solid var(--shadow);box-shadow:0 0 0 3px var(--edge),6px 6px 0 3px var(--shadow);background:#050817;overflow:hidden;cursor:pointer}
@@ -211,6 +215,7 @@ h2{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;margin:0;col
         <li><b>EL LUGAR ESTÁ ADENTRO</b>El render se canceló desde uno de los 9 espacios del Learning Center. Entra por su puerta morada y recorre sus dos plantas.</li>
         <li><b>INTERROGA EN EL CAMPUS</b>En los edificios de puerta azul solo preguntas quién y cómo. Sirve para descartar sospechosos y métodos sin entrar.</li>
         <li><b>DUCTOS DE RED</b>Talleres ↔ Edificio 3 y Cafeterías ↔ Zona de Canchas en el campus; Lab. de Modelado ↔ Lab. de Render 2 dentro del Learning Center. Úsalos en vez de tirar.</li>
+        <li><b>TÚ ERES INOCENTE</b>Tu coyote nunca es el culpable, así que no puedes sugerirlo ni acusarlo. Ojo: el culpable sí podría estar jugando como detective rival.</li>
         <li><b>ACUSA</b>Cuando estés seguro, acusa. Si aciertas, resuelves el caso. Si fallas, quedas fuera.</li>
       </ul>
       <div class="row"><button class="btn primary" id="startBtn" type="button">ABRIR EL CASO</button><button class="btn" id="replay" type="button">VER INTRO OTRA VEZ</button></div>
@@ -232,6 +237,7 @@ h2{font-family:var(--f-display);font-size:11px;letter-spacing:.08em;margin:0;col
 
     <aside class="side">
       <div class="box turn">
+        <div class="speed" role="group" aria-label="Velocidad de los turnos"><span>VELOCIDAD</span><button class="btn" type="button" data-spd="2.6">LENTA</button><button class="btn" type="button" data-spd="1.8">MEDIA</button><button class="btn" type="button" data-spd="1">RÁPIDA</button></div>
         <div class="turnhead"><canvas class="face" id="turnFace" width="12" height="10" aria-hidden="true"></canvas><div><b id="turnWho">—</b><span id="turnInfo"></span></div></div>
         <div class="dice"><canvas id="d1" width="7" height="7" aria-hidden="true"></canvas><canvas id="d2" width="7" height="7" aria-hidden="true"></canvas><span class="sum" id="dsum" aria-live="polite"></span></div>
         <p class="phase" id="phase" aria-live="polite"></p>
@@ -265,7 +271,8 @@ const PINS=[[273, 311.1], [252.5, 178.9], [278.7, 129.4], [245.4, 81.4], [231.3,
 const S=2,W=1600,H=820;
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $=s=>document.querySelector(s);
-const wait=ms=>new Promise(r=>setTimeout(r,RM?Math.min(ms,250):ms));
+let SPD=2.6;try{const v=parseFloat(localStorage.getItem('qcr-speed'));if(v)SPD=v;}catch(e){}
+const wait=ms=>new Promise(r=>setTimeout(r,RM?Math.min(ms*SPD,600):ms*SPD));
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function mk(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.imageSmoothingEnabled=false;return [c,x];}
@@ -399,7 +406,7 @@ function cardImg(c){return c.t==='s'?SUS[c.id].head:c.t==='m'?MET[c.id].img:ROOM
 
 /* ---------- graph helpers ---------- */
 const ROOMNODES=new Set(ROOMS.map(r=>r.node));
-function bfsFree(s){const d=new Array(NODES.length).fill(1e9);d[s]=0;const q=[s];while(q.length){const u=q.shift();for(const v of ADJ[u])if(d[v]>d[u]+1){d[v]=d[u]+1;q.push(v);}}return d;}
+function bfsFree(s){const d=new Array(NODES.length).fill(1e9);d[s]=0;const q=[s];while(q.length){const u=q.shift();if(u!==s&&ROOMNODES.has(u))continue;for(const v of ADJ[u])if(d[v]>d[u]+1){d[v]=d[u]+1;q.push(v);}}return d;}
 const DIST=NODES.map((_,i)=>bfsFree(i));
 function reach(start,steps){const dist=new Map([[start,0]]),par=new Map(),q=[start];
   while(q.length){const u=q.shift(),d=dist.get(u);if(d===steps)continue;if(u!==start&&ROOMNODES.has(u))continue;
@@ -499,7 +506,7 @@ function markSeen(k,src){notes[k]={mark:'x',src};renderNotes();}
 function drawDie(canvas,v){const x=canvas.getContext('2d');x.fillStyle='#1d1a30';x.fillRect(0,0,7,7);x.fillStyle='#fff4d6';x.fillRect(1,1,5,5);x.fillStyle='#ff5a4e';
   const P={1:[[3,3]],2:[[1,1],[5,5]],3:[[1,1],[3,3],[5,5]],4:[[1,1],[5,1],[1,5],[5,5]],5:[[1,1],[5,1],[3,3],[1,5],[5,5]],6:[[1,1],[5,1],[1,3],[5,3],[1,5],[5,5]]}[v]||[];
   P.forEach(([a,b])=>x.fillRect(a,b,1,1));}
-async function rollDice(){let a=1,b=1;for(let i=0;i<(RM?1:8);i++){a=1+Math.floor(Math.random()*6);b=1+Math.floor(Math.random()*6);drawDie($('#d1'),a);drawDie($('#d2'),b);$('#dsum').textContent='';await wait(55);}
+async function rollDice(){let a=1,b=1;for(let i=0;i<(RM?1:8);i++){a=1+Math.floor(Math.random()*6);b=1+Math.floor(Math.random()*6);drawDie($('#d1'),a);drawDie($('#d2'),b);$('#dsum').textContent='';await wait(45);}
   $('#dsum').textContent='= '+(a+b);return a+b;}
 
 const me=()=>players.find(p=>p.human);
@@ -531,7 +538,7 @@ let now=0,lastT=performance.now();
 function frame(t){const dt=Math.min(.05,Math.max(0,(t-lastT)/1000));lastT=t;now+=dt;update(dt);draw();requestAnimationFrame(frame);}
 const tokBoard=tk=>BOARD[tk.anim?tk.anim.path[tk.anim.i]:tk.node];
 function update(dt){Object.entries(tokens).forEach(([sid,tk])=>{
-  if(tk.anim){const a=tk.anim;a.t+=dt*(RM?40:7);while(a.t>=1&&a.i<a.path.length-1){a.t-=1;a.i++;}
+  if(tk.anim){const a=tk.anim;a.t+=dt*(RM?40:7/SPD);while(a.t>=1&&a.i<a.path.length-1){a.t-=1;a.i++;}
     const prev=a.i===0?a.fromNode:a.path[a.i-1],toN=a.path[a.i];let from=a.i===0?a.from:NODES[prev];const to=NODES[toN];if(BOARD[prev]!==BOARD[toN])from=to;const k=Math.min(1,a.t);
     tk.x=from[0]+(to[0]-from[0])*k;tk.y=from[1]+(to[1]-from[1])*k;if(Math.abs(to[0]-from[0])>1)tk.face=to[0]>from[0]?1:-1;
     const cp=curP();if(cp&&cp.sid===sid&&BOARD[toN]!==view)setView(BOARD[toN]);
@@ -587,7 +594,7 @@ function walk(sid,path){return new Promise(res=>{if(!path.length)return res();co
 function teleport(sid,node){const tk=tokens[sid];tk.node=node;}
 function focusOn(sid){const sc=$('#scroller');if(sc.scrollWidth<=sc.clientWidth+2)return;const tk=tokens[sid];const x=tk.x/W*sc.scrollWidth;sc.scrollTo({left:Math.max(0,x-sc.clientWidth/2),behavior:RM?'auto':'smooth'});}
 
-async function banner(sid,whoTxt,text,ms){drawFace($('#bannerFace'),sid);$('#bannerWho').textContent=whoTxt;$('#bannerText').textContent=text;$('#banner').hidden=false;await wait(ms);$('#banner').hidden=true;}
+async function banner(sid,whoTxt,text,ms){ms=Math.max(ms,900+text.length*38);drawFace($('#bannerFace'),sid);$('#bannerWho').textContent=whoTxt;$('#bannerText').textContent=text;$('#banner').hidden=false;await wait(ms);$('#banner').hidden=true;}
 
 /* ---------- modal ---------- */
 function modal({sid,title,body,actions}){return new Promise(res=>{const m=$('#modal');drawFace($('#mFace'),sid);$('#mFace').hidden=!sid;$('#mTitle').textContent=title;const mb=$('#mBody');mb.innerHTML='';if(typeof body==='string')mb.innerHTML=body;else if(body)mb.append(body);
@@ -605,11 +612,11 @@ function newGame(){
   players=[{sid:human,human:true,hand:[],out:false,pulled:false},...others.map(id=>({sid:id,human:false,hand:[],known:new Set(),certain:{},out:false,pulled:false}))];
   SUSPECTS.forEach(s=>{const n=G.places[s.start].node;tokens[s.id]={node:n,x:NODES[n][0],y:NODES[n][1],face:1,anim:null};});
   const pick=t=>CAT[t][Math.floor(Math.random()*CAT[t].length)];
-  solution={s:pick('s'),m:pick('m'),r:pick('r')};
+  solution={s:pick('s'),m:pick('m'),r:pick('r')};while(solution.s==='s:'+human)solution.s=pick('s');
   const deck=shuffle(CARDS.map(c=>c.key).filter(k=>![solution.s,solution.m,solution.r].includes(k)));
   deck.forEach((k,i)=>players[i%players.length].hand.push(k));
-  players.forEach(p=>{if(!p.human)p.hand.forEach(k=>p.known.add(k));});
-  me().hand.forEach(k=>markSeen(k,'tu mano'));
+  players.forEach(p=>{if(!p.human){p.hand.forEach(k=>p.known.add(k));p.known.add('s:'+p.sid);}});
+  me().hand.forEach(k=>markSeen(k,'tu mano'));markSeen('s:'+human,'eres tú');
   renderHand();renderNotes();
   $('#setup').hidden=true;$('#game').hidden=false;
   log(`Se abrió el caso. Detectives: ${players.map(p=>who(p.sid)).join(', ')}. Las ${CARDS.length-3} cartas se repartieron; 3 quedaron en el sobre.`);
@@ -621,7 +628,7 @@ function startTurn(){if(gameOver)return;const p=curP();setView(BOARD[tokens[p.si
     setPhase(p.pulled&&rm?`Te trajeron a <b>${rm.name}</b>. Puedes sugerir aquí sin moverte, o tirar los dados.`:rm&&PASSAGES[rm.id]?`Tira los dados o usa el ducto de red hacia ${ROOM[PASSAGES[rm.id]].name}.`:'Tira los dados para moverte.');updateUI();}
   else{phase='ai';updateUI();setPhase(`${SUS[p.sid].name} está investigando…`);aiTurn(p).then(()=>{if(!gameOver)nextTurn();});}}
 function nextTurn(){if(gameOver)return;curP().pulled=false;let k=0;do{cur=(cur+1)%players.length;k++;}while(players[cur].out&&k<=players.length);
-  if(players.filter(p=>!p.out).length===0){return;}setTimeout(startTurn,RM?50:350);}
+  if(players.filter(p=>!p.out).length===0){return;}setTimeout(startTurn,RM?50:700*SPD);}
 
 $('#startBtn').onclick=newGame;
 $('#bRoll').onclick=async()=>{const p=curP();busy=true;updateUI();roll=await rollDice();busy=false;p.pulled=false;R=reach(tokens[p.sid].node,roll);phase='move';
@@ -640,7 +647,7 @@ async function humanSuggest(){const p=curP();const rm=roomOf(p);if(!rm)return;le
   body.innerHTML=rm.lc?`<p>Sugerencia en <b>${esc(rm.name)}</b>. Este espacio entra como lugar. ¿Quién y cómo? Las opciones atenuadas ya las tachaste en tu libreta.</p>`
     :`<p>Interrogatorio en <b>${esc(rm.name)}</b>. Fuera del Learning Center solo preguntas quién y cómo; el lugar se investiga adentro. Las opciones atenuadas ya las tachaste en tu libreta.</p>`;
   const h1=document.createElement('h3');h1.textContent='SOSPECHOSO';const h2=document.createElement('h3');h2.textContent='MÉTODO';
-  body.append(h1,optGrid(CAT.s,k=>{s=k;chk();},seenX),h2,optGrid(CAT.m,k=>{m=k;chk();},seenX));
+  body.append(h1,optGrid(CAT.s.filter(k=>k!=='s:'+human),k=>{s=k;chk();},seenX),h2,optGrid(CAT.m,k=>{m=k;chk();},seenX));
   function chk(){const b=$('#mOk');if(b)b.disabled=!(s&&m);}
   const v=await modal({sid:p.sid,title:rm.lc?'HACER UNA SUGERENCIA':'INTERROGATORIO',body,actions:[{label:'AHORA NO',value:false},{label:rm.lc?'SUGERIR':'PREGUNTAR',value:true,primary:true,id:'mOk',disabled:true}]});
   if(!v){phase=phase==='start'?'start':'end';if(phase==='end')setPhase('No hiciste sugerencia. Termina tu turno o acusa.');updateUI();return;}
@@ -653,7 +660,7 @@ async function resolveSuggestion(p,s,m,rm){
   if(sid!==p.sid){teleport(sid,rm.node);const pl=players.find(q=>q.sid===sid);if(pl)pl.pulled=true;}
   if(!p.human)await banner(p.sid,SUS[p.sid].name.toUpperCase()+(r?' SUGIERE':' INTERROGA'),r?`Fue ${what}.`:`¿Fue ${what}? (lugar: dentro del Learning Center)`,RM?600:2300);
   const idx=players.indexOf(p);
-  for(let i=1;i<players.length;i++){const q=players[(idx+i)%players.length];const has=q.hand.filter(k=>k===s||k===m||(r&&k===r));if(!has.length){log(`${who(q.sid)} no tiene ninguna.`,q.sid);continue;}
+  for(let i=1;i<players.length;i++){const q=players[(idx+i)%players.length];const has=q.hand.filter(k=>k===s||k===m||(r&&k===r));if(!has.length){log(`${who(q.sid)} no tiene ninguna.`,q.sid);if(!q.human&&!p.human)await banner(q.sid,SUS[q.sid].name.toUpperCase(),'No tiene ninguna de esas cartas.',1000);continue;}
     let shown;
     if(q.human){const body=document.createElement('div');body.style.display='grid';body.style.gap='10px';body.innerHTML=`<p>${esc(SUS[p.sid].name)} ${r?'sugirió':'preguntó por'} ${esc(what)}. Tienes ${has.length>1?'varias de esas cartas. Elige cuál le muestras':'una de esas cartas y se la tienes que mostrar'}.</p>`;
       const row=document.createElement('div');row.className='cards';row.style.justifyContent='center';body.append(row);
@@ -663,19 +670,19 @@ async function resolveSuggestion(p,s,m,rm){
     else{const prev=has.find(k=>q.showed&&q.showed.has(k));shown=prev||has[Math.floor(Math.random()*has.length)];(q.showed=q.showed||new Set()).add(shown);}
     if(p.human){const body=document.createElement('div');body.style.display='grid';body.style.gap='12px';body.innerHTML=`<p>${esc(SUS[q.sid].name)} te enseña esta carta en secreto. Ya la tachamos en tu libreta.</p>`;const row=document.createElement('div');row.className='cards';row.style.justifyContent='center';row.append(cardEl(CARD[shown],true));body.append(row);
       markSeen(shown,SUS[q.sid].name);await modal({sid:q.sid,title:SUS[q.sid].name.toUpperCase()+' TE MUESTRA',body});log(`${who(q.sid)} te mostró <b>${CARD[shown].name}</b>.`,q.sid);}
-    else if(!q.human){log(`${who(q.sid)} le mostró una carta a ${who(p.sid)}.`,q.sid);}
+    else if(!q.human){log(`${who(q.sid)} le mostró una carta a ${who(p.sid)}.`,q.sid);await banner(q.sid,SUS[q.sid].name.toUpperCase(),`Le muestra una carta en secreto a ${SUS[p.sid].name}.`,1400);}
     if(!p.human){p.known.add(shown);aiDeduce(p);}
     return;}
-  log(`Nadie pudo refutar la sugerencia de ${who(p.sid)}.`,p.sid);
+  log(`Nadie pudo refutar la sugerencia de ${who(p.sid)}.`,p.sid);if(!p.human)await banner(p.sid,SUS[p.sid].name.toUpperCase(),'Nadie pudo refutar su sugerencia.',1400);
   if(p.human){await modal({sid:'maya',title:'NADIE PUDO REFUTAR',body:'<p>Ningún detective tenía esas cartas. Si tampoco están en tu mano, podrían ser la respuesta.</p>'});}
-  else{[s,m,r].filter(Boolean).forEach(k=>{if(!p.hand.includes(k)){const t=k[0];p.certain[t]=k;CAT[t].forEach(o=>{if(o!==k)p.known.add(o);});}});aiDeduce(p);}
+  else{[s,m,r].filter(Boolean).forEach(k=>{if(!p.hand.includes(k)&&k!=='s:'+p.sid){const t=k[0];p.certain[t]=k;CAT[t].forEach(o=>{if(o!==k)p.known.add(o);});}});aiDeduce(p);}
 }
 
 /* ---------- AI ---------- */
 function unknown(p,t){return CAT[t].filter(k=>!p.known.has(k));}
 function aiDeduce(p){['s','m','r'].forEach(t=>{const u=unknown(p,t);if(u.length===1)p.certain[t]=u[0];});}
-function ready(p){return ['s','m','r'].every(t=>p.certain[t]);}
-async function aiTurn(p){await wait(500);
+function ready(p){return solution.s!=='s:'+p.sid&&['s','m','r'].every(t=>p.certain[t]);}
+async function aiTurn(p){await banner(p.sid,'TURNO DE '+SUS[p.sid].name.toUpperCase(),roomOf(p)?`Está en ${roomOf(p).name}.`:'Está en camino.',1300);
   if(ready(p)){await aiAccuse(p);return;}
   const here=roomOf(p);const unk=unknown(p,'r');
   const goal=p.certain.r?[p.certain.r]:unk;
@@ -692,12 +699,12 @@ async function aiTurn(p){await wait(500);
     if(rm){if(rm===target)score=-100;else if(pool.includes(rm))score=-50+DIST[n][target.node]*.1;else return;}else score=DIST[n][target.node];
     if(score<bd){bd=score;best=n;}});
   if(best==null)return;
-  setPhase(`${SUS[p.sid].name} sacó ${roll} y camina hacia ${target.name}.`);
-  await walk(p.sid,pathOf(Rr,best));await wait(250);
-  const rm=ROOM_BY_NODE.get(best);if(rm){log(`${who(p.sid)} entró a ${rm.name}.`,p.sid);await aiSuggest(p,rm);}
+  setPhase(`${SUS[p.sid].name} sacó ${roll} y camina hacia ${target.name}.`);await wait(700);
+  await walk(p.sid,pathOf(Rr,best));await wait(600);
+  const rm=ROOM_BY_NODE.get(best);if(rm){log(`${who(p.sid)} entró a ${rm.name}.`,p.sid);await banner(p.sid,SUS[p.sid].name.toUpperCase(),`Entró a ${rm.name}.`,1200);await aiSuggest(p,rm);}
   else log(`${who(p.sid)} avanzó ${Rr.dist.get(best)} casillas rumbo a ${target.name}.`,p.sid);
   if(!gameOver&&ready(p)){await wait(300);await aiAccuse(p);}}
-async function aiSuggest(p,rm){const pickT=t=>{if(p.certain[t]&&Math.random()<.7)return p.certain[t];const u=unknown(p,t);return u.length?u[Math.floor(Math.random()*u.length)]:CAT[t][Math.floor(Math.random()*CAT[t].length)];};
+async function aiSuggest(p,rm){const self='s:'+p.sid;const pickT=t=>{if(p.certain[t]&&Math.random()<.7)return p.certain[t];const u=unknown(p,t).filter(k=>k!==self);const all=CAT[t].filter(k=>k!==self);return u.length?u[Math.floor(Math.random()*u.length)]:all[Math.floor(Math.random()*all.length)];};
   await resolveSuggestion(p,pickT('s'),pickT('m'),rm);}
 async function aiAccuse(p){const c=p.certain;log(`${who(p.sid)} hace una acusación.`,p.sid);
   await banner(p.sid,SUS[p.sid].name.toUpperCase()+' ACUSA',`Fue ${CARD[c.s].name}, en ${CARD[c.r].name}, con ${CARD[c.m].name}.`,RM?600:2200);
@@ -706,7 +713,7 @@ async function aiAccuse(p){const c=p.certain;log(`${who(p.sid)} hace una acusaci
 
 async function humanAccuse(){let s=null,m=null,r=null;const body=document.createElement('div');body.style.display='grid';body.style.gap='12px';
   body.innerHTML='<p>Una acusación es definitiva. Si fallas, el caso se cierra para ti. Elige quién, cómo y dónde.</p>';
-  const mk3=(t,lab,set)=>{const h=document.createElement('h3');h.textContent=lab;body.append(h,optGrid(CAT[t],k=>{set(k);$('#mOk').disabled=!(s&&m&&r);},seenX));};
+  const mk3=(t,lab,set)=>{const h=document.createElement('h3');h.textContent=lab;body.append(h,optGrid(CAT[t].filter(k=>k!=='s:'+human),k=>{set(k);$('#mOk').disabled=!(s&&m&&r);},seenX));};
   mk3('s','SOSPECHOSO',k=>s=k);mk3('m','MÉTODO',k=>m=k);mk3('r','LUGAR',k=>r=k);
   const v=await modal({sid:human,title:'ACUSACIÓN FORMAL',body,actions:[{label:'CANCELAR',value:false},{label:'ACUSAR',value:true,danger:true,id:'mOk',disabled:true}]});
   if(!v)return;const ok=s===solution.s&&m===solution.m&&r===solution.r;
@@ -725,6 +732,8 @@ async function finish(won,headline,faceSid){gameOver=true;phase='idle';R=null;up
   if(v==='new'){$('#game').hidden=true;$('#setup').hidden=false;window.scrollTo({top:0});}
   else{setPhase(`Caso cerrado: fue ${S_.name}, en ${R_.name}, con ${M_.name}. <button class="btn primary" id="again" type="button" style="margin-top:8px">NUEVA PARTIDA</button>`);$('#again').onclick=()=>{$('#game').hidden=true;$('#setup').hidden=false;window.scrollTo({top:0});};}}
 
+document.querySelectorAll('.speed .btn').forEach(b=>{const set=()=>document.querySelectorAll('.speed .btn').forEach(x=>x.setAttribute('aria-pressed',parseFloat(x.dataset.spd)===SPD));
+  b.onclick=()=>{SPD=parseFloat(b.dataset.spd);try{localStorage.setItem('qcr-speed',SPD);}catch(e){}set();};set();});
 /* ---------- intro: Learning Center en 3D y plano interior ---------- */
 const LINES=[
  {sid:'maya',t:'Timo… mira la ventana de arriba. Es el Laboratorio de Render 1.'},
