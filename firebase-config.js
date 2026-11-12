@@ -10,5 +10,5 @@ window.ANIMAPP_FIREBASE = {
   measurementId: "G-1DNFK50FR9",
   // Clave web de Cloud Messaging (Configuración del proyecto → Cloud Messaging → Certificados push web).
   // Es pública. Mientras esté vacía, el botón «Activar avisos» dice que aún no están configurados.
-  vapidKey: ""
+  vapidKey: "BFOyjcoTKl6g99fdtSOUubFw1V8g94yDdeRof7D785ijGVhVSHfppp4BOfnYDFZQ4N1dQygxYCmTF3qRvO-JhmQ"
 };
