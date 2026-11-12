@@ -86,6 +86,7 @@ button{font:inherit;color:inherit}
 .tile{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 10px 16px;text-align:center;min-height:150px;justify-content:center}
 .tile svg{width:64px;height:64px}
 .tile .t{font-family:var(--display);font-size:14px;line-height:1.6;text-wrap:balance;max-width:100%;min-width:0}
+.tl-short{display:none}@media (max-width:600px){.tl-long{display:none}.tl-short{display:inline}}
 .tile:hover{--c:var(--iaev-yellow)}
 .tile.pro{--c:var(--ink);--t:#fff}
 .tile.pro:hover{--c:var(--iaev-maroon)}
@@ -2738,7 +2739,9 @@ function renderContent(id){
     ${c.html?c.html():""}`);
   if(c.links){ const g=document.createElement("nav"); g.className="sub-grid"+(c.links.length%4===0?" cols-4":""); g.setAttribute("aria-label",id==="nosotros"?L("Más sobre nosotros","More about us"):L("Opciones de","Options for")+" "+secT(byId[id]));
     c.links.forEach(lid=>{ const t=byId[lid], b=document.createElement("button"); b.className="pbtn tile";
-      b.innerHTML=`<svg class="px"></svg><span class="t">${secT(t)}</span>`; drawIcon32(b.querySelector("svg"),lid);
+      const hn=/^horario-(\d)$/.exec(t.id), lbl=(hn&&LANG!=="en")?`${TERM_ES[hn[1]]} <span class="tl-long">cuatrimestre</span><span class="tl-short">cuatri.</span>`:secT(t);
+      if(hn) b.setAttribute("aria-label",secT(t));
+      b.innerHTML=`<svg class="px"></svg><span class="t">${lbl}</span>`; drawIcon32(b.querySelector("svg"),lid);
       b.addEventListener("click",()=>{sfx.select();go(lid)}); b.addEventListener("mouseenter",sfx.hover); g.appendChild(b) });
     sb.appendChild(g) }
   if(c.p){ iconSVG($("readBtn2").querySelector("svg"),"speak");
