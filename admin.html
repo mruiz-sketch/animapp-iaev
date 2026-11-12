@@ -88,9 +88,9 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
     </div>
     </div>
 
-    <div class="sub">
+    <div class="sub" id="jsonBox" hidden>
     <h2>Contenido en JSON (opcional)</h2>
-    <p class="muted" style="margin-bottom:14px">Para capturar el horario como tabla (o avisos y recursos en Sólo Profesores). Se muestra debajo de los archivos.</p>
+    <p class="muted" style="margin-bottom:14px">Para capturar avisos y recursos de Sólo Profesores como texto. Se muestra debajo de los archivos.</p>
     <div class="stack">
       <div class="row">
         <button class="btn plain" id="jLoad">Cargar actual</button>
@@ -271,7 +271,8 @@ else (async()=>{
   window.avPrefill=(t,b,u)=>{ $("avT").value=t; $("avB").value=b; $("avU").value=u; avPrev(); };
   icsCard("",()=>db.collection("profesores").doc("calendario"),"Calendario docente guardado ({n} eventos). Ya se ve en Sólo Profesores.");
   icsCard("2",()=>db.collection("publico").doc("calendario"),"Calendario de alumnos guardado ({n} eventos). Ya se ve en la sección Calendario. Si quieres avisar a la comunidad, el aviso ya quedó listo abajo en «Enviar aviso».");
-  $("target").onchange=()=>{ $("json").value=""; refresh(); };
+  const jsonVis=()=>{ $("jsonBox").hidden=isH(); }; jsonVis();
+  $("target").onchange=()=>{ $("json").value=""; jsonVis(); refresh(); };
   auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; $("avCard").hidden=!u; if(u){ refresh(); avCount(); } });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
