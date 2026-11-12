@@ -382,6 +382,8 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .qa-item summary:hover{background:#fff8dc}
 .qa-a{padding:4px 16px 16px 54px;font-size:19.5px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
 .prof-top{margin-bottom:22px}.prof-top .sai-btn{text-decoration:none;display:inline-block}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:14px;padding:18px 22px}
+.tpl-list{display:flex;flex-direction:column;gap:22px;padding:6px}.tpl-item{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
+.tpl-item .sai-btn{min-width:min(100%,300px);text-align:center}.panel .tpl-item a.sai-btn{text-decoration:none}.panel .tpl-d,.tpl-d{margin:0;flex:1 1 260px;max-width:60ch}.tpl-note{margin:26px 0 0;color:var(--ink-soft);font-size:16px}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:14px;text-decoration:none;display:inline-block}
 .bl-strip{display:flex;align-items:center;gap:16px;background:var(--paper);padding:14px;border-left:8px solid var(--cc);box-shadow:0 -3px 0 var(--ink),0 3px 0 var(--ink),-3px 0 0 var(--ink),3px 0 0 var(--ink)}
 .bl-nav{width:40px;height:40px;font-size:15px;flex:none}.bl-nav:disabled{opacity:.35;cursor:default}
@@ -2430,6 +2432,9 @@ const CONTENT={
   links:["horario-1","horario-2","horario-3","horario-4","horario-5","horario-7","horario-8","horario-9"]
  },
  qa:{ h:["Preguntas frecuentes","Frequently asked questions"], html:qaHTML },
+ plantillas:{ h:["Plantillas oficiales","Official templates"], html:()=>`<div class="tpl-list">${PLANTILLAS.map(t=>`<div class="tpl-item"><a class="pbtn yellow portal-go-btn sai-btn" href="${t.url}" target="_blank" rel="noopener">${t.t[LANG==="en"?1:0]} ↗</a><p class="tpl-d">${t.d[LANG==="en"?1:0]}</p></div>`).join("")}</div>
+   <p class="tpl-note">${L("Abre la plantilla y haz una copia (en Google Docs: Archivo → Hacer una copia; en Canva: «Usar plantilla») para trabajar en la tuya.","Open the template and make a copy (Google Docs: File → Make a copy; Canva: “Use template”) to work on your own.")}</p>`,
+   after:()=>document.querySelectorAll(".tpl-item a").forEach(b=>b.addEventListener("click",()=>sfx.select())) },
  blog:{ replace:true, html:blogHTML, after:wireBlog },
  academia:{
   h:["Quiénes somos","Who we are"],
@@ -2745,6 +2750,11 @@ const ASISTENCIA={src:"https://gestionacademica.tailaf0046.ts.net/coordinacion/p
 const PROF_PORTALS=[
  {src:"https://sai.upsrj.edu.mx/docentes.php",url:"https://sai.upsrj.edu.mx/docentes.php",t:["SAI Docentes","SAI · Faculty"]},
  {src:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",url:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",t:["SRA","SRA"],insecure:true}];
+const PLANTILLAS=[
+ {url:"https://docs.google.com/document/d/1GYhl9eBqfBK_Sg1tRKhEhS8EkJ50FhOz-yW6Z8qGEl4/edit?usp=sharing",t:["Documentación general","General documents"],
+  d:["Portada con tu nombre completo, matrícula, grupo, materia, docente asesor, número y tema de la actividad y fecha de entrega. Títulos en Arial 13 negritas y texto en Arial 11.","Cover with your full name, student ID, group, course, advising professor, activity number and topic, and due date. Headings in Arial 13 bold, body text in Arial 11."]},
+ {url:"https://canva.link/54qany4hkrrzmlf",t:["Presentación general","General presentation"],d:["Plantilla de Canva para tus presentaciones de clase.","Canva template for your class presentations."]},
+ {url:"https://canva.link/vlqaycxm7mykzmy",t:["Storyboard","Storyboard"],d:["Plantilla de Canva para armar tus storyboards.","Canva template to build your storyboards."]}];
 const SAI_PORTALS=[
  {src:"https://sai.upsrj.edu.mx/alumnos.php",url:"https://sai.upsrj.edu.mx/alumnos.php",t:["SAI de Alumnos","SAI · Students"]},
  {src:"https://sai.upsrj.edu.mx/egresados.php",url:"https://sai.upsrj.edu.mx/egresados.php",t:["SAI de Egresados","SAI · Alumni"]}];
