@@ -341,7 +341,10 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .fl-item{margin:0 0 30px}.fl-item h3{font-family:var(--display);font-weight:400;font-size:16px;line-height:1.6;margin:0 0 12px;color:var(--iaev-red)}
 .fl-img{display:block;width:100%;height:auto;image-rendering:auto;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
 .fl-pdf{display:block;width:100%;height:min(80vh,900px);border:0;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
-.fl-act{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}.fl-dl{font-size:14px;text-decoration:none}
+.fl-act{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px}
+.fl-pages{display:flex;flex-direction:column;gap:12px;text-decoration:none;color:inherit}
+.fl-page{display:block;width:100%;height:auto;background:#fff;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
+.fl-hint{margin:16px 0 0;font-size:15px;color:var(--ink-soft)}.fl-dl{font-size:14px;text-decoration:none}
 #menu.solo .stage{grid-template-columns:1fr}
 .bot-wrap{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:85;display:flex;flex-direction:column;align-items:flex-end;gap:12px;pointer-events:none}
 .on-netlify .bot-wrap{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
@@ -3036,9 +3039,26 @@ function showFiles(sb,ref,v,id){
       const b64=parts.map(x=>x.exists?x.data().d:"").join(""), bin=atob(b64), u8=new Uint8Array(bin.length); for(let k=0;k<bin.length;k++) u8[k]=bin.charCodeAt(k);
       const url=URL.createObjectURL(new Blob([u8],{type:a.tipo})); fileURLs.push(url);
       const dl=`<a class="pbtn yellow fl-dl" href="${url}" download="${esc(a.nombre||"archivo")}">${L("⬇ Descargar","⬇ Download")}</a>`;
-      if(a.tipo==="application/pdf") box.innerHTML=`<iframe class="fl-pdf" src="${url}" title="${esc(a.titulo||a.nombre)}"></iframe><div class="fl-act"><a class="pbtn fl-dl" href="${url}" target="_blank" rel="noopener">${L("Abrir PDF ↗","Open PDF ↗")}</a>${dl}</div>`;
+      if(a.tipo==="application/pdf"){ box.innerHTML=`<a class="fl-pages" href="${url}" target="_blank" rel="noopener" aria-label="${esc(L("Abrir PDF: ","Open PDF: ")+(a.titulo||a.nombre))}"><p class="cal-none">${L("Preparando vista…","Preparing preview…")}</p></a><div class="fl-act"><a class="pbtn fl-dl" href="${url}" target="_blank" rel="noopener">${L("Abrir PDF ↗","Open PDF ↗")}</a>${dl}</div>`;
+        pdfFit(box.querySelector(".fl-pages"),u8,url,a.titulo||a.nombre); }
       else box.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img class="fl-img" src="${url}" alt="${esc(a.titulo||a.nombre)}"></a><div class="fl-act">${dl}</div>`;
     }catch(e){ box.innerHTML=`<p class="cal-none">${L("No se pudo cargar este archivo.","Couldn't load this file.")}</p>`; } });
+}
+/* PDF a lo ancho de la pantalla: cada página se dibuja con PDF.js para que el horario se vea completo en celular.
+   Si PDF.js no carga, se usa el visor del navegador (iframe). */
+const PDFJS="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+let pdfjsP=null;
+function pdfjs(){ return pdfjsP||(pdfjsP=loadJS(PDFJS+"pdf.min.js").then(()=>{ window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js"; return window.pdfjsLib; }).catch(e=>{ pdfjsP=null; throw e; })); }
+async function pdfFit(holder,u8,url,title){
+  try{ const lib=await pdfjs(); const doc=await lib.getDocument({data:u8.slice()}).promise;
+    holder.innerHTML=""; const W=Math.max(200,holder.clientWidth||holder.parentElement.clientWidth), dpr=Math.min(3,Math.max(2,window.devicePixelRatio||1));
+    for(let n=1;n<=Math.min(doc.numPages,12);n++){ const pg=await doc.getPage(n), v1=pg.getViewport({scale:1}), sc=W/v1.width, vp=pg.getViewport({scale:sc*dpr});
+      const c=document.createElement("canvas"); c.width=Math.round(vp.width); c.height=Math.round(vp.height); c.className="fl-page";
+      c.setAttribute("role","img"); c.setAttribute("aria-label",(title||"PDF")+(doc.numPages>1?` · ${L("página","page")} ${n}`:""));
+      holder.appendChild(c); await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise; }
+    if(doc.numPages>12) holder.insertAdjacentHTML("beforeend",`<p class="cal-none">${L("Abre el PDF para ver las demás páginas.","Open the PDF to see the remaining pages.")}</p>`);
+    const hint=document.createElement("p"); hint.className="fl-hint"; hint.textContent=L("Toca el horario para abrirlo y hacer zoom.","Tap the schedule to open it and zoom in."); holder.after(hint);
+  }catch(e){ console.warn("pdf.js",e); holder.outerHTML=`<iframe class="fl-pdf" src="${url}" title="${esc(title||"PDF")}"></iframe>`; }
 }
 /* Calendario docente: profesores/calendario { eventos:[{s,e,t}], actualizado } (se importa desde admin.html con el .ics) */
 function loadProfCal(sb,id){
