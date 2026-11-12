@@ -2179,6 +2179,7 @@ function buildGrid(){
   const grid=$("grid"); grid.innerHTML="";
   SECTIONS.forEach((s,i)=>{
     const b=document.createElement("button"); b.className="pbtn tile"+(s.pro?" pro":""); b.style.animationDelay=(i*.06)+"s";
+    const endPop=()=>{ b.style.animation="none"; }; b.addEventListener("animationend",endPop,{once:true}); setTimeout(endPop,i*60+900);
     b.innerHTML=`<svg class="px"></svg><span class="t">${secT(s)}</span>`; drawIcon32(b.querySelector("svg"),s.id);
     b.addEventListener("click",()=>{ if(s.id==="asistencia"){ openExperience(ASISTENCIA); return } sfx.select();go(s.id)}); b.addEventListener("mouseenter",sfx.hover);
     grid.appendChild(b);
