@@ -3,6 +3,7 @@ rules_version = '2';
 // - horarios/*  : lectura para cualquier cuenta @upsrj.edu.mx verificada.
 // - profesores/*: lectura solo para los docentes de "Nuestra Academia".
 // - Escritura (admin.html): los docentes de "Nuestra Academia".
+// - perfiles/{uid}: la credencial de cada persona; solo su dueño la lee y la edita.
 // Si cambia la lista de docentes en ANIMAPP, actualiza también la lista de docente() aquí.
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -41,6 +42,16 @@ service cloud.firestore {
     match /profesores/{rest=**} {
       allow read: if docente();
       allow write: if admin();
+    }
+    // Credencial de cada persona (foto, nombre, matrícula): solo la lee y edita su dueño.
+    match /perfiles/{uid} {
+      allow read: if upsrj() && request.auth.uid == uid;
+      allow create, update: if upsrj() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['nombre', 'matricula', 'foto', 'correo', 'actualizado'])
+        && (!('foto' in request.resource.data) || (request.resource.data.foto is string && request.resource.data.foto.size() < 400000))
+        && (!('nombre' in request.resource.data) || (request.resource.data.nombre is string && request.resource.data.nombre.size() <= 80))
+        && (!('matricula' in request.resource.data) || (request.resource.data.matricula is string && request.resource.data.matricula.size() <= 20));
+      allow delete: if upsrj() && request.auth.uid == uid;
     }
   }
 }

@@ -290,6 +290,36 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .login-pop{position:absolute;right:0;top:calc(100% + 14px);z-index:70;background:var(--card);padding:14px;width:max-content;max-width:min(300px,86vw);display:flex;flex-direction:column;gap:12px;
   box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
 .login-who{margin:0;font-size:17px;overflow-wrap:anywhere}.login-out{font-size:14px}
+.login-btn img.av{width:28px;height:28px;object-fit:cover;image-rendering:auto;flex:none;box-shadow:0 0 0 2px var(--ink)}
+.id-panel{width:min(520px,100%);max-height:calc(100dvh - 32px);overflow:auto;background:var(--card);
+  box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink),10px 12px 0 rgba(38,36,42,.3)}
+.id-head{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--iaev-red);color:#fff;font-family:var(--display);font-size:15px;padding:12px 14px}
+.id-x{width:32px;height:32px;border:2px solid #fff;background:transparent;color:#fff;font-family:var(--display);font-size:14px;cursor:pointer}
+#idBody{padding:18px;display:flex;flex-direction:column;gap:16px}
+.id-card{background:linear-gradient(135deg,#fffdf4 0%,#fff8dc 100%);box-shadow:0 0 0 3px var(--ink),6px 6px 0 3px rgba(38,36,42,.18);position:relative;overflow:hidden}
+.id-band{display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;padding:9px 12px;font-family:var(--display);font-size:10.5px;line-height:1.5}
+.id-band b{color:var(--iaev-yellow);font-weight:400}
+.id-band .stripe{margin-left:auto;display:flex;gap:3px}.id-band .stripe i{width:8px;height:14px;display:block}
+.id-main{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:16px 14px 12px;align-items:start}
+.id-photo{display:flex;flex-direction:column;align-items:center;gap:10px}
+.id-pic{width:112px;height:136px;background:var(--paper);box-shadow:0 0 0 3px var(--ink);display:grid;place-items:center;overflow:hidden}
+.id-pic img{width:100%;height:100%;object-fit:cover}.id-pic svg{width:64px;height:64px}
+.id-photo .pbtn{font-size:11px;padding:8px 9px}
+.id-data{display:flex;flex-direction:column;gap:10px;min-width:0}
+.id-f{display:flex;flex-direction:column;gap:3px;min-width:0}
+.id-f>span{font-family:var(--display);font-size:9.5px;color:var(--ink-soft);letter-spacing:.04em}
+.id-f input{font:inherit;font-size:17px;font-weight:600;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed rgba(38,36,42,.35);padding:3px 2px;min-width:0;width:100%}
+.id-f input:focus{outline:none;border-bottom:2px solid var(--iaev-blue);background:#fff}
+.id-f>span.ro{font-family:var(--body);letter-spacing:0;color:var(--ink);font-size:15px;overflow-wrap:anywhere}
+.id-out .gbtn{display:inline-flex;align-items:center;gap:12px}
+.id-role{align-self:flex-start;font-family:var(--display);font-size:10px;padding:5px 8px;background:var(--iaev-yellow);box-shadow:0 0 0 2px var(--ink)}
+.id-role.doc{background:var(--iaev-blue);color:#fff}
+.id-bar{display:flex;align-items:flex-end;gap:2px;height:30px;padding:0 14px 12px}.id-bar i{display:block;background:var(--ink);height:100%}
+.id-msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--ink-soft);font-size:16px}.id-msg.ok{border-color:#4f9a5e}.id-msg.err{border-color:var(--iaev-red)}
+.id-acts{display:flex;flex-wrap:wrap;gap:14px}
+.id-out{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px}
+.id-out p{margin:0;max-width:38ch}
+@media (max-width:440px){.id-main{grid-template-columns:1fr;justify-items:center}.id-data{width:100%}.id-pic{width:120px;height:146px}}
 .lock{display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px;padding:18px 6px}
 .lock svg{width:72px;height:72px}.lock h2{font-family:var(--display);font-weight:400;font-size:clamp(14px,2.6vw,17px);line-height:1.6;margin:0;color:var(--iaev-red)}
 .lock p{margin:0;max-width:52ch}.lock .gbtn{font-size:15px;display:inline-flex;align-items:center;gap:10px}
@@ -389,7 +419,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
     <button class="pbtn icon" id="homeBtn" aria-label="Inicio"><svg class="px" data-icon="home"></svg></button>
   </div>
   <div class="spacer"></div>
-  <div class="login-wrap"><button class="pbtn lang-btn login-btn" id="loginBtn" aria-haspopup="true" aria-expanded="false"><svg class="px" data-icon="user"></svg><span class="lbl" id="loginLbl">Iniciar sesión</span></button>
+  <div class="login-wrap"><button class="pbtn lang-btn login-btn" id="loginBtn" aria-haspopup="dialog"><svg class="px" data-icon="user"></svg><span class="lbl" id="loginLbl">Iniciar sesión</span></button>
     <div class="login-pop" id="loginPop" hidden><p class="login-who" id="loginWho"></p><button class="pbtn red login-out" id="loginOut">Cerrar sesión</button></div></div>
   <button class="pbtn lang-btn" id="langBtn" aria-label="Cambiar el idioma a inglés"><svg class="px" data-icon="globe"></svg><span class="lbl">Idioma:</span><span class="code">ES</span></button>
   <button class="pbtn yellow audio-btn" id="audioBtn" aria-pressed="true" aria-label="Desactivar audio descriptivo">
@@ -1762,6 +1792,13 @@ requestAnimationFrame(frame);
   <div class="exp-fallback" id="expFallback" hidden><div class="exp-fb-in"><p id="expFbTxt">No se pudo abrir aquí. Ábrelo en una pestaña nueva.</p><a class="pbtn yellow exp-fb-link" id="expFbLink" target="_blank" rel="noopener"></a></div></div>
 </div>
 
+<div class="modal" id="idModal" hidden role="dialog" aria-modal="true" aria-labelledby="idTitle">
+  <div class="id-panel">
+    <div class="id-head"><span id="idTitle">Credencial IAEV</span><button class="id-x" id="idClose" aria-label="Cerrar">X</button></div>
+    <div id="idBody"></div>
+  </div>
+</div>
+
 <div class="modal" id="installModal" hidden role="dialog" aria-modal="true" aria-labelledby="inTitle">
   <div class="panel in-panel">
     <h2 id="inTitle">Instalar ANIMAPP</h2>
@@ -2860,6 +2897,9 @@ function toast(msg){ let t=document.getElementById("toast"); if(!t){ t=document.
 function onAuth(u){
   if(u&&!(DOMAIN_RE.test(u.email||"")&&u.emailVerified)){ firebase.auth().signOut(); toast(L("Usa tu cuenta institucional @upsrj.edu.mx.","Please use your @upsrj.edu.mx institutional account.")); return; }
   auth.user=u||null; auth.phase=u?"in":"out"; renderLogin(); refreshGated();
+  if(!u){ perfil=null; perfilUid=null; renderAvatar(); }
+  if(!$("idModal").hidden) renderID();
+  if(u) loadPerfil().then(()=>{ if(!$("idModal").hidden) renderID(); });
 }
 async function signIn(){
   if(auth.phase==="claude"){ toast(L("El inicio de sesión funciona en la versión publicada de ANIMAPP; en la vista de Claude no está disponible.","Sign-in works in the published ANIMAPP; it isn't available in the Claude view.")); return; }
@@ -2876,11 +2916,88 @@ function renderLogin(){
   else { lbl.textContent=L("Iniciar sesión","Sign in"); btn.setAttribute("aria-label",L("Iniciar sesión con tu cuenta institucional","Sign in with your institutional account")); $("loginPop").hidden=true; }
   $("loginOut").textContent=L("Cerrar sesión","Sign out");
 }
-$("loginBtn").addEventListener("click",e=>{ e.stopPropagation(); sfx.select();
-  if(auth.phase==="in"){ const pop=$("loginPop"); pop.hidden=!pop.hidden; $("loginBtn").setAttribute("aria-expanded",String(!pop.hidden)); }
-  else signIn(); });
+$("loginBtn").addEventListener("click",e=>{ e.stopPropagation(); sfx.select(); openID(); });
 $("loginOut").addEventListener("click",()=>{ $("loginPop").hidden=true; sfx.back(); firebase.auth().signOut(); });
 document.addEventListener("click",e=>{ const pop=$("loginPop"); if(!pop.hidden&&!pop.contains(e.target)){ pop.hidden=true; $("loginBtn").setAttribute("aria-expanded","false"); } });
+/* ====== CREDENCIAL (perfil): foto, nombre completo y matrícula ======
+   Se guarda en Firestore perfiles/{uid}; cada quien solo puede leer y editar el suyo (ver firestore.rules). */
+let perfil=null, perfilUid=null;
+const isProf=u=>!!u&&profEmails().includes((u.email||"").toLowerCase());
+const matFromMail=m=>{ const x=String(m||"").split("@")[0]; return /^\d{6,}$/.test(x)?x:""; };
+async function loadPerfil(){ const u=auth.user; if(!u){ perfil=null; perfilUid=null; return null; }
+  if(perfilUid===u.uid&&perfil) return perfil;
+  try{ await fb(); const d=await firebase.firestore().collection("perfiles").doc(u.uid).get(); perfil=d.exists?d.data():{}; }
+  catch(e){ console.warn("perfil",e); perfil={}; perfil._err=e&&e.code; }
+  perfilUid=u.uid; renderAvatar(); return perfil; }
+function renderAvatar(){ const b=$("loginBtn"); if(!b) return; const old=b.querySelector("img.av"), svg=b.querySelector("svg");
+  const foto=auth.phase==="in"&&perfil&&perfil.foto;
+  if(foto){ if(old) old.src=foto; else { const i=document.createElement("img"); i.className="av"; i.alt=""; i.src=foto; b.insertBefore(i,svg); } if(svg) svg.style.display="none"; }
+  else { if(old) old.remove(); if(svg) svg.style.display=""; } }
+function idMsg(t,k){ const m=$("idMsg"); if(!m) return; m.hidden=!t; m.className="id-msg"+(k?" "+k:""); m.textContent=t||""; }
+function barcode(seed){ let h=0; for(const c of String(seed)) h=(h*31+c.charCodeAt(0))>>>0; let o=""; for(let i=0;i<72;i++){ h=(h*1103515245+12345)>>>0; o+=`<i style="width:${1+(h>>>28)%3}px;opacity:${(h>>>20)%5?1:.0}"></i>`; } return o; }
+async function openID(){ const m=$("idModal"); m.hidden=false; renderID(); $("idClose").focus();
+  if(auth.phase==="loading") fb().catch(()=>{});
+  if(auth.phase==="in"){ await loadPerfil(); if(!m.hidden) renderID(); } }
+function closeID(){ $("idModal").hidden=true; $("loginBtn").focus(); }
+function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").textContent=L("Credencial IAEV","IAEV ID card"); $("idClose").setAttribute("aria-label",L("Cerrar","Close"));
+  const u=auth.user;
+  if(auth.phase!=="in"||!u){
+    const msg=auth.phase==="claude"?L("El inicio de sesión funciona en la versión publicada de ANIMAPP (animapp-iaev.netlify.app); en la vista de Claude no está disponible.","Sign-in works in the published ANIMAPP (animapp-iaev.netlify.app); it isn't available in the Claude view.")
+      :auth.phase==="noconfig"?L("El inicio de sesión todavía no está configurado.","Sign-in isn't set up yet.")
+      :auth.phase==="loading"?L("Revisando tu sesión…","Checking your session…")
+      :L("Inicia sesión con tu cuenta institucional para ver tu credencial: foto, nombre completo y matrícula.","Sign in with your institutional account to see your ID card: photo, full name and student ID.");
+    body.innerHTML=`<div class="id-out"><svg class="px" id="idIco" style="width:72px;height:72px"></svg><p>${msg}</p>
+      ${auth.phase==="out"||auth.phase==="error"?`<button class="pbtn red gbtn" id="idLogin"><i aria-hidden="true">G</i>${L("Iniciar sesión con Google","Sign in with Google")}</button><p class="note">${L("Usa tu cuenta institucional @upsrj.edu.mx","Use your @upsrj.edu.mx institutional account")}</p>`:""}</div>`;
+    iconSVG($("idIco"),"user"); $("idLogin")?.addEventListener("click",()=>{ sfx.select(); signIn(); }); return; }
+  const p=perfil&&perfilUid===u.uid?perfil:null, prof=isProf(u);
+  const nombre=(p&&p.nombre)||u.displayName||"", mat=(p&&p.matricula)||matFromMail(u.email);
+  const cols=["#bc2b36","#ebc232","#4f9a5e","#3d7fc4"];
+  body.innerHTML=`<div class="id-card">
+    <div class="id-band"><span><b>UPSRJ</b> · ${L("Ingeniería en Animación y Efectos Visuales","Animation & Visual Effects Engineering")}</span><span class="stripe">${cols.map(c=>`<i style="background:${c}"></i>`).join("")}</span></div>
+    <div class="id-main">
+      <div class="id-photo"><div class="id-pic" id="idPic">${p&&p.foto?`<img src="${esc(p.foto)}" alt="${esc(L("Foto de perfil","Profile photo"))}">`:`<svg class="px" id="idPh"></svg>`}</div>
+        <label class="pbtn" for="idFile" id="idFileBtn" role="button" tabindex="0">${p&&p.foto?L("Cambiar foto","Change photo"):L("Subir foto","Upload photo")}</label>
+        <input type="file" id="idFile" accept="image/*" hidden></div>
+      <div class="id-data">
+        <label class="id-f"><span>${L("NOMBRE COMPLETO","FULL NAME")}</span><input id="idName" maxlength="80" autocomplete="name" value="${esc(nombre)}" placeholder="${esc(L("Tu nombre completo","Your full name"))}"></label>
+        <label class="id-f"><span>${prof?L("NO. DE EMPLEADO","EMPLOYEE NO."):L("MATRÍCULA","STUDENT ID")}</span><input id="idMat" maxlength="20" inputmode="numeric" value="${esc(mat)}" placeholder="${esc(prof?L("Opcional","Optional"):L("Escribe tu matrícula","Enter your student ID"))}"></label>
+        <div class="id-f"><span>${L("CORREO","EMAIL")}</span><span class="ro">${esc(u.email)}</span></div>
+        <span class="id-role${prof?" doc":""}">${prof?L("DOCENTE","FACULTY"):L("ALUMNO/A","STUDENT")}</span>
+      </div>
+    </div>
+    <div class="id-bar" aria-hidden="true">${barcode(u.uid)}</div>
+  </div>
+  <p class="id-msg" id="idMsg" hidden></p>
+  <div class="id-acts"><button class="pbtn yellow" id="idSave">${L("Guardar cambios","Save changes")}</button><button class="pbtn red" id="idOut">${L("Cerrar sesión","Sign out")}</button></div>`;
+  if(!(p&&p.foto)) iconSVG($("idPh"),"user");
+  if(p&&p._err==="permission-denied") idMsg(L("Tu perfil aún no se puede guardar: falta publicar las reglas nuevas de Firestore.","Your profile can't be saved yet: the new Firestore rules haven't been published."),"err");
+  $("idFileBtn").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); $("idFile").click(); } });
+  $("idFile").addEventListener("change",e=>{ const f=e.target.files[0]; e.target.value=""; if(f) savePhoto(f); });
+  $("idSave").addEventListener("click",saveID);
+  $("idOut").addEventListener("click",()=>{ sfx.back(); perfil=null; perfilUid=null; closeID(); firebase.auth().signOut(); });
+}
+function perfilRef(){ return firebase.firestore().collection("perfiles").doc(auth.user.uid); }
+function saveErr(e){ return e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."); }
+async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.replace(/\s+/g," ").trim(), mat=$("idMat").value.replace(/\s+/g,"").trim();
+  if(mat&&!/^[A-Za-z0-9-]{3,20}$/.test(mat)){ idMsg(L("La matrícula solo puede tener números y letras.","The ID can only contain letters and numbers."),"err"); return; }
+  b.disabled=true; idMsg(L("Guardando…","Saving…"));
+  try{ await fb(); const d={nombre,matricula:mat,correo:auth.user.email,actualizado:new Date().toISOString()};
+    await perfilRef().set(d,{merge:true}); perfil=Object.assign({},perfil,d); delete perfil._err; sfx.select(); idMsg(L("¡Listo! Tu credencial está actualizada.","Done! Your ID card is updated."),"ok"); }
+  catch(e){ console.warn(e); idMsg(saveErr(e),"err"); } finally{ b.disabled=false; } }
+function shrinkPhoto(file){ return new Promise((ok,ko)=>{ const url=URL.createObjectURL(file), im=new Image();
+  im.onload=()=>{ const W=240,H=292, r=Math.max(W/im.width,H/im.height), w=im.width*r, h=im.height*r;
+    const c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"); g.fillStyle="#fff"; g.fillRect(0,0,W,H);
+    g.drawImage(im,(W-w)/2,(H-h)/2,w,h); URL.revokeObjectURL(url); ok(c.toDataURL("image/jpeg",.84)); };
+  im.onerror=()=>{ URL.revokeObjectURL(url); ko(new Error("img")); }; im.src=url; }); }
+async function savePhoto(file){ if(!/^image\//.test(file.type)){ idMsg(L("Elige una imagen (JPG o PNG).","Choose an image (JPG or PNG)."),"err"); return; }
+  if(file.size>15*1024*1024){ idMsg(L("La imagen es muy pesada (máx. 15 MB).","The image is too large (max 15 MB)."),"err"); return; }
+  idMsg(L("Subiendo foto…","Uploading photo…"));
+  try{ const foto=await shrinkPhoto(file); await fb(); await perfilRef().set({foto,correo:auth.user.email,actualizado:new Date().toISOString()},{merge:true});
+    perfil=Object.assign({},perfil,{foto}); delete perfil._err; renderAvatar(); renderID(); sfx.select(); idMsg(L("¡Foto actualizada!","Photo updated!"),"ok"); }
+  catch(e){ console.warn(e); idMsg(e&&e.message==="img"?L("No se pudo leer esa imagen. Prueba con otra (JPG o PNG).","Couldn't read that image. Try another one (JPG or PNG)."):saveErr(e),"err"); } }
+$("idClose").addEventListener("click",()=>{ sfx.back(); closeID(); });
+$("idModal").addEventListener("click",e=>{ if(e.target.id==="idModal") closeID(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("idModal").hidden) closeID(); });
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const escBr=t=>esc(t).replace(/\n/g,"<br>");
 const safeUrl=u=>/^https?:\/\//i.test(u||"")?esc(u):"#";
@@ -3316,7 +3433,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&expOpen) closeExpe
 $("langBtn").addEventListener("click",()=>{ LANG=LANG==="es"?"en":"es"; try{localStorage.setItem("animapp-lang",LANG)}catch(e){}
   sfx.select(); if(synth) synth.cancel(); applyLang(); buildGrid();
   if(current==="section") renderSection(location.hash.slice(1));
-  renderAvisos();
+  renderAvisos(); if(!$("idModal").hidden) renderID();
   if(current==="menu"&&!$("grid").hidden) $("bubbleText").textContent=GREETING;
   say(L("Idioma: español","Language: English"),false); lastEl=$("langBtn") });
 applyLang(); buildGrid(); renderAvisos();
