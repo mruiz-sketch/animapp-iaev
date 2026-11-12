@@ -49,6 +49,13 @@ button{font:inherit;color:inherit}
 .topbar .lang-btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;padding:8px 12px;margin-right:8px}
 .lang-btn svg{width:24px;height:24px}.lang-btn .code{color:var(--iaev-red)}
 @media (max-width:560px){.audio-btn .lbl,.lang-btn .lbl{display:none}.topbar .brand span{display:none}.topbar,.topbar .nav{gap:9px}.topbar .lang-btn{margin-right:0}}
+/* Celular: el logo nunca se encoge; los botones del encabezado se compactan */
+.topbar .brand{flex:none}
+.topbar .brand img{flex:none;height:24px;width:auto;aspect-ratio:12/5;object-fit:contain}
+@media (max-width:560px){.topbar{gap:7px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px))}.topbar .nav{gap:7px}.topbar .brand{padding:2px}
+  .topbar .pbtn.icon{padding:6px}.topbar .pbtn.icon svg{width:22px;height:22px}
+  .topbar .lang-btn,.topbar .audio-btn{padding:6px 8px;gap:4px;font-size:12px}.topbar .lang-btn svg,.topbar .audio-btn svg{width:20px;height:20px}}
+@media (max-width:360px){.topbar{gap:5px}.topbar .nav{gap:5px}.topbar .brand img{height:20px}.topbar .pbtn.icon svg{width:20px;height:20px}.topbar .lang-btn svg,.topbar .audio-btn svg{width:18px;height:18px}}
 
 /* Pantallas */
 .screen{min-height:calc(100% - 64px)}
