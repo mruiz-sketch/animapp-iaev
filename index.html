@@ -316,7 +316,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .id-role.doc{background:var(--iaev-blue);color:#fff}
 .id-bar{display:flex;align-items:flex-end;gap:2px;height:30px;padding:0 14px 12px}.id-bar i{display:block;background:var(--ink);height:100%}
 .id-msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--ink-soft);font-size:16px}.id-msg.ok{border-color:#4f9a5e}.id-msg.err{border-color:var(--iaev-red)}
-.id-acts{display:flex;flex-wrap:wrap;gap:14px}
+.id-acts{display:flex;flex-wrap:wrap;gap:14px}.id-admin{text-decoration:none;background:var(--iaev-blue);color:#fff}
 .id-out{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px}
 .id-out p{margin:0;max-width:38ch}
 @media (max-width:440px){.id-main{grid-template-columns:1fr;justify-items:center}.id-data{width:100%}.id-pic{width:120px;height:146px}}
@@ -2968,7 +2968,7 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
     <div class="id-bar" aria-hidden="true">${barcode(u.uid)}</div>
   </div>
   <p class="id-msg" id="idMsg" hidden></p>
-  <div class="id-acts"><button class="pbtn yellow" id="idSave">${L("Guardar cambios","Save changes")}</button><button class="pbtn red" id="idOut">${L("Cerrar sesión","Sign out")}</button></div>`;
+  <div class="id-acts"><button class="pbtn yellow" id="idSave">${L("Guardar cambios","Save changes")}</button>${prof?`<a class="pbtn blue id-admin" href="${inClaudeHost()?APP_URL+"admin.html":"admin.html"}"${inClaudeHost()?' target="_blank" rel="noopener"':""}>${L("Admin ⚙","Admin ⚙")}</a>`:""}<button class="pbtn red" id="idOut">${L("Cerrar sesión","Sign out")}</button></div>`;
   if(!(p&&p.foto)) iconSVG($("idPh"),"user");
   if(p&&p._err==="permission-denied") idMsg(L("Tu perfil aún no se puede guardar: falta publicar las reglas nuevas de Firestore.","Your profile can't be saved yet: the new Firestore rules haven't been published."),"err");
   $("idFileBtn").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); $("idFile").click(); } });
