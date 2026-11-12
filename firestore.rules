@@ -43,14 +43,15 @@ service cloud.firestore {
       allow read: if docente();
       allow write: if admin();
     }
-    // Credencial de cada persona (foto, nombre, matrícula): solo la lee y edita su dueño.
+    // Credencial de cada persona (foto, nombre, matrícula, cuatrimestre y grupo): solo la lee y edita su dueño.
     match /perfiles/{uid} {
       allow read: if upsrj() && request.auth.uid == uid;
       allow create, update: if upsrj() && request.auth.uid == uid
-        && request.resource.data.keys().hasOnly(['nombre', 'matricula', 'foto', 'correo', 'actualizado'])
+        && request.resource.data.keys().hasOnly(['nombre', 'matricula', 'cuatrimestre', 'grupo', 'foto', 'correo', 'actualizado'])
         && (!('foto' in request.resource.data) || (request.resource.data.foto is string && request.resource.data.foto.size() < 400000))
         && (!('nombre' in request.resource.data) || (request.resource.data.nombre is string && request.resource.data.nombre.size() <= 80))
-        && (!('matricula' in request.resource.data) || (request.resource.data.matricula is string && request.resource.data.matricula.size() <= 20));
+        && (!('matricula' in request.resource.data) || (request.resource.data.matricula is string && request.resource.data.matricula.size() <= 20))
+        && (!('grupo' in request.resource.data) || (request.resource.data.grupo is string && request.resource.data.grupo.size() <= 12));
       allow delete: if upsrj() && request.auth.uid == uid;
     }
   }

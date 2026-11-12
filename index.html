@@ -308,6 +308,9 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .id-data{display:flex;flex-direction:column;gap:10px;min-width:0}
 .id-f{display:flex;flex-direction:column;gap:3px;min-width:0}
 .id-f>span{font-family:var(--display);font-size:9.5px;color:var(--ink-soft);letter-spacing:.04em}
+.id-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.id-f select{font:inherit;font-size:17px;font-weight:600;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed rgba(38,36,42,.35);padding:3px 2px;min-width:0;width:100%}
+.id-f select:focus{outline:none;border-bottom:2px solid var(--iaev-blue);background:#fff}
 .id-f input{font:inherit;font-size:17px;font-weight:600;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed rgba(38,36,42,.35);padding:3px 2px;min-width:0;width:100%}
 .id-f input:focus{outline:none;border-bottom:2px solid var(--iaev-blue);background:#fff}
 .id-f>span.ro{font-family:var(--body);letter-spacing:0;color:var(--ink);font-size:15px;overflow-wrap:anywhere}
@@ -2964,6 +2967,8 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
       <div class="id-data">
         <label class="id-f"><span>${L("NOMBRE COMPLETO","FULL NAME")}</span><input id="idName" maxlength="80" autocomplete="name" value="${esc(nombre)}" placeholder="${esc(L("Tu nombre completo","Your full name"))}"></label>
         <label class="id-f"><span>${prof?L("NO. DE EMPLEADO","EMPLOYEE NO."):L("MATRÍCULA","STUDENT ID")}</span><input id="idMat" maxlength="20" inputmode="numeric" value="${esc(mat)}" placeholder="${esc(prof?L("Opcional","Optional"):L("Escribe tu matrícula","Enter your student ID"))}"></label>
+        ${prof?"":`<div class="id-row"><label class="id-f"><span>${L("CUATRIMESTRE","TERM")}</span><select id="idCua"><option value="">—</option>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${String(p&&p.cuatrimestre||"")===String(n)?" selected":""}>${LANG==="en"?n+(["st","nd","rd"][n-1]||"th"):n+"º"}</option>`).join("")}</select></label>
+          <label class="id-f"><span>${L("GRUPO","GROUP")}</span><input id="idGrp" maxlength="12" autocapitalize="characters" value="${esc(p&&p.grupo||"")}" placeholder="${esc(L("Ej. A","E.g. A"))}"></label></div>`}
         <div class="id-f"><span>${L("CORREO","EMAIL")}</span><span class="ro">${esc(u.email)}</span></div>
         <span class="id-role${prof?" doc":""}">${prof?L("DOCENTE","FACULTY"):L("ALUMNO/A","STUDENT")}</span>
       </div>
@@ -2985,6 +2990,7 @@ async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.rep
   if(mat&&!/^[A-Za-z0-9-]{3,20}$/.test(mat)){ idMsg(L("La matrícula solo puede tener números y letras.","The ID can only contain letters and numbers."),"err"); return; }
   b.disabled=true; idMsg(L("Guardando…","Saving…"));
   try{ await fb(); const d={nombre,matricula:mat,correo:auth.user.email,actualizado:new Date().toISOString()};
+    if($("idCua")){ d.cuatrimestre=$("idCua").value; d.grupo=$("idGrp").value.replace(/\s+/g," ").trim().toUpperCase().slice(0,12); }
     await perfilRef().set(d,{merge:true}); perfil=Object.assign({},perfil,d); delete perfil._err; sfx.select(); idMsg(L("¡Listo! Tu credencial está actualizada.","Done! Your ID card is updated."),"ok"); }
   catch(e){ console.warn(e); idMsg(saveErr(e),"err"); } finally{ b.disabled=false; } }
 function shrinkPhoto(file){ return new Promise((ok,ko)=>{ const url=URL.createObjectURL(file), im=new Image();
