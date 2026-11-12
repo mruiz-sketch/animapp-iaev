@@ -5,6 +5,7 @@
 # reglas de Firestore). Se excluye ese archivo del escáner de secretos para que no bloquee la publicación.
 [build.environment]
   SECRETS_SCAN_SMART_DETECTION_OMIT_PATHS = "firebase-config.js"
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyAo6ZfqsRJN4dDHsFj1eJgHc-6b6VDz5LQ"
 
 [functions]
   directory = "netlify/functions"
