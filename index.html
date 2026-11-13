@@ -1869,6 +1869,7 @@ const SEC_EN={blog:["Blog","News, articles and updates about the program, writte
  horarios:["Schedules","Class schedules by group and term, plus tutoring hours."],
  mapas:["Maps","Find the university's buildings, labs, classrooms and spaces."],
  material:["Supplies & Equipment","Supply lists by course, plus computer, tablet and software requirements."],
+ software:["Software","The programs you will use in each term of the program."],
  upsrj:["UPSRJ Website","Open the official website of the Universidad Politécnica de Santa Rosa Jáuregui."],
  sai:["SAI","Access the university's Integrated Administration System to check grades and paperwork."],
  filmfest:["Coyote Film Fest","IAEV's short film festival: call for entries, categories, jury and winners."],
@@ -2026,6 +2027,12 @@ const ICONS32={
   [["r","p",24,2,3,3],["r","l",24,5,3,1],["r","y",24,6,3,14],["r","yl",24,6,1,14],["p","o",[[24,20],[27,20],[25.5,25]]],["r","k",25,24,1,1]],
   [["r","m",29,3,2,13],["r","l",28,16,4,2],["p","r",[[28,18],[32,18],[30,24]]]]
  ],
+ software:[
+  [["r","l",2,3,28,20],["r","n",4,5,24,16],["r","l",13,23,6,3],["r","l",8,26,16,3]],
+  [["r","r",7,8,5,5],["r","b",14,8,5,5],["r","g",21,8,4,5]],
+  [["r","y",7,15,5,4],["r","p",14,15,5,4]],
+  [["p","w",[[21,14],[21,23],[23,21],[25,25],[26.5,24],[24.5,20],[27,20]]]]
+ ],
  upsrj:[
   [["r","k",15,0,1,5],["p","g",[[16,0],[21,1.5],[16,3]]]],
   [["p","r",[[3,13],[16,5],[29,13]]],["r","l",3,13,26,3],["r","l",3,26,26,2],["r","l",1,28,30,3]],
@@ -2156,6 +2163,7 @@ const SECTIONS=[
  {id:"mapas",t:"Mapas",d:"Ubica los edificios, laboratorios, salones y espacios de la universidad."},
  {id:"material",t:"Material y Equipo",d:"Lista de materiales por asignatura y requisitos de equipo de cómputo, tabletas y software."},
  {id:"sai",t:"SAI",d:"Acceso al Sistema de Administración Integral de la universidad para consultar calificaciones y trámites."},
+ {id:"software",t:"Software",d:"Los programas que usarás en cada cuatrimestre de la carrera."},
  {id:"upsrj",t:"Sitio UPSRJ",d:"Abre el sitio oficial de la Universidad Politécnica de Santa Rosa Jáuregui.",url:"https://upsrj.edu.mx/"},
  {id:"filmfest",t:"Coyote Film Fest",d:"El festival de cortometrajes de IAEV: convocatoria, categorías, jurado y ganadores."},
  {id:"reglamento",t:"Reglamento",d:"Normas de la universidad y de los laboratorios, derechos y obligaciones de los estudiantes."},
@@ -2429,6 +2437,7 @@ function greet(animated){
 
 
 /* ====== CONTENIDO DE LAS SECCIONES ====== */
+const SOFTWARE=[]; /* {t:["1er cuatrimestre","1st term"],items:["Programa", …]} */
 const CONTENT={
  nosotros:{
   h:["Un poco sobre la Academia...","A little about the Academy..."],
@@ -2456,6 +2465,7 @@ const CONTENT={
   links:["horario-1","horario-2","horario-3","horario-4","horario-5","horario-7","horario-8","horario-9"]
  },
  qa:{ h:["Preguntas frecuentes","Frequently asked questions"], html:qaHTML },
+ software:{ h:["Software por cuatrimestre","Software by term"], html:()=>SOFTWARE.length?`<div class="sw-list">${SOFTWARE.map(c=>`<div class="sw-term"><h3>${c.t[LANG==="en"?1:0]}</h3><ul>${c.items.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`:`<p class="tpl-note">${L("Muy pronto encontrarás aquí la lista de programas que se usan en cada cuatrimestre.","Coming soon: the list of programs used in each term.")}</p>` },
  plantillas:{ h:["Plantillas oficiales","Official templates"], html:()=>`<div class="tpl-list">${PLANTILLAS.map(t=>`<div class="tpl-item"><a class="pbtn yellow portal-go-btn sai-btn" href="${t.url}" target="_blank" rel="noopener">${t.t[LANG==="en"?1:0]} ↗</a><p class="tpl-d">${t.d[LANG==="en"?1:0]}</p></div>`).join("")}</div>
    <p class="tpl-note">${L("Abre la plantilla y haz una copia (en Google Docs: Archivo → Hacer una copia; en Canva: «Usar plantilla») para trabajar en la tuya.","Open the template and make a copy (Google Docs: File → Make a copy; Canva: “Use template”) to work on your own.")}</p>`,
    after:()=>document.querySelectorAll(".tpl-item a").forEach(b=>b.addEventListener("click",()=>sfx.select())) },
@@ -3184,6 +3194,7 @@ const BSYN={
  blog:"blog noticias novedades news",
  nosotros:"nosotros carrera iaev ingenieria animacion efectos visuales about program",
  plantillas:"plantilla plantillas formato formatos templates",
+ software:"software softwares programa programas aplicaciones apps licencia licencias",
  upsrj:"sitio pagina web oficial universidad upsrj website",
  qa:"preguntas frecuentes dudas faq",
  profesores:"solo_profesores avisos recursos"
