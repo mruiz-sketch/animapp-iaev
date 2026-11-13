@@ -149,7 +149,7 @@ footer h2{font-family:var(--display);font-weight:400;font-size:15px;margin:0 0 1
 .sec-photo{margin:24px 0 0}
 /* Mapa curricular */
 .cm-scroll{overflow-x:auto;margin-top:8px;padding-bottom:6px;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink)}
-.cm-board{min-width:1400px;background:#0f2b2f;padding:22px 20px 18px}
+.cm-board{min-width:1700px;background:#0f2b2f;padding:22px 20px 18px}
 .cm-head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:22px}
 .cm-head-txt{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
 .cm-logo{display:block;width:auto;max-width:none;image-rendering:auto;flex:none}.cm-logo-bis{height:72px}.cm-logo-up{height:52px}
@@ -159,9 +159,9 @@ footer h2{font-family:var(--display);font-weight:400;font-size:15px;margin:0 0 1
 .cm-col{display:flex;flex-direction:column;gap:10px;min-width:0}
 .cm-term{font-family:var(--body);font-weight:700;font-size:15px;color:#d9f6f2;margin:0;text-align:center;min-height:36px;display:grid;place-items:center;line-height:1.2}
 .cm-list{display:flex;flex-direction:column;gap:10px}
-.cm-card{--c:#ddd;--d:#bbb;--t:#222;background:var(--c);color:var(--t);height:74px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
-.cm-name{flex:1;display:grid;place-items:center;text-align:center;font-family:var(--body);font-weight:700;font-size:15px;line-height:1.15;text-transform:uppercase;padding:4px 6px;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:anywhere}
-.cm-meta{display:flex;justify-content:space-between;gap:4px;white-space:nowrap;background:var(--d);font-family:var(--body);font-weight:600;font-size:14px;padding:2px 6px;font-variant-numeric:tabular-nums}
+.cm-card{--c:#ddd;--d:#bbb;--t:#222;background:var(--c);color:var(--t);height:96px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.cm-name{flex:1;display:grid;place-items:center;text-align:center;font-family:var(--body);font-weight:700;font-size:15px;line-height:1.15;text-transform:uppercase;padding:4px 6px;hyphens:none;-webkit-hyphens:none;overflow-wrap:normal;word-break:normal;min-height:0;overflow:hidden}
+.cm-meta{display:flex;justify-content:space-between;gap:4px;white-space:nowrap;background:var(--d);font-family:var(--body);font-weight:600;font-size:13px;padding:2px 6px;font-variant-numeric:tabular-nums;overflow:hidden}
 .cm-en{--c:#dff7c4;--d:#a7e06a;--t:#2f4a12}.cm-tr{--c:#f8c07e;--d:#eea85f;--t:#7a3f08}
 .cm-an{--c:#f9b4c4;--d:#ec8aa2;--t:#7d1735}.cm-di{--c:#fbf08a;--d:#e8d84a;--t:#4f4508}
 .cm-au{--c:#f8a8f0;--d:#e47ad9;--t:#5c0f55}.cm-md{--c:#b9d9f9;--d:#8fbdf0;--t:#163f70}
@@ -180,7 +180,7 @@ footer h2{font-family:var(--display);font-weight:400;font-size:15px;margin:0 0 1
 .pa-y{background:#fbe98c;color:#5a5320}.pa-b{background:#a9cdf0;color:#23466e}.pa-p{background:#f4c2c2;color:#6e2b2b}
 .pa-cols{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:10px}
 .pa-term{min-height:34px;display:grid;place-items:center;font-size:14px}
-.pa-list{display:grid;grid-template-rows:repeat(7,66px);gap:10px}
+.pa-list{display:grid;grid-template-rows:repeat(7,86px);gap:10px}
 .pa-list .cm-card{height:auto}
 .pa-hrs{justify-content:center}
 .pa-sum{font-family:var(--body);font-weight:600;font-size:14px;text-align:center;padding:4px}
@@ -2438,6 +2438,10 @@ function greet(animated){
 
 /* ====== CONTENIDO DE LAS SECCIONES ====== */
 const SOFTWARE=[]; /* {t:["1er cuatrimestre","1st term"],items:["Programa", …]} */
+/* Plan de estudios: encoge el texto de cada recuadro hasta que quepa (sin cortar palabras) */
+function fitCM(){ document.querySelectorAll(".cm-name,.cm-meta").forEach(n=>{ n.style.fontSize=""; let f=parseFloat(getComputedStyle(n).fontSize), g=0;
+  const over=()=>n.scrollHeight>n.clientHeight+1||n.scrollWidth>n.clientWidth+1||[...n.querySelectorAll("*")].some(c=>c.scrollWidth>c.clientWidth+1);
+  while(over()&&f>9&&g++<30){ f-=.5; n.style.fontSize=f+"px"; } }); }
 const CONTENT={
  nosotros:{
   h:["Un poco sobre la Academia...","A little about the Academy..."],
@@ -2449,7 +2453,7 @@ const CONTENT={
  },
  "plan-estudios":{
   h:["Hasta IAEV-43","Through IAEV-43"],
-  after:wirePlanPDF,
+  after:()=>{ wirePlanPDF(); fitCM(); if(document.fonts) document.fonts.ready.then(fitCM); },
   html:()=>planPDFButtons()+curriculumHTML()+`<h2 class="sec-h2 sec-h2-more">${L("Desde IAEV-PA-01 en adelante","From IAEV-PA-01 onward")}</h2>`+curriculumPAHTML()
  },
  material:{ replace:true, html:equipoHTML, after:wireEquipo },
