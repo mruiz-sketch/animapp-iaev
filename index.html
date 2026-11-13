@@ -1869,6 +1869,7 @@ const SEC_EN={blog:["Blog","News, articles and updates about the program, writte
  horarios:["Schedules","Class schedules by group and term, plus tutoring hours."],
  mapas:["Maps","Find the university's buildings, labs, classrooms and spaces."],
  material:["Supplies & Equipment","Supply lists by course, plus computer, tablet and software requirements."],
+ upsrj:["UPSRJ Website","Open the official website of the Universidad Politécnica de Santa Rosa Jáuregui."],
  sai:["SAI","Access the university's Integrated Administration System to check grades and paperwork."],
  filmfest:["Coyote Film Fest","IAEV's short film festival: call for entries, categories, jury and winners."],
  reglamento:["Rules","University and lab regulations, plus student rights and responsibilities."],
@@ -2025,6 +2026,12 @@ const ICONS32={
   [["r","p",24,2,3,3],["r","l",24,5,3,1],["r","y",24,6,3,14],["r","yl",24,6,1,14],["p","o",[[24,20],[27,20],[25.5,25]]],["r","k",25,24,1,1]],
   [["r","m",29,3,2,13],["r","l",28,16,4,2],["p","r",[[28,18],[32,18],[30,24]]]]
  ],
+ upsrj:[
+  [["r","k",15,0,1,5],["p","g",[[16,0],[21,1.5],[16,3]]]],
+  [["p","r",[[3,13],[16,5],[29,13]]],["r","l",3,13,26,3],["r","l",3,26,26,2],["r","l",1,28,30,3]],
+  [["r","w",6,16,3,10],["r","w",11,16,3,10],["r","w",18,16,3,10],["r","w",23,16,3,10]],
+  [["e","y",16,10.5,1.7,1.7],["r","n",15,18,2,8]]
+ ],
  sai:[
   [["r","l",2,3,28,26],["r","b",2,3,28,4],["r","r",4,4,2,2],["r","y",7,4,2,2],["r","w",11,4,16,2],["r","sky",3,8,26,20],["r","g",3,25,26,3]],
   [["r","k",15,9,1,6],["p","g",[[16,9],[21,10.5],[16,12]]]],
@@ -2149,6 +2156,7 @@ const SECTIONS=[
  {id:"mapas",t:"Mapas",d:"Ubica los edificios, laboratorios, salones y espacios de la universidad."},
  {id:"material",t:"Material y Equipo",d:"Lista de materiales por asignatura y requisitos de equipo de cómputo, tabletas y software."},
  {id:"sai",t:"SAI",d:"Acceso al Sistema de Administración Integral de la universidad para consultar calificaciones y trámites."},
+ {id:"upsrj",t:"Sitio UPSRJ",d:"Abre el sitio oficial de la Universidad Politécnica de Santa Rosa Jáuregui.",url:"https://upsrj.edu.mx/"},
  {id:"filmfest",t:"Coyote Film Fest",d:"El festival de cortometrajes de IAEV: convocatoria, categorías, jurado y ganadores."},
  {id:"reglamento",t:"Reglamento",d:"Normas de la universidad y de los laboratorios, derechos y obligaciones de los estudiantes."},
  {id:"titulacion",t:"Titulación",d:"Modalidades, requisitos y pasos para tu proceso de titulación."},
@@ -2249,7 +2257,7 @@ function buildGrid(){
     const b=document.createElement("button"); b.className="pbtn tile"+(s.pro?" pro":""); b.style.animationDelay=(i*.06)+"s";
     const endPop=()=>{ b.style.animation="none"; }; b.addEventListener("animationend",endPop,{once:true}); setTimeout(endPop,i*60+900);
     b.innerHTML=`<svg class="px"></svg><span class="t">${secT(s)}</span>`; drawIcon32(b.querySelector("svg"),s.id);
-    b.addEventListener("click",()=>{ if(s.id==="asistencia"){ openExperience(ASISTENCIA); return } sfx.select();go(s.id)}); b.addEventListener("mouseenter",sfx.hover);
+    b.addEventListener("click",()=>{ if(s.url){ sfx.select(); window.open(s.url,"_blank","noopener"); return } if(s.id==="asistencia"){ openExperience(ASISTENCIA); return } sfx.select();go(s.id)}); b.addEventListener("mouseenter",sfx.hover);
     grid.appendChild(b);
   });
 }
@@ -2910,7 +2918,7 @@ function renderSection(id){
   if(id==="mapas"){ $("secBody").innerHTML='<p class="short">'+L('Explora el campus de la UPSRJ: pasa el cursor sobre un edificio para ver su nombre y haz clic en un lugar para que los coyotes caminen hasta allá. También puedes elegir un destino en la lista de lugares.','Explore the UPSRJ campus: hover over a building to see its name and click a place so the coyotes walk there. You can also pick a destination from the list of places.')+'</p>' }
 }
 
-function go(id,{push=true}={}){
+function go(id,{push=true}={}){ if(byId[id]&&byId[id].url){ window.open(byId[id].url,"_blank","noopener"); return; }
   if(push) stack.push(current==="section"?location.hash.slice(1):current==="menu"?"inicio":"intro");
   if(synth) synth.cancel();
   if(id==="inicio"){ show("menu"); greet(!greeted); greeted=true; setHash("inicio") }
@@ -3176,6 +3184,7 @@ const BSYN={
  blog:"blog noticias novedades news",
  nosotros:"nosotros carrera iaev ingenieria animacion efectos visuales about program",
  plantillas:"plantilla plantillas formato formatos templates",
+ upsrj:"sitio pagina web oficial universidad upsrj website",
  qa:"preguntas frecuentes dudas faq",
  profesores:"solo_profesores avisos recursos"
 };
