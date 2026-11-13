@@ -243,6 +243,15 @@ footer h2{font-family:var(--display);font-weight:400;font-size:15px;margin:0 0 1
   .eq-info{padding:18px 12px 18px calc(var(--peek) + 10px);font-size:15.5px}.eq-R .eq-info{padding:18px calc(var(--peek) + 10px) 18px 12px}
   .eq-info ul{padding-left:16px}.eq-tip,.eq-nota p{text-align:left}
   .eq-t{font-size:20.5px}.eq-logo-up{width:200px}.eq-logo-iaev{width:260px}
+  /* Celular: tarjeta vertical (título arriba, imagen grande abajo) y detalles debajo al tocar */
+  .eq-stage,.eq-R .eq-stage{display:flex;flex-direction:column;min-height:0;border-radius:90px 90px 18px 18px}
+  .eq-cover,.eq-R .eq-cover,.eq-L .eq-cover{position:relative;inset:auto;order:-1;flex-direction:column;align-items:center;justify-content:flex-start;gap:14px;padding:30px 16px 22px;text-align:center;transform:none!important;background:transparent}
+  .eq-stage{background:var(--band)}
+  .eq-cover-txt{align-items:center;width:100%}.eq-stage.open .eq-cover-txt{opacity:1}
+  .eq-cover-t{font-size:clamp(24px,8vw,32px);overflow-wrap:anywhere;hyphens:auto}
+  .eq-img{height:auto;width:min(82%,320px)}
+  .eq-info,.eq-R .eq-info{display:none;opacity:1;padding:4px 18px 22px;background:color-mix(in srgb,var(--band) 40%,#fff);border-radius:0 0 18px 18px}
+  .eq-stage.open .eq-info{display:block}.eq-info .eq-t{display:none}
 }
 @media (prefers-reduced-motion:reduce){.eq-cover{transition:none}}
 .cal-live{margin-bottom:30px}.cal-frame{position:relative;width:100%;aspect-ratio:4/3;max-height:640px;box-shadow:0 -4px 0 var(--ink),0 4px 0 var(--ink),-4px 0 0 var(--ink),4px 0 0 var(--ink);background:#fff}.cal-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -2621,6 +2630,9 @@ const EQUIPO=[
        "This item isn't as necessary as the rest of the equipment. However, if you want to specialize in audio recording and sound design, you may want headphones made specifically for that kind of work."]}
 ];
 const CUATRI_ES={2:"2º",3:"3º",4:"4º",5:"5º"};
+function eqHint(dir,open){ const m=matchMedia("(max-width:760px)").matches;
+  if(open) return m?L("Toca para cerrar ▲","Tap to close ▲"):L("Toca para cerrar","Tap to close");
+  return m?L("Toca para ver los detalles ▼","Tap to see the details ▼"):(dir==="L"?"◀ ":"")+L("Toca para ver los detalles","Tap to see the details")+(dir==="R"?" ▶":""); }
 function equipoHTML(){ const i=LANG==="en"?1:0;
   const rows=EQUIPO.map(e=>{ const lis=e.li.map(p=>`<li><b>${p[i][0]}:</b> ${p[i][1]}</li>`).join("")+`<li class="eq-cost"><b><i>${L("Costo","Cost")}: ${e.cost}</i></b></li>`;
     const cu=LANG==="en"?`<span class="eq-cu-n">${e.cu}${({2:"nd",3:"rd",4:"th",5:"th"})[e.cu]}</span><span class="eq-cu-w">TERM</span>`:`<span class="eq-cu-n">${CUATRI_ES[e.cu]}</span><span class="eq-cu-w">CUATRI</span>`;
@@ -2630,7 +2642,7 @@ function equipoHTML(){ const i=LANG==="en"?1:0;
         <div class="eq-info" id="eq-info-${e.id}" aria-hidden="true"><h3 class="eq-t">${e.t[i]}</h3><ul>${lis}</ul>
           <p class="eq-sub">${L("Otras sugerencias:","Other suggestions:")}</p><p class="eq-tip">${e.tip[i]}</p></div>
         <button class="eq-cover" type="button" aria-expanded="false" aria-controls="eq-info-${e.id}" aria-label="${e.t[i]}, ${L("a partir del","from the")} ${LANG==="en"?e.cu+({2:"nd",3:"rd",4:"th",5:"th"})[e.cu]+" term":CUATRI_ES[e.cu]+" cuatrimestre"}. ${L("Ver detalles","See details")}">
-          <span class="eq-cover-txt"><span class="eq-cover-t">${e.t[i]}</span><span class="eq-cover-cu">${LANG==="en"?e.cu+({2:"nd",3:"rd",4:"th",5:"th"})[e.cu]+" term":CUATRI_ES[e.cu]+" cuatrimestre"}</span><span class="eq-hint">${e.dir==="L"?"◀ ":""}${L("Toca para ver los detalles","Tap to see the details")}${e.dir==="R"?" ▶":""}</span></span>
+          <span class="eq-cover-txt"><span class="eq-cover-t">${e.t[i]}</span><span class="eq-cover-cu">${LANG==="en"?e.cu+({2:"nd",3:"rd",4:"th",5:"th"})[e.cu]+" term":CUATRI_ES[e.cu]+" cuatrimestre"}</span><span class="eq-hint">${eqHint(e.dir,false)}</span></span>
           <img class="eq-img" src="${e.img}" alt="">
         </button>
       </div></div>`; }).join("");
@@ -2645,7 +2657,7 @@ function equipoHTML(){ const i=LANG==="en"?1:0;
   </div>`; }
 function wireEquipo(){ document.querySelectorAll(".eq-cover").forEach(b=>b.addEventListener("click",()=>{ const st=b.closest(".eq-stage"), open=!st.classList.contains("open");
   st.classList.toggle("open",open); b.setAttribute("aria-expanded",String(open)); st.querySelector(".eq-info").setAttribute("aria-hidden",String(!open));
-  b.querySelector(".eq-hint").textContent=open?(L("Toca para cerrar","Tap to close")):((b.closest(".eq-L")?"◀ ":"")+L("Toca para ver los detalles","Tap to see the details")+(b.closest(".eq-R")?" ▶":""));
+  b.querySelector(".eq-hint").textContent=eqHint(b.closest(".eq-L")?"L":"R",open);
   sfx.select(); if(open&&audioOn) say(st.querySelector(".eq-info").innerText.replace(/\s+/g," ")); else if(synth) synth.cancel(); })); }
 
 /* ====== CALENDARIO ====== */
