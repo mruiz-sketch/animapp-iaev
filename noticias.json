@@ -1,7 +1,159 @@
 {
-  "actualizado": "2026-11-11",
-  "resumen": "Semana de cambios en la cúpula de los estudios: Pixar nombra nuevo presidente y James Gunn y Peter Safran dejan la dirección de DC Studios tras la compra de Skydance. En taquilla, Godzilla Minus Zero abre en primer lugar, The Cat in the Hat debuta por debajo de otras adaptaciones de Seuss y el stop-motion Wildwood de Laika supera los 40 MDD. Japón anuncia los Nippon Anime Awards para 2027, sigue el debate sobre el uso de IA en el anuncio de Dior de Sylvain Chomet y arranca el American Film Market en Las Vegas.",
+  "actualizado": "2026-11-14",
   "items": [
+    {
+      "titulo": "El Manchester Animation Festival prohíbe películas hechas con IA generativa y nombra a 'In Waves' mejor largometraje",
+      "resumen": "A partir de su edición 2027, el festival británico no aceptará obras realizadas con IA generativa; en 2026 premió a 'In Waves' de Phuong Mai Nguyen y a 'When the Sea Was Calm' como mejor corto, con récord de casi 12,000 asistentes.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-13",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/awards/manchester-animation-festival-genai-ban-in-waves-269431.html",
+      "apa": "Lang, J. (2026, 13 de noviembre). Manchester Animation Festival bans films made with GenAI, names 'In Waves' best feature. Cartoon Brew. https://www.cartoonbrew.com/awards/manchester-animation-festival-genai-ban-in-waves-269431.html"
+    },
+    {
+      "titulo": "Un diario de desarrollo en video adelanta 'Planeswalker', la serie de Netflix de 'Magic: The Gathering' que llega en 2027",
+      "resumen": "Netflix mostró un primer vistazo a la serie animada basada en el juego de cartas, con Patrick Osborne como director supervisor y animación del estudio Digic; seguirá a la maga Chandra.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-13",
+      "categoria": "Televisión",
+      "url": "https://www.cartoonbrew.com/series/netflix-magic-the-gathering-planeswalker-first-look-269425.html",
+      "apa": "Lang, J. (2026, 13 de noviembre). Video development diary teases Netflix's 'Magic The Gathering' series 'Planeswalker,' coming in 2027. Cartoon Brew. https://www.cartoonbrew.com/series/netflix-magic-the-gathering-planeswalker-first-look-269425.html"
+    },
+    {
+      "titulo": "El Libro 2 de 'Avatar: Seven Havens' se estrenará en mayo en Paramount+",
+      "resumen": "La segunda temporada, 'Discovery', de 13 episodios, llegará el 21 de mayo de 2027 en entregas semanales; el Libro 3 saldrá ese mismo año y la serie cerrará con el Libro 4.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Televisión",
+      "url": "https://www.animationmagazine.net/2026/11/avatar-seven-havens-book-2-premiere-set-for-may-on-paramount/",
+      "apa": "Milligan, M. (2026, 12 de noviembre). 'Avatar: Seven Havens' Book 2 premiere set for May on Paramount+. Animation Magazine. https://www.animationmagazine.net/2026/11/avatar-seven-havens-book-2-premiere-set-for-may-on-paramount/"
+    },
+    {
+      "titulo": "El segundo tráiler de 'Ray Gunn' se adentra en un futuro complejo con resultados explosivos",
+      "resumen": "Netflix lanzó un nuevo avance del largometraje animado de Brad Bird, con las voces de Sam Rockwell y Scarlett Johansson; llega a cines selectos el 4 de diciembre y a streaming el 18.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/ray-gunn-second-trailer-zooms-into-a-complex-future-with-explosive-results/",
+      "apa": "Milligan, M. (2026, 12 de noviembre). 'Ray Gunn' second trailer zooms into a complex future with explosive results. Animation Magazine. https://www.animationmagazine.net/2026/11/ray-gunn-second-trailer-zooms-into-a-complex-future-with-explosive-results/"
+    },
+    {
+      "titulo": "'Sonic the Hedgehog: Memories and Beyond', corto por el 35 aniversario, se estrena en YouTube",
+      "resumen": "SEGA publicó un corto animado de 13 minutos, producido por GXS Productions, en el que Sonic enfrenta a un Metal Sonic mejorado por Dr. Eggman.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/sonic-the-hedgehog-memories-and-beyond-35th-anniversary-short-drops-on-youtube/",
+      "apa": "Animation Magazine. (2026, 12 de noviembre). 'Sonic the Hedgehog: Memories and Beyond' 35th anniversary short drops on YouTube. https://www.animationmagazine.net/2026/11/sonic-the-hedgehog-memories-and-beyond-35th-anniversary-short-drops-on-youtube/"
+    },
+    {
+      "titulo": "'Julián', de Cartoon Saloon, fija su estreno en EE. UU. con GKIDS",
+      "resumen": "GKIDS distribuirá en Estados Unidos este largometraje dibujado a mano de Louise Bagnall, basado en el libro 'Julián Is a Mermaid' de Jessica Love. Llegará a cines el 26 de marzo de 2027.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/cartoon-saloons-julian-sets-u-s-release-with-gkids/",
+      "apa": "Milligan, M. (2026, 12 de noviembre). <i>Cartoon Saloon's 'Julián' sets U.S. release with GKIDS</i>. Animation Magazine. https://www.animationmagazine.net/2026/11/cartoon-saloons-julian-sets-u-s-release-with-gkids/"
+    },
+    {
+      "titulo": "'Gatto', de Disney-Pixar, lista para saltar con nuevo tráiler y póster",
+      "resumen": "Pixar presentó nuevo tráiler y póster de 'Gatto', una aventura de un gato ladrón en Venecia dirigida por Enrico Casarosa ('Luca'). Se estrena el 5 de marzo de 2027, acompañada del corto 'Loving Dory'.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/disney-pixars-gatto-ready-to-pounce-with-new-trailer-poster/",
+      "apa": "Milligan, M. (2026, 12 de noviembre). <i>Disney-Pixar's 'Gatto' ready to pounce with new trailer & poster</i>. Animation Magazine. https://www.animationmagazine.net/2026/11/disney-pixars-gatto-ready-to-pounce-with-new-trailer-poster/"
+    },
+    {
+      "titulo": "El CEE Animation Forum corona a sus ganadores de 2026",
+      "resumen": "El foro de pitching de Europa central y del este, celebrado en Pilsen (Chequia), repartió 100 000 euros en premios entre 33 proyectos, con énfasis en series animadas. Ganaron 'Dancing Bears' (largometraje), 'Lussekatt' (serie), 'Trois-Fois-Rien' (corto) e 'Ita Turns 30' (corto estudiantil).",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-12",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/cee-animation-forum-crowns-2026-winners/",
+      "apa": "Milligan, M. (2026, 12 de noviembre). <i>CEE Animation Forum crowns 2026 winners</i>. Animation Magazine. https://www.animationmagazine.net/2026/11/cee-animation-forum-crowns-2026-winners/"
+    },
+    {
+      "titulo": "'El sesgo en la contratación es endémico': se debate el problema de diversidad de la industria de la animación en el MAF",
+      "resumen": "En un panel del Manchester Animation Festival, profesionales británicos discutieron la falta de personas racializadas en puestos de decisión y propusieron mentorías, comunidad y alianzas con grupos de base para lograr un cambio real.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-11",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/events/animation-industry-diversity-hiring-bias-manchester-animation-festival-269351.html",
+      "apa": "Giraud, K. (2026, 11 de noviembre). 'The hiring bias is endemic': Animation industry's diversity problem debated at MAF. Cartoon Brew. https://www.cartoonbrew.com/events/animation-industry-diversity-hiring-bias-manchester-animation-festival-269351.html"
+    },
+    {
+      "titulo": "CyberAgent firma una alianza con el estudio de anime MAPPA",
+      "resumen": "La empresa japonesa adquirió una participación en MHD, matriz de MAPPA ('Jujutsu Kaisen', 'Chainsaw Man'). Combinarán la producción del estudio con la experiencia de CyberAgent en streaming, videojuegos, publicidad y eventos.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-11",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/cyberagent-inks-alliance-with-anime-studio-mappa/",
+      "apa": "Milligan, M. (2026, 11 de noviembre). <i>CyberAgent inks alliance with anime studio MAPPA</i>. Animation Magazine. https://www.animationmagazine.net/2026/11/cyberagent-inks-alliance-with-anime-studio-mappa/"
+    },
+    {
+      "titulo": "La aclamada comedia animada francesa para adultos 'Jim Queen' tendrá estreno en cines de EE. UU. tras ser adquirida por Magnolia",
+      "resumen": "Magnolia Pictures compró los derechos para Estados Unidos de esta comedia animada que se estrenó en las funciones de medianoche de Cannes y pasó por Annecy. Llegará a cines el próximo verano con un doblaje en inglés que incluye a Jordan Firstman y Matteo Lane.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-11",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/distribution/jim-queen-us-theatrical-release-magnolia-pictures-269369.html",
+      "apa": "Lang, J. (2026, 11 de noviembre). <i>Acclaimed French adult animated comedy 'Jim Queen' is getting a U.S. theatrical release after Magnolia pickup</i>. Cartoon Brew. https://www.cartoonbrew.com/distribution/jim-queen-us-theatrical-release-magnolia-pictures-269369.html"
+    },
+    {
+      "titulo": "'Iron Boy', ganadora en Cannes y Annecy, presenta tráiler y fechas de estreno en EE. UU.",
+      "resumen": "Sony Pictures Classics lanzó el tráiler del largometraje dibujado a mano de Louis Clichy, premiado en Cannes, Annecy y Animation Is Film. Se estrenará en Nueva York y Los Ángeles el 4 de diciembre y en todo el país el 22 de enero de 2027.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-11",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/feature-film/iron-boy-trailer-us-release-date-269365.html",
+      "apa": "Lang, J. (2026, 11 de noviembre). <i>Cannes and Annecy winner 'Iron Boy' gets U.S. trailer and release dates</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/iron-boy-trailer-us-release-date-269365.html"
+    },
+    {
+      "titulo": "Rumbo al Óscar 2027: los directores de '18 Months', Paulo Garcia y Natália Gouvea",
+      "resumen": "El corto en stop-motion de Zombie Studio narra la historia real de dos hombres que criaron a un bebé hallado en el metro de Nueva York. Ganó el Gran Premio del Jurado en Animayo 2026 y combina títeres, animación proyectada y expresiones faciales digitales.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-11",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/awards/18-months-directors-paulo-garcia-natalia-gouvea-269280.html",
+      "apa": "Lang, J. (2026, 11 de noviembre). <i>2027 Oscars short film contenders: '18 Months' directors Paulo Garcia and Natália Gouvea</i>. Cartoon Brew. https://www.cartoonbrew.com/awards/18-months-directors-paulo-garcia-natalia-gouvea-269280.html"
+    },
+    {
+      "titulo": "Skydance apuesta por la IA para salir de una deuda de 87 000 millones de dólares",
+      "resumen": "Tras comprar Warner Bros. Discovery, Skydance planea recortar al menos 6 000 MDD anuales en tres años, con la IA como pieza clave en oficinas, programación y producción. David Ellison asegura que la IA «nunca reemplazará a los artistas», pero no aclara qué puestos de producción se verán afectados.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-10",
+      "categoria": "Cine",
+      "url": "https://www.cartoonbrew.com/business/skydance-ai-cost-cutting-87-billion-debt-269275.html",
+      "apa": "Lang, J. (2026, 10 de noviembre). <i>Skydance is betting on AI to help dig itself out of $87 billion in debt</i>. Cartoon Brew. https://www.cartoonbrew.com/business/skydance-ai-cost-cutting-87-billion-debt-269275.html"
+    },
+    {
+      "titulo": "Anuncian nueva película y cuarta temporada de 'Spy x Family' para 2027",
+      "resumen": "Toho confirmó un nuevo largometraje para cines japoneses y una cuarta temporada de la serie, ambos en 2027. Aún no hay título, director ni fecha de estreno internacional.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-10",
+      "categoria": "Televisión",
+      "url": "https://www.cartoonbrew.com/anime/spy-x-family-season-4-new-feature-269251.html",
+      "apa": "Lang, J. (2026, 10 de noviembre). <i>New 'Spy x Family' movie and fourth season announced for 2027</i>. Cartoon Brew. https://www.cartoonbrew.com/anime/spy-x-family-season-4-new-feature-269251.html"
+    },
+    {
+      "titulo": "Los creadores de 'Hexed', de Disney, hablan de animación a mano, historias originales y llevar el CG al límite",
+      "resumen": "Los directores Fawn Veerasunthorn y Jason Hand, junto a Jared Bush, explican el prólogo dibujado a mano de la película y cómo animadores veteranos exageraron personajes en CG. Bush defiende que el estudio siga apostando por historias originales además de secuelas.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-10",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/feature-film/disney-hexed-filmmakers-hand-drawn-animation-original-films-267896.html",
+      "apa": "Bennett, T. (2026, 10 de noviembre). <i>Disney's 'Hexed' filmmakers talk hand-drawn animation, original stories, and pushing CG boundaries</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/disney-hexed-filmmakers-hand-drawn-animation-original-films-267896.html"
+    },
+    {
+      "titulo": "La distribuidora mexicana de 'Wildwood' ordena un nuevo doblaje tras las críticas por su elenco de celebridades e influencers",
+      "resumen": "Tras las quejas por usar famosos y creadores de redes en lugar de actores de doblaje, Imagem Films Mx estrena desde el 12 de noviembre una nueva versión en español latino de la película de Laika. Se suman las actrices de doblaje Danna Alcalá y Erica Edwards, y Emilio Treviño conserva el papel de Curtis.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-10",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/voice-acting/wildwood-new-spanish-language-dub-269270.html",
+      "apa": "Lang, J. (2026, 10 de noviembre). <i>Mexican 'Wildwood' distributor orders new dub after backlash over celebrity, influencer voice cast</i>. Cartoon Brew. https://www.cartoonbrew.com/voice-acting/wildwood-new-spanish-language-dub-269270.html"
+    },
     {
       "titulo": "Young Animator of the Year 2026 premia a jóvenes animadores del Reino Unido",
       "resumen": "Los premios YAY UK se entregaron el 8 de noviembre en el Manchester Animation Festival a animadores de 11 a 22 años en stop-motion, 2D y 3D, con una nueva categoría de proyecto en grupo. El concurso, de Blue Zoo y ACCESS:VFX, recibió más de 240 trabajos y los ganadores visitarán Aardman y Blue Zoo.",
@@ -10,6 +162,15 @@
       "categoria": "Animación",
       "url": "https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation",
       "apa": "Skwigly. (2026, 10 de noviembre). <i>Young Animator of The Year 2026 celebrates the future of UK animation</i>. Skwigly Animation Magazine. https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation"
+    },
+    {
+      "titulo": "Una cuenta de IA plagia el premiado corto 'El Empleo' (2008) para promocionar clases de «cine» de 49 dólares al mes",
+      "resumen": "La cuenta de Instagram Nightframe publicó una versión hecha con IA del corto animado argentino, que sumó millones de vistas antes de ser retirada por la queja del codirector Patricio Plaza. El texto del post dirigía a AI Film School, un servicio de pago, aunque el responsable negó tener relación con él.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-09",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/artificial-intelligence/el-empleo-unauthorized-ai-remake-269233.html",
+      "apa": "Lang, J. (2026, 9 de noviembre). <i>AI account rips off award-winning 2008 short 'El Empleo' to promote $49-a-month 'filmmaking' classes (exclusive)</i>. Cartoon Brew. https://www.cartoonbrew.com/artificial-intelligence/el-empleo-unauthorized-ai-remake-269233.html"
     },
     {
       "titulo": "Godzilla Minus Zero lidera la taquilla; The Cat in the Hat abre en segundo lugar y Wildwood supera los 40 MDD",
@@ -55,51 +216,6 @@
       "categoria": "Animación · Estrenos",
       "url": "https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html",
       "apa": "Lang, J. (2026, 7 de noviembre). <i>Scratch DJ Kid Koala learned to speak in frames for his animated feature debut 'Space Cadet'</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html"
-    },
-    {
-      "titulo": "Sylvain Chomet defiende que el anuncio de Dior fue dibujado a mano, pero admite «interpolación automatizada»",
-      "resumen": "El director y su productor afirman que 20 artistas trabajaron siete meses en el corto, pero reconocen un sistema de interpolación automática en una parte del proceso. No revelaron el software usado, por lo que persisten las dudas sobre el uso de IA.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-07",
-      "categoria": "Animación · IA",
-      "url": "https://www.cartoonbrew.com/artificial-intelligence/sylvain-chomet-dior-ad-automated-interpolation-269167.html",
-      "apa": "Lang, J. (2026, 7 de noviembre). <i>Sylvain Chomet insists Dior ad was hand-drawn, but acknowledges 'automated interpolation'</i>. Cartoon Brew. https://www.cartoonbrew.com/artificial-intelligence/sylvain-chomet-dior-ad-automated-interpolation-269167.html"
-    },
-    {
-      "titulo": "Rumbo al Óscar 2027: 'Daffy Season', el corto de los Looney Tunes con toques de horror",
-      "resumen": "Los directores Hamish Grieve y Todd Wilderman mezclan el humor clásico de los Looney Tunes, CG moderno y horror inspirado en Argento en una historia donde el Pato Lucas prefiere ser cazado a ser ignorado.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-06",
-      "categoria": "Animación",
-      "url": "https://www.cartoonbrew.com/awards/daffy-season-hamish-grieve-todd-wilderman-269158.html",
-      "apa": "Lang, J. (2026, 6 de noviembre). <i>2027 Oscars short film contenders: 'Daffy Season' directors Hamish Grieve and Todd Wilderman</i>. Cartoon Brew. https://www.cartoonbrew.com/awards/daffy-season-hamish-grieve-todd-wilderman-269158.html"
-    },
-    {
-      "titulo": "Ray Gunn, la cinta animada de Brad Bird para Netflix, tiene función especial con preguntas al director",
-      "resumen": "El 10 de noviembre se proyectó en el Netflix Home Theater de Los Ángeles. La película, un noir de ciencia ficción ambientado en la ciudad futurista de Metropia, marca el regreso del director de Los Increíbles y El gigante de hierro a la animación.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-06",
-      "categoria": "Animación · Streaming",
-      "url": "https://www.cartoonbrew.com/feature-film/netflix-ray-gunn-free-screening-los-angeles-269151.html",
-      "apa": "Lang, J. (2026, 6 de noviembre). <i>You're invited to a free 'Ray Gunn' screening and Q&A with Brad Bird in Los Angeles</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/netflix-ray-gunn-free-screening-los-angeles-269151.html"
-    },
-    {
-      "titulo": "Jonathan Garson será el nuevo presidente de Pixar; Jonas Rivera asume un rol creativo ampliado",
-      "resumen": "Garson sustituirá a Jim Morris el 4 de enero de 2027; Morris será presidente emérito. Rivera, como vicepresidente ejecutivo creativo, trabajará de tiempo completo junto a Pete Docter, mientras Garson supervisa producción y operaciones.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-05",
-      "categoria": "Animación · Estudios",
-      "url": "https://www.cartoonbrew.com/executives/pixar-jim-morris-jonathan-garson-jonas-rivera-269116.html",
-      "apa": "Lang, J. (2026, 5 de noviembre). <i>Jonathan Garson to succeed Jim Morris as Pixar president; Jonas Rivera takes expanded creative role</i>. Cartoon Brew. https://www.cartoonbrew.com/executives/pixar-jim-morris-jonathan-garson-jonas-rivera-269116.html"
-    },
-    {
-      "titulo": "Japón crea los Nippon Anime Awards; la primera ceremonia será el 21 de noviembre de 2027",
-      "resumen": "La Asociación Japonesa de Animación, con el Gobierno Metropolitano de Tokio, lanza un premio que reconocerá tanto a las obras como a las personas que las crean. La gala será en el SGC Hall Ariake de Tokio e incluirá programas de negocio y formación de talento.",
-      "fuente": "GameBusiness.jp",
-      "fecha": "2026-11-05",
-      "categoria": "Anime · Premios",
-      "url": "https://www.gamebusiness.jp/article/2026/11/05/28546.html",
-      "apa": "Branc. (2026, 5 de noviembre). <i>新アニメ賞「日本アニメアワード」、2027年11月21日に開催。東京都と組みビジネス創出・人材育成も</i> [New anime award \"Nippon Anime Awards\" to be held on November 21, 2027]. GameBusiness.jp. https://www.gamebusiness.jp/article/2026/11/05/28546.html"
     }
   ]
 }
