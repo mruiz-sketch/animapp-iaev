@@ -12,6 +12,10 @@
   node_bundler = "esbuild"
   external_node_modules = ["firebase-admin"]
 
+# Revisa el Google Calendar de alumnos cada hora: avisa fechas nuevas y recuerda un día antes y el mero día
+[functions."calendario-avisos"]
+  schedule = "@hourly"
+
 # No publicar el código de las funciones ni las dependencias como archivos
 [[redirects]]
   from = "/netlify/*"
