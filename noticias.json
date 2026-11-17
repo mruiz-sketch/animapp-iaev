@@ -1,6 +1,96 @@
 {
-  "actualizado": "2026-11-14",
+  "actualizado": "2026-11-16",
   "items": [
+    {
+      "titulo": "Exclusiva: el ícono independiente Don Hertzfeldt habla sobre retratar una vida común como un 'rastro de papel' en su aclamado nuevo cortometraje",
+      "resumen": "Hertzfeldt explica cómo creó 'Paper Trail', un corto de 14 minutos que narra una vida a través de dibujos, tareas escolares y documentos, hecho en un año con software que no actualiza desde 2014. También critica la IA generativa por saltarse el aprendizaje que implica hacer arte y aconseja a los jóvenes animadores nutrirse de experiencias variadas.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-15",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/exclusive-indie-icon-don-hertzfeldt-on-depicting-an-average-life-as-a-paper-trail-in-his-widely-acclaimed-new-short/",
+      "apa": "Zahed, R. (2026, 15 de noviembre). Exclusive: Indie icon Don Hertzfeldt on depicting an average life as a 'Paper Trail' in his widely acclaimed new short. Animation Magazine. https://www.animationmagazine.net/2026/11/exclusive-indie-icon-don-hertzfeldt-on-depicting-an-average-life-as-a-paper-trail-in-his-widely-acclaimed-new-short/"
+    },
+    {
+      "titulo": "Nic Cabana, cofundador de Claynosaurz, presentará su nueva plataforma independiente HEEBOO en la World Animation Summit esta semana",
+      "resumen": "Cabana dará una conferencia sobre cómo crear propiedad intelectual original y convertir a los fans en un negocio sostenible, y mostrará HEEBOO, una plataforma con herramientas comunitarias y de negocio para que creadores independientes gestionen sus propias marcas de entretenimiento.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-15",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/claynosaurz-co-founder-nic-cabana-to-unveil-his-new-indie-platform-heeboo-at-the-world-animation-summit-this-week/",
+      "apa": "Zahed, R. (2026, 15 de noviembre). Claynosaurz co-founder Nic Cabana to unveil his new indie platform HEEBOO at the World Animation Summit this week. Animation Magazine. https://www.animationmagazine.net/2026/11/claynosaurz-co-founder-nic-cabana-to-unveil-his-new-indie-platform-heeboo-at-the-world-animation-summit-this-week/"
+    },
+    {
+      "titulo": "El premiado cortometraje animado 'The Apricot' se estrena en YouTube",
+      "resumen": "El corto 2D de Alex Z. Avila, realizado en la beca Spark Animation del Latino Film Institute, ya puede verse gratis en YouTube tras ganar el premio del jurado en el New York International Children's Film Festival, que lo califica para el Oscar. Basado en una historia real, sigue a un niño de 10 años que trabaja en la granja de chabacanos de su abuelo.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-14",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/award-winning-animated-short-the-apricot-makes-youtube-premiere/",
+      "apa": "Milligan, M. (2026, 14 de noviembre). Award-winning animated short 'The Apricot' makes YouTube premiere. Animation Magazine. https://www.animationmagazine.net/2026/11/award-winning-animated-short-the-apricot-makes-youtube-premiere/"
+    },
+    {
+      "titulo": "Los Premios del Cine Europeo presentan una de sus selecciones de animación más fuertes en años",
+      "resumen": "La Academia de Cine Europeo nominó a In Waves, Iron Boy, Jim Queen, Lucy Lost y Viva Carmen, todas producciones francesas, al mejor largometraje animado; la ceremonia será el 16 de enero de 2027 en Atenas.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-14",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/awards/european-animation-award-nominees-269443.html",
+      "apa": "Lang, J. (2026, 14 de noviembre). European Film Awards unveil one of their strongest animation lineups in years. Cartoon Brew. https://www.cartoonbrew.com/awards/european-animation-award-nominees-269443.html"
+    },
+    {
+      "titulo": "'Wildwood' de LAIKA se acerca a los 70 millones de dólares en todo el mundo",
+      "resumen": "La película en stop-motion dirigida por Travis Knight suma unos 69.2 millones de dólares globales y cayó solo 20% en su tercer fin de semana en Norteamérica, el mejor sostenimiento de la taquilla.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-13",
+      "categoria": "Cine",
+      "url": "https://www.animationmagazine.net/2026/11/laikas-wildwood-nears-70-million-worldwide/",
+      "apa": "Animation Magazine. (2026, 13 de noviembre). LAIKA's 'Wildwood' nears $70 million worldwide. https://www.animationmagazine.net/2026/11/laikas-wildwood-nears-70-million-worldwide/"
+    },
+    {
+      "titulo": "Rosa intenso: los directores de 'Flamingo Flamenco' hablan de la nueva película de Studio 100 que despega en el AFM",
+      "resumen": "Raúl García y Rob Sprackling explican cómo la danza de cortejo de los flamencos inspiró esta cinta CG, animada en Maya en 3Doubles Producciones (Tenerife), y comparten su visión sobre el futuro de la animación y la IA.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-13",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/pretty-in-pink-flamingo-flamenco-directors-discuss-the-new-studio-100-movie-taking-flight-at-afm/",
+      "apa": "Zahed, R. (2026, 13 de noviembre). Pretty in pink: 'Flamingo Flamenco' directors discuss the new Studio 100 movie taking flight at AFM. Animation Magazine. https://www.animationmagazine.net/2026/11/pretty-in-pink-flamingo-flamenco-directors-discuss-the-new-studio-100-movie-taking-flight-at-afm/"
+    },
+    {
+      "titulo": "Ficción perruna: las creadoras de 'Doozie's Doghouse' presentan el spin-off",
+      "resumen": "El derivado de Gabby's Dollhouse de DreamWorks mezcla animación y acción real; unas 230 personas trabajaron en la serie, animada por CGCG (Taiwán) y Saffronic (India), ya disponible en Netflix.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-13",
+      "categoria": "Televisión",
+      "url": "https://www.animationmagazine.net/2026/11/pup-fiction-doozies-doghouse-creators-introduce-the-tail-wagging-spinoff/",
+      "apa": "Idelson, K. (2026, 13 de noviembre). Pup fiction: 'Doozie's Doghouse' creators introduce the tail-wagging spinoff. Animation Magazine. https://www.animationmagazine.net/2026/11/pup-fiction-doozies-doghouse-creators-introduce-the-tail-wagging-spinoff/"
+    },
+    {
+      "titulo": "Contendientes al Óscar 2027 en cortometraje: la directora de 'Adgwa-Ata', Zsuzsanna Kreif",
+      "resumen": "El corto franco-húngaro sin diálogos, que mezcla texturas de plumón con una estética de club y música techno, explora el paso de la niñez a la adultez y quedó calificado para el Óscar tras ganar en Friss Hús Budapest.",
+      "fuente": "Cartoon Brew",
+      "fecha": "2026-11-13",
+      "categoria": "Animación",
+      "url": "https://www.cartoonbrew.com/awards/adgwa-ata-zsuzsanna-kreif-269414.html",
+      "apa": "Lang, J. (2026, 13 de noviembre). 2027 Oscars short film contenders: 'Adgwa-Ata' director Zsuzsanna Kreif. Cartoon Brew. https://www.cartoonbrew.com/awards/adgwa-ata-zsuzsanna-kreif-269414.html"
+    },
+    {
+      "titulo": "El largometraje animado nepalí 'Lost in Mandala' elige a Kai Cech como protagonista",
+      "resumen": "Incessant Rain Studios (Katmandú y Los Ángeles) desarrolla esta aventura fantástica dirigida por Kiran Bhakta Joshi, exsupervisor de efectos visuales de Disney, sobre una niña atrapada en un mundo mágico dentro de un mandala.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-13",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/nepali-animated-feature-lost-in-mandala-casts-kai-cech-to-star/",
+      "apa": "Milligan, M. (2026, 13 de noviembre). Nepali animated feature 'Lost in Mandala' casts Kai Cech to star. Animation Magazine. https://www.animationmagazine.net/2026/11/nepali-animated-feature-lost-in-mandala-casts-kai-cech-to-star/"
+    },
+    {
+      "titulo": "Unos (pocos) días en la vida: Leah Nelson, directora de 'Tangles'",
+      "resumen": "La directora canadiense comparte en fotos su año con Tangles, largometraje independiente basado en la novela gráfica de Sarah Leavitt, que tendrá un estreno calificador al Óscar en Nueva York y Los Ángeles el 27 de noviembre.",
+      "fuente": "Animation Magazine",
+      "fecha": "2026-11-13",
+      "categoria": "Animación",
+      "url": "https://www.animationmagazine.net/2026/11/a-few-days-in-the-life-tangles-director-leah-nelson/",
+      "apa": "Animation Magazine. (2026, 13 de noviembre). A (few) days in the life: 'Tangles' director Leah Nelson. https://www.animationmagazine.net/2026/11/a-few-days-in-the-life-tangles-director-leah-nelson/"
+    },
     {
       "titulo": "El Manchester Animation Festival prohíbe películas hechas con IA generativa y nombra a 'In Waves' mejor largometraje",
       "resumen": "A partir de su edición 2027, el festival británico no aceptará obras realizadas con IA generativa; en 2026 premió a 'In Waves' de Phuong Mai Nguyen y a 'When the Sea Was Calm' como mejor corto, con récord de casi 12,000 asistentes.",
@@ -126,96 +216,6 @@
       "categoria": "Cine",
       "url": "https://www.cartoonbrew.com/business/skydance-ai-cost-cutting-87-billion-debt-269275.html",
       "apa": "Lang, J. (2026, 10 de noviembre). <i>Skydance is betting on AI to help dig itself out of $87 billion in debt</i>. Cartoon Brew. https://www.cartoonbrew.com/business/skydance-ai-cost-cutting-87-billion-debt-269275.html"
-    },
-    {
-      "titulo": "Anuncian nueva película y cuarta temporada de 'Spy x Family' para 2027",
-      "resumen": "Toho confirmó un nuevo largometraje para cines japoneses y una cuarta temporada de la serie, ambos en 2027. Aún no hay título, director ni fecha de estreno internacional.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-10",
-      "categoria": "Televisión",
-      "url": "https://www.cartoonbrew.com/anime/spy-x-family-season-4-new-feature-269251.html",
-      "apa": "Lang, J. (2026, 10 de noviembre). <i>New 'Spy x Family' movie and fourth season announced for 2027</i>. Cartoon Brew. https://www.cartoonbrew.com/anime/spy-x-family-season-4-new-feature-269251.html"
-    },
-    {
-      "titulo": "Los creadores de 'Hexed', de Disney, hablan de animación a mano, historias originales y llevar el CG al límite",
-      "resumen": "Los directores Fawn Veerasunthorn y Jason Hand, junto a Jared Bush, explican el prólogo dibujado a mano de la película y cómo animadores veteranos exageraron personajes en CG. Bush defiende que el estudio siga apostando por historias originales además de secuelas.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-10",
-      "categoria": "Animación",
-      "url": "https://www.cartoonbrew.com/feature-film/disney-hexed-filmmakers-hand-drawn-animation-original-films-267896.html",
-      "apa": "Bennett, T. (2026, 10 de noviembre). <i>Disney's 'Hexed' filmmakers talk hand-drawn animation, original stories, and pushing CG boundaries</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/disney-hexed-filmmakers-hand-drawn-animation-original-films-267896.html"
-    },
-    {
-      "titulo": "La distribuidora mexicana de 'Wildwood' ordena un nuevo doblaje tras las críticas por su elenco de celebridades e influencers",
-      "resumen": "Tras las quejas por usar famosos y creadores de redes en lugar de actores de doblaje, Imagem Films Mx estrena desde el 12 de noviembre una nueva versión en español latino de la película de Laika. Se suman las actrices de doblaje Danna Alcalá y Erica Edwards, y Emilio Treviño conserva el papel de Curtis.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-10",
-      "categoria": "Animación",
-      "url": "https://www.cartoonbrew.com/voice-acting/wildwood-new-spanish-language-dub-269270.html",
-      "apa": "Lang, J. (2026, 10 de noviembre). <i>Mexican 'Wildwood' distributor orders new dub after backlash over celebrity, influencer voice cast</i>. Cartoon Brew. https://www.cartoonbrew.com/voice-acting/wildwood-new-spanish-language-dub-269270.html"
-    },
-    {
-      "titulo": "Young Animator of the Year 2026 premia a jóvenes animadores del Reino Unido",
-      "resumen": "Los premios YAY UK se entregaron el 8 de noviembre en el Manchester Animation Festival a animadores de 11 a 22 años en stop-motion, 2D y 3D, con una nueva categoría de proyecto en grupo. El concurso, de Blue Zoo y ACCESS:VFX, recibió más de 240 trabajos y los ganadores visitarán Aardman y Blue Zoo.",
-      "fuente": "Skwigly Animation Magazine",
-      "fecha": "2026-11-10",
-      "categoria": "Animación",
-      "url": "https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation",
-      "apa": "Skwigly. (2026, 10 de noviembre). <i>Young Animator of The Year 2026 celebrates the future of UK animation</i>. Skwigly Animation Magazine. https://skwigly.co.uk/young-animator-of-the-year-2026-celebrates-the-future-of-uk-animation"
-    },
-    {
-      "titulo": "Una cuenta de IA plagia el premiado corto 'El Empleo' (2008) para promocionar clases de «cine» de 49 dólares al mes",
-      "resumen": "La cuenta de Instagram Nightframe publicó una versión hecha con IA del corto animado argentino, que sumó millones de vistas antes de ser retirada por la queja del codirector Patricio Plaza. El texto del post dirigía a AI Film School, un servicio de pago, aunque el responsable negó tener relación con él.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-09",
-      "categoria": "Animación",
-      "url": "https://www.cartoonbrew.com/artificial-intelligence/el-empleo-unauthorized-ai-remake-269233.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). <i>AI account rips off award-winning 2008 short 'El Empleo' to promote $49-a-month 'filmmaking' classes (exclusive)</i>. Cartoon Brew. https://www.cartoonbrew.com/artificial-intelligence/el-empleo-unauthorized-ai-remake-269233.html"
-    },
-    {
-      "titulo": "Godzilla Minus Zero lidera la taquilla; The Cat in the Hat abre en segundo lugar y Wildwood supera los 40 MDD",
-      "resumen": "The Cat in the Hat debutó con 20.5 MDD en Norteamérica (30.5 MDD mundiales), detrás de Godzilla Minus Zero (31.6 MDD), y lejos de The Lorax y The Grinch. El stop-motion Wildwood de Laika cayó solo 20 % en su tercer fin de semana y suma unos 40 MDD domésticos.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-09",
-      "categoria": "Taquilla",
-      "url": "https://www.cartoonbrew.com/box-office-report/cat-in-the-hat-box-office-opening-wildwood-269213.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). <i>'The Cat in the Hat' beats predictions but opens below Seuss predecessors as 'Wildwood' holds strong in week three</i>. Cartoon Brew. https://www.cartoonbrew.com/box-office-report/cat-in-the-hat-box-office-opening-wildwood-269213.html"
-    },
-    {
-      "titulo": "Rumbo al Óscar 2027: la directora Matea Radic habla de su corto 'Paradaïz'",
-      "resumen": "Radic construye su cortometraje animado a partir de recuerdos de infancia y fotos familiares para hablar del regreso a Sarajevo, el desplazamiento y la idea de hogar.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-09",
-      "categoria": "Animación",
-      "url": "https://www.cartoonbrew.com/awards/paradaiz-matea-radic-director-oscar-interview-269199.html",
-      "apa": "Lang, J. (2026, 9 de noviembre). <i>2027 Oscars short film contenders: 'Paradaïz' director Matea Radic</i>. Cartoon Brew. https://www.cartoonbrew.com/awards/paradaiz-matea-radic-director-oscar-interview-269199.html"
-    },
-    {
-      "titulo": "James Gunn y Peter Safran dejan la dirección de DC Studios; Jeremy Latcham toma el mando",
-      "resumen": "Skydance reemplaza a los codirectores con el exejecutivo de Marvel Jeremy Latcham, presidente y director creativo desde el 1 de diciembre. Gunn y Safran seguirán como productores de proyectos como The Batman Part II, y Gunn dirigirá Man of Tomorrow (verano de 2027).",
-      "fuente": "Forbes",
-      "fecha": "2026-11-09",
-      "categoria": "Cine · Estudios",
-      "url": "https://www.forbes.com/sites/timlammers/2026/11/09/what-james-gunns-exit-means-for-dc-studios-movies-and-tv-shows/",
-      "apa": "Lammers, T. (2026, 9 de noviembre). <i>What James Gunn's exit means for DC Studios' movies and TV shows</i>. Forbes. https://www.forbes.com/sites/timlammers/2026/11/09/what-james-gunns-exit-means-for-dc-studios-movies-and-tv-shows/"
-    },
-    {
-      "titulo": "Arranca el American Film Market 2026 en Las Vegas, del 10 al 15 de noviembre",
-      "resumen": "El AFM reúne a productores, distribuidores y compradores para financiar, vender y licenciar cine independiente. Delegaciones como la de Creative BC (Canadá) asisten para buscar socios de coproducción y compradores internacionales.",
-      "fuente": "Creative BC",
-      "fecha": "2026-11-09",
-      "categoria": "Industria · Mercados",
-      "url": "https://creativebc.com/2026/11/british-columbia-canada-at-the-american-film-market-2026/",
-      "apa": "Creative BC. (2026, 9 de noviembre). <i>British Columbia, Canada at the American Film Market 2026</i>. https://creativebc.com/2026/11/british-columbia-canada-at-the-american-film-market-2026/"
-    },
-    {
-      "titulo": "Kid Koala debuta como director de animación con Space Cadet, que llega a cines de EE. UU. el 13 de noviembre",
-      "resumen": "El DJ Eric San adapta su novela gráfica de 2011 en un largometraje canadiense sin diálogos, producido por Outsiders Films. Se estrenó en la sección Generation de Berlín y pasó por Annecy y Toronto.",
-      "fuente": "Cartoon Brew",
-      "fecha": "2026-11-07",
-      "categoria": "Animación · Estrenos",
-      "url": "https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html",
-      "apa": "Lang, J. (2026, 7 de noviembre). <i>Scratch DJ Kid Koala learned to speak in frames for his animated feature debut 'Space Cadet'</i>. Cartoon Brew. https://www.cartoonbrew.com/feature-film/space-cadet-kid-koala-eric-san-interview-269165.html"
     }
   ]
 }
