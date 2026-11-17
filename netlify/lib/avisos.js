@@ -53,4 +53,24 @@ async function suscritos() {
   return snap.data().count;
 }
 
-module.exports = { TOPIC, DOCENTES, fb, json, tokenId, enviar, suscritos };
+// Avisa las noticias que aún no se habían avisado (estado compartido en sistema/avisos.noticias).
+async function avisarNoticias(items) {
+  items = (items || []).filter(n => n && n.url);
+  const ref = fb().firestore().collection("sistema").doc("avisos");
+  const doc = await ref.get();
+  const vistas = doc.exists && Array.isArray(doc.data().noticias) ? doc.data().noticias : null;
+  const todas = items.map(n => n.url);
+  if (!vistas) { await ref.set({ noticias: todas.slice(0, 400) }, { merge: true }); return "estado inicial guardado"; }
+  const nuevas = items.filter(n => !vistas.includes(n.url));
+  await ref.set({ noticias: [...new Set(todas.concat(vistas))].slice(0, 400) }, { merge: true });
+  if (!nuevas.length) return "sin noticias nuevas";
+  const n = nuevas.length;
+  await enviar({
+    title: n === 1 ? "📰 Nueva noticia en ANIMAPP" : `📰 ${n} noticias nuevas en ANIMAPP`,
+    body: nuevas[0].titulo + (n > 1 ? ` · y ${n - 1} más` : ""),
+    url: "/#blog", tag: "noticias",
+  });
+  return `avisadas ${n} noticias`;
+}
+
+module.exports = { TOPIC, DOCENTES, fb, json, tokenId, enviar, suscritos, avisarNoticias };

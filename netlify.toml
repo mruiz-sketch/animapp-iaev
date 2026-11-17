@@ -16,6 +16,10 @@
 [functions."calendario-avisos"]
   schedule = "@hourly"
 
+# Lee las noticias que deja la tarea diaria en Google Drive y las publica en la app (Firestore publico/noticias)
+[functions."noticias-drive"]
+  schedule = "@hourly"
+
 # No publicar el código de las funciones ni las dependencias como archivos
 [[redirects]]
   from = "/netlify/*"

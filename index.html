@@ -2564,7 +2564,7 @@ function blogHTML(){ const i=LANG==="en"?1:0;
    <p class="bl-intro">${L("Festivales de animación, cine y diseño donde puedes inscribir tus proyectos o aprender de la industria.","Animation, film and design festivals where you can submit your projects or learn from the industry.")}</p>
    <div class="fest-btns">${FESTIVALES.map((gr,k)=>`<button class="pbtn fest-btn" data-fg="${k}" aria-expanded="false" aria-controls="fg${k}"><canvas class="px fest-ico" id="fico${k}" width="${k?40:48}" height="${k?40:34}" aria-hidden="true"></canvas><span class="fest-lbl">${gr.g[i]}</span><span class="fest-n">${gr.items.length} ${L("festivales","festivals")}</span></button>`).join("")}</div>
    ${FESTIVALES.map((gr,k)=>`<div class="fest-group" id="fg${k}" hidden><h3 class="bl-g">${gr.g[i]}</h3><ul class="bl-fests">${gr.items.map(f=>`<li class="bl-fest"><a href="${f[1]}" target="_blank" rel="noopener"><span class="bl-fn">${f[0]} ↗</span><span class="bl-fd">${f[2+i]}</span></a></li>`).join("")}</ul></div>`).join("")}`; }
-/* Noticias: noticias.json (lo actualiza la tarea programada diaria "Buscar noticias de la industria…") */
+/* Noticias: noticias.json o Firestore publico/noticias (los actualiza la tarea programada diaria "Buscar noticias de la industria…") */
 let NEWS=null, newsAll=false;
 function newsHTML(){ const box=$("newsBox"); if(!box) return;
   if(!NEWS||!NEWS.items||!NEWS.items.length){ box.innerHTML=`<p class="cal-none">${L("Todavía no hay noticias publicadas.","No news yet.")}</p>`; return; }
@@ -2577,7 +2577,11 @@ function newsHTML(){ const box=$("newsBox"); if(!box) return;
   const m=$("newsMore"); if(m) m.onclick=()=>{ newsAll=!newsAll; sfx.blip(); newsHTML(); };
 }
 function loadNews(){ newsAll=false; if(NEWS){ newsHTML(); return; }
-  fetch("noticias.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(j=>{ NEWS=j; newsHTML(); }).catch(()=>{ NEWS=null; newsHTML(); }); }
+  /* dos fuentes: noticias.json del sitio y Firestore publico/noticias (lo llena la función noticias-drive desde Google Drive); gana la más reciente */
+  const pick=j=>{ if(j&&Array.isArray(j.items)&&j.items.length&&(!NEWS||String(j.actualizado||"")>String(NEWS.actualizado||""))){ NEWS=j; newsHTML(); } };
+  const a=fetch("noticias.json",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(pick).catch(()=>{});
+  let b=Promise.resolve(); try{ b=firebase.firestore().collection("publico").doc("noticias").get().then(d=>{ const v=d.exists?d.data():null; if(v&&v.json) pick(JSON.parse(v.json)); }).catch(()=>{}); }catch(e){}
+  Promise.all([a,b]).then(()=>{ if(!NEWS) newsHTML(); }); }
 /* Íconos animados de los botones de festivales: bandera de México ondeando y globo terráqueo girando (pixel art en canvas) */
 const WORLD="000000000000000000000000000000000000000000000000000000000000000011111000000000000000111111100000000111111111100001111000000111111111111111111111001111111111111101100000011111111111111111111111000000011111111100000001011111111111111111111000000000011111111000000001111111111111111111100000000000011111110000000001111101111111111111000000000000001111100000000001111110111111111101100000000000000111100000000011111110100111111100000000000000000011000000000011111110100010011000000000000000000000110000000011111111000010010000000000000000000000011110000000011111000000011100000000000000000000011111100000011110000000000111100000000000000000001111100000001110100000000011100000000000000000000111100000001110000000000111110000000000000000000111000000001100000000000111110000000000000000001110000000001000000000000011110001000000000000001100000000000000000000000000010000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
 let festRAF=0;
