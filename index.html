@@ -2744,6 +2744,7 @@ function stuCat(t){ const n=bnorm(t);
 function loadPublicCal(){
   try{ firebase.firestore().collection("publico").doc("calendario").get().then(d=>{ const v=d.exists?d.data():null;
     if(!v||!Array.isArray(v.eventos)||!v.eventos.length) return;
+    if(v.eventos.every(x=>/^(busy|ocupad[oa])$/i.test(String(x.t||"").trim()))) return; /* calendario compartido solo como libre/ocupado: se ignora */
     CAL_EVENTS.splice(0,CAL_EVENTS.length,...v.eventos.map(x=>[x.s,x.e,x.t,stuCat(x.t)]).sort((a,b)=>a[0]<b[0]?-1:1));
     if(v.actualizado) CAL_UPD=[v.actualizado,v.actualizado];
     if(current==="section"&&location.hash.slice(1)==="calendario") renderSection("calendario");

@@ -1,5 +1,6 @@
 [build]
   publish = "."
+  command = "python3 _build/drive_sync.py || true"
 
 # La apiKey de Firebase (AIza…) en firebase-config.js es pública por diseño (la seguridad está en las
 # reglas de Firestore). Se excluye ese archivo del escáner de secretos para que no bloquee la publicación.
@@ -20,9 +21,19 @@
 [functions."noticias-drive"]
   schedule = "@hourly"
 
+# Si las tareas dejan un mapa o juego nuevo en Google Drive, pide una nueva publicación (Build Hook)
+[functions."sync-drive"]
+  schedule = "@hourly"
+
 # No publicar el código de las funciones ni las dependencias como archivos
 [[redirects]]
   from = "/netlify/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/_build/*"
   to = "/404"
   status = 404
   force = true

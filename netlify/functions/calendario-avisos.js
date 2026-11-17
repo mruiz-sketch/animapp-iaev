@@ -41,6 +41,16 @@ function hoyMX() {
   return { ymd: p.year + p.month + p.day, hora: +p.hour };
 }
 const fecha = ymd => `${+ymd.slice(6, 8)} ${MESES[+ymd.slice(4, 6) - 1]}`;
+const esOcupado = t => /^(busy|ocupado|ocupada)$/i.test(String(t || "").trim());
+// Respaldo: las fechas que trae la propia app (CAL_EVENTS en index.html)
+async function eventosDelSitio() {
+  try {
+    const base = process.env.URL || "https://animapp-iaev.netlify.app";
+    const html = await (await fetch(base + "/index.html", { headers: { "cache-control": "no-cache" } })).text();
+    const m = html.match(/const CAL_EVENTS=(\[\[.*?\]\]);/s);
+    return m ? JSON.parse(m[1]).map(x => ({ s: x[0], e: x[1], t: x[2] })) : [];
+  } catch { return []; }
+}
 const clave = ev => ev.s + "|" + ev.t;
 const lista = (evs, max = 2) => evs.slice(0, max).map(e => e.t).join(" · ") + (evs.length > max ? ` · y ${evs.length - max} más` : "");
 
@@ -57,14 +67,23 @@ exports.handler = async () => {
     let eventos = null;
     try {
       const r = await fetch(ICS_URL, { headers: { "cache-control": "no-cache" } });
-      if (r.ok) { const ev = parseICS(await r.text()); if (ev.length) eventos = ev; }
+      if (r.ok) {
+        const ev = parseICS(await r.text());
+        // Si el calendario solo se comparte como «libre/ocupado», todos los títulos dicen «Busy»: no sirve
+        if (ev.length && ev.every(e => esOcupado(e.t))) log.push("Google Calendar solo comparte libre/ocupado (Busy)");
+        else if (ev.length) eventos = ev;
+      }
       else log.push("ics " + r.status);
     } catch (e) { log.push("ics " + e.message); }
     const pubRef = db.collection("publico").doc("calendario");
     if (!eventos) {
       const pub = (await pubRef.get()).data();
       eventos = pub && Array.isArray(pub.eventos) ? pub.eventos : [];
-      log.push("usando Firestore (" + eventos.length + ")");
+      if (eventos.length && eventos.every(e => esOcupado(e.t))) { // limpieza: nunca dejar «Busy» en la app
+        await pubRef.delete(); eventos = []; log.push("borrado calendario «Busy» de Firestore");
+      }
+      if (!eventos.length) eventos = await eventosDelSitio();
+      log.push("usando fechas guardadas (" + eventos.length + ")");
     } else {
       // Mantener la sección Calendario de ANIMAPP al día con Google Calendar
       const pub = (await pubRef.get()).data();
