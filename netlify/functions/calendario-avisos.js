@@ -97,7 +97,9 @@ exports.handler = async () => {
     const futuros = eventos.filter(e => e.s >= hoy);
 
     // 2) Eventos nuevos (solo si el calendario se leyó de Google)
-    const vistos = Array.isArray(estado.calendario_vistos) ? estado.calendario_vistos : null;
+    let vistos = Array.isArray(estado.calendario_vistos) ? estado.calendario_vistos : null;
+    // Si lo guardado era del calendario en modo «Busy», se toma como primera vez (sin avisar todo el calendario)
+    if (vistos && vistos.length && vistos.every(k => esOcupado(String(k).split("|").slice(1).join("|")))) vistos = null;
     const nuevosEstado = {};
     if (!log.some(x => x.startsWith("usando"))) {
       if (vistos) {
