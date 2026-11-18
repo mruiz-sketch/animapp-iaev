@@ -25,6 +25,7 @@ exports.handler = async () => {
     out.firestore.publico_calendario = pub ? { eventos: (pub.eventos || []).length, fuente: pub.fuente || "admin", actualizado: pub.actualizado || "" } : "no existe";
     const est = (await db.collection("sistema").doc("avisos").get()).data() || {};
     out.firestore.recordatorios_enviados = est.calendario_recordatorios || {};
+    out.ultimo_aviso_enviado = est.ultimo || "ninguno";
     out.firestore.eventos_vistos = Array.isArray(est.calendario_vistos) ? est.calendario_vistos.length : "ninguno";
     out.ultima_corrida = est.calendario_ultimo || "todavía no hay registro (la función programada no ha corrido con esta versión)";
     try { out.dispositivos_suscritos = await suscritos(); } catch (e) { out.dispositivos_suscritos = "?"; }
