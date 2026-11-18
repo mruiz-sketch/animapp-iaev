@@ -54,6 +54,7 @@ async function eventosDelSitio() {
 const clave = ev => ev.s + "|" + ev.t;
 const lista = (evs, max = 2) => evs.slice(0, max).map(e => e.t).join(" · ") + (evs.length > max ? ` · y ${evs.length - max} más` : "");
 
+exports._h = { parseICS, hoyMX, addDays, esOcupado, eventosDelSitio, ICS_URL };
 exports.handler = async () => {
   const log = [];
   try {
@@ -129,6 +130,7 @@ exports.handler = async () => {
       env.manana = manana; log.push("recordatorio de mañana");
     }
     nuevosEstado.calendario_recordatorios = env;
+    nuevosEstado.calendario_ultimo = { at: new Date().toISOString(), hoy, hora, log: log.join(" | ") || "sin cambios" };
     await ref.set(nuevosEstado, { merge: true });
 
     console.log(log.join(" | ") || "sin cambios");
