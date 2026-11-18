@@ -14,7 +14,7 @@ const DOCENTES = [
 function fb() {
   if (!admin.apps.length) {
     const raw = (process.env.FIREBASE_SERVICE_ACCOUNT || "").trim();
-    if (!raw) { const e = new Error("Falta la variable FIREBASE_SERVICE_ACCOUNT en Netlify."); e.status = 503; throw e; }
+    if (!raw) { const e = new Error("Falta FIREBASE_SERVICE_ACCOUNT (secreto de GitHub Actions)."); e.status = 503; throw e; }
     const sa = JSON.parse(raw.startsWith("{") ? raw : Buffer.from(raw, "base64").toString("utf8"));
     admin.initializeApp({ credential: admin.credential.cert(sa) });
   }

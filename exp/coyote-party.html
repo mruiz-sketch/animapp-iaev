@@ -3208,7 +3208,7 @@ PH.final={enter(){showScene('stage');stageShot('pod');G.cheer=true;const fin=S.o
 const CON={on:false,code:'',peers:{},slotOf:{},inp:[0,1,2,3,4].map(()=>({h:0,n:0})),lastS:'',handled:{},pollT:null,dropped:new Set()};
 const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}]};
 function cpRoot(){let b;try{b=new URL(document.baseURI)}catch(e){return null}if(!/^https?:$/.test(b.protocol))return null;const p=b.pathname.includes('/exp/')?b.pathname.split('/exp/')[0]+'/':b.pathname.replace(/[^/]*$/,'');return b.origin+p}
-const CP_ROOT=cpRoot();const SIG=CP_ROOT?new URL('/.netlify/functions/cp-signal',CP_ROOT).href:null;
+const CP_ROOT=cpRoot();const SIG=CP_ROOT?new URL('/api/cp-signal',CP_ROOT).href:null;
 async function sig(body){const r=await fetch(SIG,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j}
 async function sigGet(q){const r=await fetch(SIG+'?'+new URLSearchParams(q),{cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j}
 function iceDone(pc,ms=2500){return new Promise(r=>{if(pc.iceGatheringState==='complete')return r();const t=setTimeout(r,ms);pc.addEventListener('icegatheringstatechange',()=>{if(pc.iceGatheringState==='complete'){clearTimeout(t);r()}})})}
@@ -3251,7 +3251,7 @@ function toConsoleMenu(note){S=null;CUR={key:''};modal();showPad(false);['#hud',
     ${note?`<p style="color:#ff9c9c">${esc(note)}</p>`:''}
     <h3 style="margin-top:14px">¿CUÁNTOS JUGADORES?</h3><div class="row" id="nb">${[1,2,3,4,5].map(n=>`<button class="btn ${n===2?'pink':''}" data-n="${n}" ${ok?'':'disabled'}>${n}</button>`).join('')}</div>
     <div class="small">Los lugares que falten hasta 5 los ocupan bots coyote.</div>
-    ${ok?'':'<p style="color:#ff9c9c">Los controles por celular solo funcionan en la versión publicada de ANIMAPP (animapp-iaev.netlify.app).</p>'}</div>`);
+    ${ok?'':'<p style="color:#ff9c9c">Los controles por celular solo funcionan en la versión publicada de ANIMAPP (animapp-iaev.pages.dev).</p>'}</div>`);
   document.querySelectorAll('#nb button').forEach(b=>b.onclick=async()=>{audio();document.querySelectorAll('#nb button').forEach(x=>x.disabled=true);try{await startConsole(+b.dataset.n)}catch(e){console.error(e);CON.on=false;toConsoleMenu('No se pudo abrir la sala ('+e.message+'). Revisa tu conexión a internet e inténtalo de nuevo.')}})}
 async function startConsole(n){NET.role='console';NET.mySlot=-1;S=newS();S.pl.forEach((p,i)=>{p.b=i<n?0:1;p.n=i<n?'':''});await conOpen();G.flag.next=false;setPh('lobby');SFX.fan();
   say([['timo','¡Bienvenidos! Escaneen el código QR con su celular para usarlo como control.'],['maya','Asegúrense de estar en la misma red wifi que esta computadora.']],{auto:5000});

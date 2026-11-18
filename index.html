@@ -2786,7 +2786,7 @@ function drawMonth(){ const box=document.getElementById("calMonth"); if(!box) re
 /* ====== ACCESOS A OTRAS EXPERIENCIAS (artifacts vinculados) ====== */
 const PORTALS={
  juegos:[
-  {url:"https://animapp-iaev.netlify.app/exp/coyote-party.html",file:"exp/coyote-party.html",icon:"party",pc:1,t:["Coyote Party","Coyote Party"],d:["El reality show de IAEV con Timo y Maya: hasta 5 jugadores (los lugares libres son bots) compiten en 80 minijuegos y 5 tableros temáticos en 3D por los Coyoscares. La pantalla se juega en la PC y cada quien usa su celular como control escaneando un código QR.","IAEV's reality show hosted by Timo and Maya: up to 5 players (empty seats are bots) compete in 80 minigames and 5 themed 3D boards for the Coyoscars. The screen runs on a PC and everyone uses their phone as the controller by scanning a QR code."]},
+  {url:"https://animapp-iaev.pages.dev/exp/coyote-party.html",file:"exp/coyote-party.html",icon:"party",pc:1,t:["Coyote Party","Coyote Party"],d:["El reality show de IAEV con Timo y Maya: hasta 5 jugadores (los lugares libres son bots) compiten en 80 minijuegos y 5 tableros temáticos en 3D por los Coyoscares. La pantalla se juega en la PC y cada quien usa su celular como control escaneando un código QR.","IAEV's reality show hosted by Timo and Maya: up to 5 players (empty seats are bots) compete in 80 minigames and 5 themed 3D boards for the Coyoscars. The screen runs on a PC and everyone uses their phone as the controller by scanning a QR code."]},
   {url:"https://claude.ai/artifact/Emwa6QuPEsyn6DJCxrQP7W",file:"exp/kart.html",icon:"kart",t:["Coyote Kart","Coyote Kart"],d:["Carreras en pixel art por la Copa IAEV: elige entre 6 coyotes y tu vehículo, arma un torneo en 6 pistas temáticas y usa comodines como el turbo, el cactus o la tinta de pluma.","Pixel art racing for the IAEV Cup: pick one of 6 coyotes and a vehicle, build a tournament across 6 themed tracks and use power-ups like the turbo, the cactus or the pen ink."]},
   {url:"https://claude.ai/artifact/AXA2FsYVfnNhYc74nXBKrs",file:"exp/humedal.html",icon:"humedal",t:["Humedal Escondido","Hidden Wetland"],d:["Explora en primera persona el humedal de la universidad y encuentra a los animales escondidos guiándote por sus sonidos. Puedes meterte al estanque, pero ahí caminas más lento.","Explore the university wetland in first person and find the hidden animals by following their sounds. You can wade into the pond, but you'll move slower there."]},
   {url:"https://claude.ai/artifact/Enk9tDRCtHYuYipbZS7XMV",file:"exp/render.html",icon:"render",t:["¿Quién canceló el render?","Who canceled the render?"],d:["Juego de misterio tipo Clue: es la noche antes del Coyote Film Fest y alguien canceló el render final. Recorre el campus con tu detective, haz sugerencias y descubre quién lo canceló, dónde y cómo antes que los demás.","A Clue-style mystery: it's the night before the Coyote Film Fest and someone canceled the final render. Move your detective around campus, make suggestions and find out who did it, where and how before the others."]}],
@@ -3029,7 +3029,7 @@ function closeID(){ $("idModal").hidden=true; $("loginBtn").focus(); }
 function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").textContent=L("Credencial IAEV","IAEV ID card"); $("idClose").setAttribute("aria-label",L("Cerrar","Close"));
   const u=auth.user;
   if(auth.phase!=="in"||!u){
-    const msg=auth.phase==="claude"?L("El inicio de sesión funciona en la versión publicada de ANIMAPP (animapp-iaev.netlify.app); en la vista de Claude no está disponible.","Sign-in works in the published ANIMAPP (animapp-iaev.netlify.app); it isn't available in the Claude view.")
+    const msg=auth.phase==="claude"?L("El inicio de sesión funciona en la versión publicada de ANIMAPP (animapp-iaev.pages.dev); en la vista de Claude no está disponible.","Sign-in works in the published ANIMAPP (animapp-iaev.pages.dev); it isn't available in the Claude view.")
       :auth.phase==="noconfig"?L("El inicio de sesión todavía no está configurado.","Sign-in isn't set up yet.")
       :auth.phase==="loading"?L("Revisando tu sesión…","Checking your session…")
       :L("Inicia sesión con tu cuenta institucional para ver tu credencial: foto, nombre completo y matrícula.","Sign in with your institutional account to see your ID card: photo, full name and student ID.");
@@ -3530,7 +3530,7 @@ function fitTiles(){ document.querySelectorAll(".tile .t").forEach(t=>{ t.style.
 let fitRaf=0; const fitSoon=()=>{ cancelAnimationFrame(fitRaf); fitRaf=requestAnimationFrame(fitTiles); };
 new MutationObserver(fitSoon).observe(document.body,{childList:true,subtree:true}); addEventListener("resize",fitSoon);
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitSoon);
-const APP_URL="https://animapp-iaev.netlify.app/";
+const APP_URL="https://animapp-iaev.pages.dev/";
 if(/netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("on-netlify"); // deja espacio a la etiqueta «Powered by Netlify»
 let deferredInstall=null;
 const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
@@ -3561,7 +3561,7 @@ function installSteps(){
 /* ====== AVISOS (notificaciones push con Firebase Cloud Messaging) ======
    El servidor (funciones de Netlify) suscribe cada dispositivo al tema «animapp»;
    los avisos llegan por sw.js. Noticias nuevas: automático. Otros avisos: admin.html. */
-const AV_KEY="animapp-avisos", AV_FN="/.netlify/functions/avisos-suscribir";
+const AV_KEY="animapp-avisos", AV_FN="/api/avisos-suscribir";
 const avGet=k=>{ try{ return localStorage.getItem(k)||"" }catch(e){ return "" } };
 const avSet=(k,v)=>{ try{ v?localStorage.setItem(k,v):localStorage.removeItem(k) }catch(e){} };
 const avSupported=()=>"Notification" in window&&"serviceWorker" in navigator&&"PushManager" in window;
@@ -3579,7 +3579,7 @@ async function avOn(){ const t=await avToken(); await avPost(t,"alta"); avSet(AV
 async function avOff(){ const t=avGet(AV_KEY+"-t"); avSet(AV_KEY,""); avSet(AV_KEY+"-t","");
   try{ if(t) await avPost(t,"baja"); }catch(e){} try{ const m=await avMessaging(); await m.deleteToken(); }catch(e){} }
 $("avisosBtn").addEventListener("click",async()=>{ sfx.select(); const b=$("avisosBtn");
-  if(inClaudeHost()){ toast(L("Los avisos se activan en la app publicada: abre ANIMAPP en animapp-iaev.netlify.app.","Alerts work in the published app: open ANIMAPP at animapp-iaev.netlify.app.")); return; }
+  if(inClaudeHost()){ toast(L("Los avisos se activan en la app publicada: abre ANIMAPP en animapp-iaev.pages.dev.","Alerts work in the published app: open ANIMAPP at animapp-iaev.pages.dev.")); return; }
   if(!FB_CFG||!FB_CFG.vapidKey){ toast(L("Los avisos todavía no están configurados. ¡Pronto!","Alerts aren't set up yet. Coming soon!")); return; }
   if(!avSupported()){
     if(devPlat()==="ios"&&!isStandalone()){ installSteps(); toast(L("En iPhone y iPad, primero instala ANIMAPP en tu pantalla de inicio y ábrela desde su ícono; ahí podrás activar los avisos.","On iPhone and iPad, first add ANIMAPP to your Home Screen and open it from its icon; then you can turn on alerts.")); }

@@ -45,6 +45,8 @@ const esOcupado = t => /^(busy|ocupado|ocupada)$/i.test(String(t || "").trim());
 // Respaldo: las fechas que trae la propia app (CAL_EVENTS en index.html)
 async function eventosDelSitio() {
   try {
+    // En GitHub Actions el sitio está en la carpeta de trabajo: se lee el index.html local
+    try { const fs = require("fs"); if (fs.existsSync("index.html")) { const m = fs.readFileSync("index.html", "utf8").match(/const CAL_EVENTS=(\[\[.*?\]\]);/s); if (m) return JSON.parse(m[1]).map(x => ({ s: x[0], e: x[1], t: x[2] })); } } catch {}
     const base = process.env.URL || "https://animapp-iaev.netlify.app";
     const html = await (await fetch(base + "/index.html", { headers: { "cache-control": "no-cache" } })).text();
     const m = html.match(/const CAL_EVENTS=(\[\[.*?\]\]);/s);

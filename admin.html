@@ -254,7 +254,7 @@ else (async()=>{
       try{ await ref().set({eventos:ev,actualizado:today()}); msg(okMsg.replace("{n}",ev.length),"ok"); if(sfx==="2"&&window.avPrefill) avPrefill("📅 Calendario escolar actualizado","Ya están las fechas nuevas del calendario de alumnos en ANIMAPP.","/#calendario"); }
       catch(e){ msg(e.code==="permission-denied"?"Tu cuenta no tiene permiso para guardar.":"No se pudo guardar: "+e.message,"err"); id("icsSave").disabled=false; } }; }
   /* --- avisos (notificaciones push) --- */
-  const AVF="/.netlify/functions/avisos-enviar";
+  const AVF="/api/avisos-enviar";
   async function avCall(method,body){ const t=await auth.currentUser.getIdToken();
     const r=await fetch(AVF,{method,headers:{authorization:"Bearer "+t,"content-type":"application/json"},body:body?JSON.stringify(body):undefined});
     let j={}; try{ j=await r.json(); }catch(e){} if(!r.ok) throw new Error(j.error||("Error "+r.status)); return j; }

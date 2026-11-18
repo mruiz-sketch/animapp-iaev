@@ -1,0 +1,46 @@
+# Tareas de ANIMAPP cada hora (avisos del calendario, noticias desde Google Drive, mapa y juego del render).
+# Necesita el secreto FIREBASE_SERVICE_ACCOUNT en Settings → Secrets and variables → Actions.
+name: Tareas ANIMAPP
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency:
+  group: tareas
+  cancel-in-progress: false
+jobs:
+  tareas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # solo lo necesario (sin los videos)
+          sparse-checkout: |
+            _build
+            netlify
+            package.json
+            index.html
+            noticias.json
+            exp/render.html
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund --omit=dev
+      - name: Avisos y noticias
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: node _build/tareas.js
+      - name: Mapa y juego del render desde Google Drive
+        run: python3 _build/drive_sync.py || true
+      - name: Subir cambios
+        run: |
+          git config user.name "ANIMAPP tareas"
+          git config user.email "actions@users.noreply.github.com"
+          git add noticias.json index.html exp/render.html
+          if git diff --cached --quiet; then echo "sin cambios"; exit 0; fi
+          git commit -m "Tareas automáticas: noticias, mapa o juego actualizados"
+          git pull --rebase origin main && git push origin HEAD:main
