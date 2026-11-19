@@ -3200,9 +3200,14 @@ $("mmClose").addEventListener("click",()=>{ sfx.back(); closeMood(); });
 $("moodModal").addEventListener("click",e=>{ if(e.target.id==="moodModal") closeMood(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("moodModal").hidden) closeMood(); });
 /* Al abrir la app con sesión iniciada (alumnos y docentes), aparece primero el mood meter, una vez por cada vez que se abre */
-function moodOnOpen(u){ if(!u) return; /* también docentes (para probarlo) */ let shown=""; try{ shown=sessionStorage.getItem("mm-open")||""; }catch(e){}
-  if(shown===u.uid) return; try{ sessionStorage.setItem("mm-open",u.uid); }catch(e){}
-  setTimeout(()=>{ if(auth.user&&auth.user.uid===u.uid&&$("moodModal").hidden) openMood(); },900); }
+/* Solo una vez por día: si ya respondió hoy, no vuelve a salir. (Docentes: además, si eligen "Ahora no", no sale otra vez en esa misma visita.) */
+function moodOnOpen(u){ if(!u) return; let shown=""; try{ shown=sessionStorage.getItem("mm-open")||""; }catch(e){}
+  if(shown===u.uid+"|"+hoyISO()) return;
+  loadAnimo().then(a=>{ if(!auth.user||auth.user.uid!==u.uid) return;
+    if(a&&a.dias&&a.dias[hoyISO()]) return; /* ya respondió hoy */
+    if(a&&a._err&&a._err!=="permission-denied") return; /* sin conexión: no insistir */
+    try{ sessionStorage.setItem("mm-open",u.uid+"|"+hoyISO()); }catch(e){}
+    setTimeout(()=>{ if(auth.user&&auth.user.uid===u.uid&&$("moodModal").hidden) openMood(); },900); }); }
 function perfilRef(){ return firebase.firestore().collection("perfiles").doc(auth.user.uid); }
 function saveErr(e){ return e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."); }
 async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.replace(/\s+/g," ").trim(), mat=$("idMat").value.replace(/\s+/g,"").trim();
