@@ -339,7 +339,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .id-msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--ink-soft);font-size:16px}.id-msg.ok{border-color:#4f9a5e}.id-msg.err{border-color:var(--iaev-red)}
 /* Mood meter (ánimo del día) */
 .mm-panel{width:min(560px,100%)}#mmBody{padding:16px 18px 20px}.mm-svg:not(.picked) .mm-needle{opacity:.3}
-.mm-q{margin:0 0 6px;font-size:19px;color:var(--ink)}
+.mm-q{margin:0 0 6px;font-size:19px;color:var(--ink)}.mm-intro{margin:0 0 12px;padding:10px 12px;background:#fff6d6;border-left:6px solid var(--iaev-yellow);font-size:17.5px;line-height:1.45}
 .mm-svg{display:block;width:100%;max-width:460px;margin:4px auto 0;overflow:visible;touch-action:manipulation}
 .mm-seg{cursor:pointer;stroke:#fff;stroke-width:4;transition:filter .15s,opacity .2s}
 .mm-seg:hover,.mm-seg:focus-visible{filter:brightness(1.08);outline:none}
@@ -3160,7 +3160,7 @@ async function openMood(){ const m=$("moodModal"); m.hidden=false; $("mmTitle").
 function closeMood(force){ if(mmMust&&!mmOk&&!force) return; clearTimeout(mmT); $("moodModal").hidden=true; }
 function renderMood(){ const b=$("mmBody");
   $("mmClose").hidden=mmMust&&!mmOk;
-  b.innerHTML=`<p class="mm-q">${L("Toca el color que más se parece a cómo te sientes.","Tap the color that best matches how you feel.")}</p>${mmSVG()}
+  b.innerHTML=`${mmMust&&!mmOk?`<p class="mm-intro">${L("¡Hola! Antes de continuar, por favor responde esta breve encuesta sobre cómo te sientes hoy. Solo toma unos segundos.","Hi! Before you continue, please answer this short survey about how you feel today. It only takes a few seconds.")}</p>`:""}<p class="mm-q">${L("Toca el color que más se parece a cómo te sientes.","Tap the color that best matches how you feel.")}</p>${mmSVG()}
     <p class="mm-lbl" id="mmLbl" aria-live="polite"></p>
     <div class="mm-list" id="mmList" hidden></div>
     <p class="id-msg" id="mmMsg" hidden></p>
