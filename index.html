@@ -337,6 +337,48 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .id-role.doc{background:var(--iaev-blue);color:#fff}
 .id-bar{display:flex;align-items:flex-end;gap:2px;height:30px;padding:0 14px 12px}.id-bar i{display:block;background:var(--ink);height:100%}
 .id-msg{margin:0;padding:10px 12px;background:var(--paper);border-left:6px solid var(--ink-soft);font-size:16px}.id-msg.ok{border-color:#4f9a5e}.id-msg.err{border-color:var(--iaev-red)}
+/* Mood meter (ánimo del día) */
+.mm-panel{width:min(560px,100%)}#mmBody{padding:16px 18px 20px}.mm-svg:not(.picked) .mm-needle{opacity:.3}
+.mm-q{margin:0 0 6px;font-size:19px;color:var(--ink)}
+.mm-svg{display:block;width:100%;max-width:460px;margin:4px auto 0;overflow:visible;touch-action:manipulation}
+.mm-seg{cursor:pointer;stroke:#fff;stroke-width:4;transition:filter .15s,opacity .2s}
+.mm-seg:hover,.mm-seg:focus-visible{filter:brightness(1.08);outline:none}
+.mm-svg.picked .mm-seg:not(.on){opacity:.45}
+.mm-face{cursor:pointer}
+.mm-needle{transform-origin:230px 236px;transition:transform .7s cubic-bezier(.34,1.56,.64,1)}
+.mm-lbl{text-align:center;font-family:var(--display);font-size:16px;line-height:1.5;min-height:1.6em;margin:6px 0 4px}
+.mm-list{margin:12px 0 4px}.mm-list[hidden]{display:none}
+.mm-list p{margin:0 0 10px;font-size:17px;color:var(--ink-soft)}
+.mm-chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mm-chip{font:600 14px/1.2 var(--body);padding:10px 4px;border:0;color:#fff;cursor:pointer;border-radius:2px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);opacity:.7}
+.mm-chip[aria-pressed="true"]{opacity:1;outline:3px solid var(--ink);outline-offset:-3px}
+.mm-note{font-size:15px;color:var(--ink-soft);margin:12px 0 0}
+.mm-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+@media (max-width:420px){.mm-chips{grid-template-columns:repeat(2,1fr)}}
+.id-mood{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0 4px;padding:12px;border:3px solid var(--ink);background:var(--paper)}
+.id-mood i{width:22px;height:22px;display:inline-block;border:2px solid var(--ink)}
+.id-mood span{flex:1;min-width:150px;font-size:17px}
+/* Bienestar (Sólo Profesores) */
+.bw-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}
+.bw-ctl select,.bw-ctl button{font:600 16px var(--body);padding:6px 10px;border:3px solid var(--ink);background:#fff;cursor:pointer}
+.bw-month{font-family:var(--display);font-size:14px;min-width:11ch;text-align:center}
+.bw-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:15px;margin:0 0 14px}.bw-leg i{display:inline-block;width:14px;height:14px;border:1px solid var(--ink);vertical-align:-2px;margin-right:5px}
+.bw-cua{margin:18px 0 6px;font-family:var(--display);font-size:15px;color:var(--iaev-red)}
+.bw-grp{margin:0 0 18px;border:3px solid var(--ink);background:#fff}
+.bw-gh{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 10px;background:var(--paper);border-bottom:3px solid var(--ink);font-size:16px}
+.bw-gh b{font-family:var(--display);font-size:13px}
+.bw-gh input{font:16px var(--body);padding:4px 8px;border:2px solid var(--ink);min-width:12ch;flex:1;max-width:260px}
+.bw-gh button{font:600 14px var(--body);padding:4px 10px;border:2px solid var(--ink);background:var(--iaev-yellow);cursor:pointer}
+.bw-scroll{overflow-x:auto}
+.bw-t{border-collapse:collapse;font-size:14px;min-width:100%}
+.bw-t th,.bw-t td{border:1px solid #d6dae2;padding:0;text-align:center}
+.bw-t th.n,.bw-t td.n{text-align:left;padding:4px 8px;min-width:190px;position:sticky;left:0;background:#fff;z-index:1}
+.bw-t td.n small{display:block;color:var(--ink-soft);font-size:12.5px;word-break:break-all}
+.bw-t th.d{font-weight:600;font-size:11.5px;min-width:22px;padding:2px 0;color:var(--ink-soft)}
+.bw-t th.d.we{background:#f3f4f7}
+.bw-t td.c{width:22px;height:30px}
+.bw-t td.c.x{cursor:help}@media (max-width:560px){.bw-t th.n,.bw-t td.n{min-width:130px;max-width:150px}}
+.bw-alert{display:inline-block;margin-left:6px;font-size:12.5px;font-weight:700;color:#b3000c}
 .id-acts{display:flex;flex-wrap:wrap;gap:14px}.id-admin{text-decoration:none;background:var(--iaev-blue);color:#fff}
 .id-out{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px}
 .id-out p{margin:0;max-width:38ch}
@@ -1825,6 +1867,13 @@ requestAnimationFrame(frame);
   </div>
 </div>
 
+<div class="modal" id="moodModal" hidden role="dialog" aria-modal="true" aria-labelledby="mmTitle">
+  <div class="id-panel mm-panel">
+    <div class="id-head"><span id="mmTitle">¿Cómo te sientes hoy?</span><button class="id-x" id="mmClose" aria-label="Cerrar">X</button></div>
+    <div id="mmBody"></div>
+  </div>
+</div>
+
 <div class="modal" id="installModal" hidden role="dialog" aria-modal="true" aria-labelledby="inTitle">
   <div class="panel in-panel">
     <h2 id="inTitle">Instalar ANIMAPP</h2>
@@ -2987,6 +3036,7 @@ function onAuth(u){
   if(!u){ perfil=null; perfilUid=null; renderAvatar(); }
   if(!$("idModal").hidden) renderID();
   if(u) loadPerfil().then(()=>{ if(!$("idModal").hidden) renderID(); });
+  if(!u){ animo=null; animoUid=null; } else { loadAnimo().then(()=>{ if(!$("idModal").hidden) renderID(); }); moodOnOpen(u); }
 }
 async function signIn(){
   if(auth.phase==="claude"){ toast(L("El inicio de sesión funciona en la versión publicada de ANIMAPP; en la vista de Claude no está disponible.","Sign-in works in the published ANIMAPP; it isn't available in the Claude view.")); return; }
@@ -3056,6 +3106,8 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
     </div>
     <div class="id-bar" aria-hidden="true">${barcode(u.uid)}</div>
   </div>
+  ${prof?"":(()=>{ const h=animo&&animo.dias&&animo.dias[hoyISO()], m=h?MM[h.n]:null;
+    return `<div class="id-mood">${m?`<i style="background:${m.c}"></i>`:""}<span>${m?L("Hoy te sientes: ","Today you feel: ")+"<b>"+esc(m.t[LANG==="en"?1:0])+"</b>"+(h.e&&h.e.length?" · "+esc(h.e.join(", ")):""):L("¿Cómo te sientes hoy?","How are you feeling today?")}</span><button class="pbtn blue" id="idMood">${m?L("Cambiar","Change"):L("Registrar","Check in")}</button></div>`; })()}
   <p class="id-msg" id="idMsg" hidden></p>
   <div class="id-acts"><button class="pbtn yellow" id="idSave">${L("Guardar cambios","Save changes")}</button>${prof?`<a class="pbtn blue id-admin" href="${inClaudeHost()?APP_URL+"admin.html":"admin.html"}"${inClaudeHost()?' target="_blank" rel="noopener"':""}>${L("Admin ⚙","Admin ⚙")}</a>`:""}<button class="pbtn red" id="idOut">${L("Cerrar sesión","Sign out")}</button></div>`;
   if(!(p&&p.foto)) iconSVG($("idPh"),"user");
@@ -3063,8 +3115,85 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
   $("idFileBtn").addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); $("idFile").click(); } });
   $("idFile").addEventListener("change",e=>{ const f=e.target.files[0]; e.target.value=""; if(f) savePhoto(f); });
   $("idSave").addEventListener("click",saveID);
+  $("idMood")?.addEventListener("click",()=>{ sfx.select(); openMood(); });
   $("idOut").addEventListener("click",()=>{ sfx.back(); perfil=null; perfilUid=null; closeID(); firebase.auth().signOut(); });
 }
+/* ====== MOOD METER: ánimo del día ======
+   Firestore animo/{uid}: { nombre, matricula, cuatrimestre, grupo, correo, actualizado, dias:{ "AAAA-MM-DD":{ n:0-4, e:[emociones], t } } }
+   El alumno solo escribe el suyo; los docentes de la Academia lo leen (Sólo Profesores → Bienestar). */
+const MM=[
+ {c:"#fdc830",t:["Feliz","Happy"]},
+ {c:"#08c940",t:["Desagrado","Disgust"]},
+ {c:"#0a9cf2",t:["Triste","Sad"],e:[["Disgustado/a","Disgusted"],["Decepcionado/a","Disappointed"],["Abatido/a","Glum"],["Avergonzado/a","Ashamed"],["Humillado/a","Mortified"],["Aislado/a","Alienated"],["Desanimado/a","Mopey"],["Apático/a","Apathetic"],["Apenado/a","Embarrassed"],["Excluido/a","Excluded"],["Tímido/a","Timid"],["Agotado/a","Drained"],["Solo/a","Alone"],["Decaído/a","Down"],["Aburrido/a","Bored"],["Cansado/a","Tired"]]},
+ {c:"#ff6a00",t:["Ansiedad","Anxiety"]},
+ {c:"#f50000",t:["Enojo","Anger"],e:[["Enfurecido/a","Enraged"],["Furioso/a","Furious"],["Frustrado/a","Frustrated"],["Impactado/a","Shocked"],["Indignado/a","Livid"],["Asustado/a","Frightened"],["Nervioso/a","Nervous"],["Inquieto/a","Restless"],["Muy molesto/a","Fuming"],["Aprensivo/a","Apprehensive"],["Preocupado/a","Worried"],["Irritado/a","Annoyed"],["Con repulsión","Repulsed"],["Agobiado/a","Troubled"],["Intranquilo/a","Uneasy"],["Fastidiado/a","Peeved"]]}
+];
+let animo=null, animoUid=null;
+const hoyISO=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+async function loadAnimo(){ const u=auth.user; if(!u) return null; if(animoUid===u.uid&&animo) return animo;
+  try{ await fb(); const d=await firebase.firestore().collection("animo").doc(u.uid).get(); animo=d.exists?d.data():{}; }catch(e){ animo={_err:e&&e.code}; }
+  animoUid=u.uid; return animo; }
+function mmFace(i,cx,cy,R){ const k="#26242a", w=`stroke="${k}" stroke-width="2.6" fill="none" stroke-linecap="round"`;
+  const eyes=i===4?`<path d="M${cx-9} ${cy-9} l7 4 M${cx+9} ${cy-9} l-7 4" ${w}/><circle cx="${cx-6}" cy="${cy-2}" r="2.4" fill="${k}"/><circle cx="${cx+6}" cy="${cy-2}" r="2.4" fill="${k}"/>`
+    :i===3?`<circle cx="${cx-6}" cy="${cy-4}" r="3.6" fill="#fff" stroke="${k}" stroke-width="2"/><circle cx="${cx+6}" cy="${cy-4}" r="3.6" fill="#fff" stroke="${k}" stroke-width="2"/><circle cx="${cx-6}" cy="${cy-4}" r="1.4" fill="${k}"/><circle cx="${cx+6}" cy="${cy-4}" r="1.4" fill="${k}"/>`
+    :i===1?`<path d="M${cx-10} ${cy-4} h7 M${cx+3} ${cy-4} h7" ${w}/>`
+    :`<circle cx="${cx-6}" cy="${cy-4}" r="2.4" fill="${k}"/><circle cx="${cx+6}" cy="${cy-4}" r="2.4" fill="${k}"/>`;
+  const mouth=i===0?`<path d="M${cx-9} ${cy+4} q9 10 18 0" ${w}/>`
+    :i===1?`<path d="M${cx-8} ${cy+8} q4 -5 8 0 q4 5 8 0" ${w}/>`
+    :i===2?`<path d="M${cx-8} ${cy+10} q8 -8 16 0" ${w}/><path d="M${cx+9} ${cy} q2 4 0 6 q-2 -2 0 -6" fill="#9fd8ff" stroke="${k}" stroke-width="1.4"/>`
+    :i===3?`<path d="M${cx-9} ${cy+8} l3 -3 l3 3 l3 -3 l3 3 l3 -3" ${w}/>`
+    :`<path d="M${cx-8} ${cy+9} q8 -6 16 0" ${w}/>`;
+  return `<g class="mm-face" data-i="${i}"><circle cx="${cx}" cy="${cy}" r="${R}" fill="${MM[i].c}" stroke="${k}" stroke-width="2.6"/>${eyes}${mouth}</g>`; }
+function mmSVG(){ const C=[230,236], Ro=178, Ri=96, P=(a,r)=>[C[0]+r*Math.cos(a*Math.PI/180), C[1]-r*Math.sin(a*Math.PI/180)].map(v=>v.toFixed(1)).join(" ");
+  let segs="", faces="";
+  MM.forEach((m,i)=>{ const a0=180-36*i, a1=a0-36, mid=a0-18;
+    segs+=`<path class="mm-seg" data-i="${i}" tabindex="0" role="button" aria-label="${esc(m.t[LANG==="en"?1:0])}" fill="${m.c}" d="M${P(a0,Ro)} A${Ro} ${Ro} 0 0 1 ${P(a1,Ro)} L${P(a1,Ri)} A${Ri} ${Ri} 0 0 0 ${P(a0,Ri)} Z"/>`;
+    const f=P(mid,Ro+34).split(" ").map(Number); faces+=mmFace(i,f[0],f[1],21); });
+  return `<svg class="mm-svg" viewBox="0 0 460 262" aria-hidden="false">${segs}${faces}
+    <g class="mm-needle" id="mmNeedle"><path d="M224 236 L230 120 L236 236 Z" fill="#3a3a3a"/><circle cx="230" cy="236" r="15" fill="#3a3a3a"/><circle cx="230" cy="236" r="7" fill="#fff"/><circle cx="230" cy="236" r="4" fill="#3a3a3a"/></g></svg>`; }
+let mmSel=null, mmEmo=new Set();
+async function openMood(){ const m=$("moodModal"); m.hidden=false; $("mmTitle").textContent=L("¿Cómo te sientes hoy?","How are you feeling today?"); $("mmClose").setAttribute("aria-label",L("Cerrar","Close"));
+  await loadAnimo(); const hoy=animo&&animo.dias&&animo.dias[hoyISO()]; mmSel=hoy?hoy.n:null; mmEmo=new Set(hoy&&hoy.e||[]); renderMood(); }
+function closeMood(){ $("moodModal").hidden=true; }
+function renderMood(){ const b=$("mmBody");
+  b.innerHTML=`<p class="mm-q">${L("Toca el color que más se parece a cómo te sientes.","Tap the color that best matches how you feel.")}</p>${mmSVG()}
+    <p class="mm-lbl" id="mmLbl" aria-live="polite"></p>
+    <div class="mm-list" id="mmList" hidden></div>
+    <p class="id-msg" id="mmMsg" hidden></p>
+    <div class="mm-acts"><button class="pbtn yellow" id="mmSave" disabled>${L("Guardar","Save")}</button><button class="pbtn" id="mmSkip">${L("Ahora no","Not now")}</button></div>
+    <p class="mm-note">${L("Tu respuesta la ven solo los docentes de IAEV, para acompañarte mejor.","Only IAEV faculty can see your answer, so they can support you better.")}</p>`;
+  b.querySelectorAll(".mm-seg,.mm-face").forEach(el=>{ const go=()=>{ sfx.select(); mmPick(+el.dataset.i); };
+    el.addEventListener("click",go); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }); });
+  $("mmSave").addEventListener("click",saveMood); $("mmSkip").addEventListener("click",()=>{ sfx.back(); closeMood(); });
+  if(mmSel!==null) mmPick(mmSel,true); }
+function mmPick(i,keep){ if(mmSel!==i&&!keep) mmEmo=new Set(); mmSel=i; const m=MM[i];
+  $("mmNeedle").style.transform=`rotate(${(180-36*i-18)*-1+90}deg)`;
+  const svg=document.querySelector("#mmBody .mm-svg"); svg.classList.add("picked"); svg.querySelectorAll(".mm-seg").forEach(s=>s.classList.toggle("on",+s.dataset.i===i));
+  $("mmLbl").textContent=m.t[LANG==="en"?1:0]; $("mmLbl").style.color=i===0?"#8a6a00":m.c; $("mmSave").disabled=false;
+  const box=$("mmList");
+  if(m.e){ box.hidden=false; box.innerHTML=`<p>${L("¿Cuál de estas emociones describe mejor cómo te sientes? Puedes elegir varias.","Which of these emotions describe how you feel? You can pick more than one.")}</p>
+      <div class="mm-chips">${m.e.map(([es,en])=>`<button class="mm-chip" style="background:${m.c}" aria-pressed="${mmEmo.has(es)}" data-e="${esc(es)}">${esc(LANG==="en"?en:es)}</button>`).join("")}</div>
+      <p class="mm-note">${L("Si necesitas hablar con alguien, acércate a tu tutor/a.","If you need to talk to someone, reach out to your tutor.")}</p>`;
+    box.querySelectorAll(".mm-chip").forEach(c=>c.addEventListener("click",()=>{ sfx.select(); const e=c.dataset.e; mmEmo.has(e)?mmEmo.delete(e):mmEmo.add(e); c.setAttribute("aria-pressed",String(mmEmo.has(e))); })); }
+  else { box.hidden=true; box.innerHTML=""; } }
+async function saveMood(){ if(mmSel===null) return; const b=$("mmSave"); b.disabled=true;
+  const msg=(t,k)=>{ const m=$("mmMsg"); m.hidden=!t; m.className="id-msg"+(k?" "+k:""); m.textContent=t||""; };
+  msg(L("Guardando…","Saving…"));
+  try{ await fb(); await loadPerfil(); const u=auth.user, p=perfil||{};
+    const day={n:mmSel,e:MM[mmSel].e?[...mmEmo].slice(0,16):[],t:Date.now()};
+    const d={nombre:(p.nombre||u.displayName||"").slice(0,80),matricula:p.matricula||matFromMail(u.email),cuatrimestre:p.cuatrimestre||"",grupo:p.grupo||"",correo:u.email,actualizado:new Date().toISOString(),dias:{[hoyISO()]:day}};
+    await firebase.firestore().collection("animo").doc(u.uid).set(d,{merge:true});
+    animo=Object.assign({},animo,d,{dias:Object.assign({},animo&&animo.dias,{[hoyISO()]:day})}); delete animo._err;
+    sfx.select(); closeMood(); toast(L("¡Gracias! Guardamos cómo te sientes hoy.","Thanks! We saved how you feel today."));
+    if(!$("idModal").hidden) renderID(); }
+  catch(e){ console.warn("animo",e); msg(e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."),"err"); b.disabled=false; } }
+$("mmClose").addEventListener("click",()=>{ sfx.back(); closeMood(); });
+$("moodModal").addEventListener("click",e=>{ if(e.target.id==="moodModal") closeMood(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("moodModal").hidden) closeMood(); });
+/* Al abrir la app con sesión iniciada (alumnos), aparece primero el mood meter, una vez por cada vez que se abre */
+function moodOnOpen(u){ if(!u||isProf(u)) return; let shown=""; try{ shown=sessionStorage.getItem("mm-open")||""; }catch(e){}
+  if(shown===u.uid) return; try{ sessionStorage.setItem("mm-open",u.uid); }catch(e){}
+  setTimeout(()=>{ if(auth.user&&auth.user.uid===u.uid&&$("moodModal").hidden) openMood(); },900); }
 function perfilRef(){ return firebase.firestore().collection("perfiles").doc(auth.user.uid); }
 function saveErr(e){ return e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."); }
 async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.replace(/\s+/g," ").trim(), mat=$("idMat").value.replace(/\s+/g,"").trim();
@@ -3109,7 +3238,7 @@ function gate(id){
   const db=firebase.firestore(), ref=id==="profesores"?db.collection("profesores").doc("contenido"):db.collection("horarios").doc(id.split("-")[1]);
   ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null;
       const hasF=v&&Array.isArray(v.archivos)&&v.archivos.length, hasJ=v&&(id==="profesores"?((v.avisos||[]).length||(v.recursos||[]).length):(v.grupos||[]).length);
-      if(id==="profesores") setTimeout(()=>loadProfCal(sb,id),0);
+      if(id==="profesores") setTimeout(()=>{ loadProfCal(sb,id); loadBienestar(sb,id); },0);
       if(hasF){ showFiles(sb,ref,v,id); if(hasJ) sb.insertAdjacentHTML("beforeend",id==="profesores"?profHTML(v):horarioHTML({...v,actualizado:null})); return; }
       sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
@@ -3146,6 +3275,50 @@ async function pdfFit(holder,u8,url,title){
     if(doc.numPages>12) holder.insertAdjacentHTML("beforeend",`<p class="cal-none">${L("Abre el PDF para ver las demás páginas.","Open the PDF to see the remaining pages.")}</p>`);
     const hint=document.createElement("p"); hint.className="fl-hint"; hint.textContent=L("Toca el horario para abrirlo y hacer zoom.","Tap the schedule to open it and zoom in."); holder.after(hint);
   }catch(e){ console.warn("pdf.js",e); holder.outerHTML=`<iframe class="fl-pdf" src="${url}" title="${esc(title||"PDF")}"></iframe>`; }
+}
+/* Bienestar de alumnos (Sólo Profesores): lista por cuatrimestre y grupo con el mood meter de cada día.
+   Datos: animo/* (lo escribe cada alumno) y profesores/tutores { tutores:{ "<cuatri>|<grupo>": "Nombre" } } */
+let bwData=null, bwTut={}, bwMonth=null, bwCua="";
+async function loadBienestar(sb,id){
+  const holder=document.createElement("div"); holder.id="bwBox"; holder.innerHTML=`<h2 class="sec-h2 sec-h2-more">${L("Bienestar de alumnos (mood meter)","Student wellbeing (mood meter)")}</h2><p class="cal-none">${L("Cargando…","Loading…")}</p>`;
+  sb.appendChild(holder);
+  try{ const db=firebase.firestore(); const [a,t]=await Promise.all([db.collection("animo").get(),db.collection("profesores").doc("tutores").get()]);
+    if(location.hash.slice(1)!==id) return;
+    bwData=a.docs.map(d=>Object.assign({uid:d.id},d.data())); bwTut=(t.exists&&t.data().tutores)||{};
+    if(!bwMonth){ const n=new Date(); bwMonth=[n.getFullYear(),n.getMonth()]; } drawBienestar(); }
+  catch(e){ holder.innerHTML=`<h2 class="sec-h2 sec-h2-more">${L("Bienestar de alumnos (mood meter)","Student wellbeing (mood meter)")}</h2><p class="cal-none">${e&&e.code==="permission-denied"?L("Falta publicar las reglas nuevas de Firestore para ver esta información.","The new Firestore rules need to be published to see this."):L("No se pudo cargar la información.","Couldn't load the information.")}</p>`; } }
+function drawBienestar(){ const box=$("bwBox"); if(!box||!bwData) return;
+  const [Y,M]=bwMonth, days=new Date(Y,M+1,0).getDate(), mes=new Date(Y,M,1).toLocaleDateString(LANG==="en"?"en-US":"es-MX",{month:"long",year:"numeric"});
+  const key=x=>(x.cuatrimestre||"?")+"|"+(String(x.grupo||"?").toUpperCase());
+  const cuas=[...new Set(bwData.map(x=>x.cuatrimestre||"?"))].sort((a,b)=>(a==="?")-(b==="?")||(+a)-(+b));
+  const ds=d=>Y+"-"+String(M+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+  const hoy=new Date(), last7=[...Array(7)].map((_,k)=>{ const d=new Date(hoy); d.setDate(d.getDate()-k); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); });
+  const ord=n=>n==="?"?L("Sin cuatrimestre","No term"):LANG==="en"?`Term ${n}`:`${n}º cuatrimestre`;
+  let html=`<h2 class="sec-h2 sec-h2-more">${L("Bienestar de alumnos (mood meter)","Student wellbeing (mood meter)")}</h2>
+   <div class="bw-ctl"><button id="bwPrev" aria-label="${L("Mes anterior","Previous month")}">◀</button><span class="bw-month">${esc(mes)}</span><button id="bwNext" aria-label="${L("Mes siguiente","Next month")}">▶</button>
+   <select id="bwCua"><option value="">${L("Todos los cuatrimestres","All terms")}</option>${cuas.map(c=>`<option value="${esc(c)}"${c===bwCua?" selected":""}>${esc(ord(c))}</option>`).join("")}</select></div>
+   <div class="bw-leg">${MM.map(m=>`<span><i style="background:${m.c}"></i>${esc(m.t[LANG==="en"?1:0])}</span>`).join("")}<span><i style="background:#fff"></i>${L("Sin registro","No check-in")}</span></div>`;
+  if(!bwData.length) html+=`<p class="cal-none">${L("Todavía ningún alumno ha registrado cómo se siente.","No student has checked in yet.")}</p>`;
+  cuas.filter(c=>!bwCua||c===bwCua).forEach(c=>{ const del=bwData.filter(x=>(x.cuatrimestre||"?")===c);
+    html+=`<h3 class="bw-cua">${esc(ord(c))}</h3>`;
+    [...new Set(del.map(x=>String(x.grupo||"?").toUpperCase()))].sort().forEach(g=>{ const al=del.filter(x=>String(x.grupo||"?").toUpperCase()===g).sort((a,b)=>String(a.nombre||a.correo).localeCompare(String(b.nombre||b.correo)));
+      const k=c+"|"+g;
+      html+=`<section class="bw-grp"><div class="bw-gh"><b>${g==="?"?L("Sin grupo","No group"):L("Grupo ","Group ")+esc(g)}</b><span>${al.length} ${L("alumnos","students")}</span>
+        <label style="display:flex;gap:6px;align-items:center;flex:1">${L("Tutor/a:","Tutor:")}<input data-k="${esc(k)}" class="bwTutIn" value="${esc(bwTut[k]||"")}" placeholder="${esc(L("Nombre del tutor","Tutor's name"))}"></label><button class="bwTutSave" data-k="${esc(k)}">${L("Guardar","Save")}</button></div>
+        <div class="bw-scroll"><table class="bw-t"><thead><tr><th class="n" scope="col">${L("Alumno/a","Student")}</th>${[...Array(days)].map((_,d)=>{ const wd=new Date(Y,M,d+1).getDay(); return `<th class="d${wd===0||wd===6?" we":""}" scope="col">${d+1}</th>`; }).join("")}</tr></thead><tbody>
+        ${al.map(x=>{ const dd=x.dias||{}, alert=last7.filter(k=>dd[k]&&(dd[k].n===2||dd[k].n===4)).length;
+          return `<tr><td class="n">${esc(x.nombre||L("(sin nombre)","(no name)"))}${x.matricula?` · ${esc(x.matricula)}`:""}${alert>=3?`<span class="bw-alert" title="${esc(L("Días en azul o rojo en los últimos 7 días","Blue or red days in the last 7 days"))}">⚠ ${alert}</span>`:""}<small>${esc(x.correo||"")}</small></td>
+            ${[...Array(days)].map((_,d)=>{ const v=dd[ds(d+1)]; if(!v) return `<td class="c"></td>`; const m=MM[v.n]||MM[0];
+              const tip=`${d+1} ${mes}: ${m.t[LANG==="en"?1:0]}${v.e&&v.e.length?" — "+v.e.join(", "):""}`;
+              return `<td class="c x" style="background:${m.c}" title="${esc(tip)}" aria-label="${esc(tip)}"></td>`; }).join("")}</tr>`; }).join("")}
+        </tbody></table></div></section>`; }); });
+  box.innerHTML=html;
+  $("bwPrev").onclick=()=>{ sfx.select(); bwMonth=M?[Y,M-1]:[Y-1,11]; drawBienestar(); };
+  $("bwNext").onclick=()=>{ sfx.select(); bwMonth=M<11?[Y,M+1]:[Y+1,0]; drawBienestar(); };
+  $("bwCua").onchange=e=>{ bwCua=e.target.value; drawBienestar(); };
+  box.querySelectorAll(".bwTutSave").forEach(b=>b.onclick=async()=>{ const k=b.dataset.k, v=box.querySelector(`.bwTutIn[data-k="${CSS.escape(k)}"]`).value.trim().slice(0,80);
+    b.disabled=true; try{ await firebase.firestore().collection("profesores").doc("tutores").set({tutores:{[k]:v}},{merge:true}); bwTut[k]=v; toast(L("Tutor guardado.","Tutor saved.")); }
+    catch(e){ toast(L("No se pudo guardar el tutor.","Couldn't save the tutor.")); } finally{ b.disabled=false; } });
 }
 /* Calendario docente: profesores/calendario { eventos:[{s,e,t}], actualizado } (se importa desde admin.html con el .ics) */
 function loadProfCal(sb,id){

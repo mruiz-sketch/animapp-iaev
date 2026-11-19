@@ -43,6 +43,13 @@ service cloud.firestore {
       allow read: if docente();
       allow write: if admin();
     }
+    // Mood meter (ánimo del día): cada alumno escribe el suyo; los docentes lo leen en Sólo Profesores.
+    match /animo/{uid} {
+      allow read: if docente() || (upsrj() && request.auth.uid == uid);
+      allow create, update: if upsrj() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['nombre', 'matricula', 'cuatrimestre', 'grupo', 'correo', 'actualizado', 'dias'])
+        && request.resource.data.dias is map;
+    }
     // Credencial de cada persona (foto, nombre, matrícula, cuatrimestre y grupo): solo la lee y edita su dueño.
     match /perfiles/{uid} {
       allow read: if upsrj() && request.auth.uid == uid;
