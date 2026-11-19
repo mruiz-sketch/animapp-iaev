@@ -3106,7 +3106,7 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
     </div>
     <div class="id-bar" aria-hidden="true">${barcode(u.uid)}</div>
   </div>
-  ${prof?"":(()=>{ const h=animo&&animo.dias&&animo.dias[hoyISO()], m=h?MM[h.n]:null;
+  ${(()=>{ const h=animo&&animo.dias&&animo.dias[hoyISO()], m=h?MM[h.n]:null;
     return `<div class="id-mood">${m?`<i style="background:${m.c}"></i>`:""}<span>${m?L("Hoy te sientes: ","Today you feel: ")+"<b>"+esc(m.t[LANG==="en"?1:0])+"</b>"+(h.e&&h.e.length?" · "+esc(h.e.join(", ")):""):L("¿Cómo te sientes hoy?","How are you feeling today?")}</span><button class="pbtn blue" id="idMood">${m?L("Cambiar","Change"):L("Registrar","Check in")}</button></div>`; })()}
   <p class="id-msg" id="idMsg" hidden></p>
   <div class="id-acts"><button class="pbtn yellow" id="idSave">${L("Guardar cambios","Save changes")}</button>${prof?`<a class="pbtn blue id-admin" href="${inClaudeHost()?APP_URL+"admin.html":"admin.html"}"${inClaudeHost()?' target="_blank" rel="noopener"':""}>${L("Admin ⚙","Admin ⚙")}</a>`:""}<button class="pbtn red" id="idOut">${L("Cerrar sesión","Sign out")}</button></div>`;
@@ -3190,8 +3190,8 @@ async function saveMood(){ if(mmSel===null) return; const b=$("mmSave"); b.disab
 $("mmClose").addEventListener("click",()=>{ sfx.back(); closeMood(); });
 $("moodModal").addEventListener("click",e=>{ if(e.target.id==="moodModal") closeMood(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("moodModal").hidden) closeMood(); });
-/* Al abrir la app con sesión iniciada (alumnos), aparece primero el mood meter, una vez por cada vez que se abre */
-function moodOnOpen(u){ if(!u||isProf(u)) return; let shown=""; try{ shown=sessionStorage.getItem("mm-open")||""; }catch(e){}
+/* Al abrir la app con sesión iniciada (alumnos y docentes), aparece primero el mood meter, una vez por cada vez que se abre */
+function moodOnOpen(u){ if(!u) return; /* también docentes (para probarlo) */ let shown=""; try{ shown=sessionStorage.getItem("mm-open")||""; }catch(e){}
   if(shown===u.uid) return; try{ sessionStorage.setItem("mm-open",u.uid); }catch(e){}
   setTimeout(()=>{ if(auth.user&&auth.user.uid===u.uid&&$("moodModal").hidden) openMood(); },900); }
 function perfilRef(){ return firebase.firestore().collection("perfiles").doc(auth.user.uid); }
