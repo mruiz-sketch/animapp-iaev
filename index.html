@@ -3165,7 +3165,7 @@ function renderMood(){ const b=$("mmBody");
     <div class="mm-list" id="mmList" hidden></div>
     <p class="id-msg" id="mmMsg" hidden></p>
     <div class="mm-acts">${mmMust?`<button class="pbtn yellow" id="mmDone"${mmOk?"":" disabled"}>${L("Listo","Done")}</button>`:`<button class="pbtn yellow" id="mmSave" disabled>${L("Guardar","Save")}</button><button class="pbtn" id="mmSkip">${L("Ahora no","Not now")}</button>`}</div>
-    <p class="mm-note">${mmMust?L("Se guarda automáticamente. ","It's saved automatically. "):""}${L("Tu respuesta la ven solo los docentes de IAEV, para acompañarte mejor.","Only IAEV faculty can see your answer, so they can support you better.")}</p>`;
+    <p class="mm-note">${mmMust?L("Se guarda automáticamente. ","It's saved automatically. "):""}${L("Queremos ayudarte. Tu respuesta es completamente privada y es para poder brindarte el apoyo que necesites.","We want to help you. Your answer is completely private and is only used to give you the support you need.")}</p>`;
   b.querySelectorAll(".mm-seg,.mm-face").forEach(el=>{ const go=()=>{ sfx.select(); mmPick(+el.dataset.i); if(mmMust) mmAuto(0); };
     el.addEventListener("click",go); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }); });
   if(mmMust) $("mmDone").addEventListener("click",()=>{ sfx.select(); closeMood(); if(mmOk) toast(L("¡Gracias! Guardamos cómo te sientes hoy.","Thanks! We saved how you feel today.")); });
