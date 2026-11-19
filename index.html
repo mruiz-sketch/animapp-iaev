@@ -3122,11 +3122,11 @@ function renderID(){ const body=$("idBody"); if(!body) return; $("idTitle").text
    Firestore animo/{uid}: { nombre, matricula, cuatrimestre, grupo, correo, actualizado, dias:{ "AAAA-MM-DD":{ n:0-4, e:[emociones], t } } }
    El alumno solo escribe el suyo; los docentes de la Academia lo leen (Sólo Profesores → Bienestar). */
 const MM=[
- {c:"#fdc830",t:["Feliz","Happy"]},
- {c:"#08c940",t:["Desagrado","Disgust"]},
- {c:"#0a9cf2",t:["Triste","Sad"],e:[["Disgustado/a","Disgusted"],["Decepcionado/a","Disappointed"],["Abatido/a","Glum"],["Avergonzado/a","Ashamed"],["Humillado/a","Mortified"],["Aislado/a","Alienated"],["Desanimado/a","Mopey"],["Apático/a","Apathetic"],["Apenado/a","Embarrassed"],["Excluido/a","Excluded"],["Tímido/a","Timid"],["Agotado/a","Drained"],["Solo/a","Alone"],["Decaído/a","Down"],["Aburrido/a","Bored"],["Cansado/a","Tired"]]},
- {c:"#ff6a00",t:["Ansiedad","Anxiety"]},
- {c:"#f50000",t:["Enojo","Anger"],e:[["Enfurecido/a","Enraged"],["Furioso/a","Furious"],["Frustrado/a","Frustrated"],["Impactado/a","Shocked"],["Indignado/a","Livid"],["Asustado/a","Frightened"],["Nervioso/a","Nervous"],["Inquieto/a","Restless"],["Muy molesto/a","Fuming"],["Aprensivo/a","Apprehensive"],["Preocupado/a","Worried"],["Irritado/a","Annoyed"],["Con repulsión","Repulsed"],["Agobiado/a","Troubled"],["Intranquilo/a","Uneasy"],["Fastidiado/a","Peeved"]]}
+ {c:"#fdc830",k:"#26242a",t:["Feliz","Happy"],e:[["Alegre","Cheerful"],["Contento/a","Joyful"],["Emocionado/a","Thrilled"],["Entusiasmado/a","Excited"],["Motivado/a","Motivated"],["Inspirado/a","Inspired"],["Optimista","Optimistic"],["Orgulloso/a","Proud"],["Con energía","Energized"],["Sorprendido/a","Surprised"],["Agradecido/a","Grateful"],["Tranquilo/a","Calm"],["Relajado/a","Relaxed"],["Satisfecho/a","Satisfied"],["En paz","Serene"],["Seguro/a","Secure"]]},
+ {c:"#08c940",t:["Desagrado","Disgust"],e:[["Disgustado/a","Disgusted"],["Asqueado/a","Grossed out"],["Con repulsión","Repulsed"],["Incómodo/a","Uncomfortable"],["Fastidiado/a","Peeved"],["Hastiado/a","Fed up"],["Desinteresado/a","Uninterested"],["Inconforme","Dissatisfied"]]},
+ {c:"#0a9cf2",t:["Triste","Sad"],e:[["Triste","Sad"],["Decepcionado/a","Disappointed"],["Abatido/a","Glum"],["Desanimado/a","Mopey"],["Decaído/a","Down"],["Solo/a","Alone"],["Aislado/a","Alienated"],["Excluido/a","Excluded"],["Avergonzado/a","Ashamed"],["Humillado/a","Mortified"],["Apenado/a","Embarrassed"],["Tímido/a","Timid"],["Apático/a","Apathetic"],["Aburrido/a","Bored"],["Agotado/a","Drained"],["Cansado/a","Tired"]]},
+ {c:"#ff6a00",t:["Ansiedad","Anxiety"],e:[["Nervioso/a","Nervous"],["Preocupado/a","Worried"],["Estresado/a","Stressed"],["Abrumado/a","Overwhelmed"],["Agobiado/a","Troubled"],["Inquieto/a","Restless"],["Intranquilo/a","Uneasy"],["Tenso/a","Tense"],["Asustado/a","Frightened"],["Aprensivo/a","Apprehensive"],["Inseguro/a","Insecure"],["Impactado/a","Shocked"]]},
+ {c:"#f50000",t:["Enojo","Anger"],e:[["Enojado/a","Angry"],["Furioso/a","Furious"],["Enfurecido/a","Enraged"],["Frustrado/a","Frustrated"],["Indignado/a","Livid"],["Muy molesto/a","Fuming"],["Irritado/a","Annoyed"],["Resentido/a","Resentful"]]}
 ];
 let animo=null, animoUid=null;
 const hoyISO=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
@@ -3169,11 +3169,11 @@ function renderMood(){ const b=$("mmBody");
 function mmPick(i,keep){ if(mmSel!==i&&!keep) mmEmo=new Set(); mmSel=i; const m=MM[i];
   $("mmNeedle").style.transform=`rotate(${(180-36*i-18)*-1+90}deg)`;
   const svg=document.querySelector("#mmBody .mm-svg"); svg.classList.add("picked"); svg.querySelectorAll(".mm-seg").forEach(s=>s.classList.toggle("on",+s.dataset.i===i));
-  $("mmLbl").textContent=m.t[LANG==="en"?1:0]; $("mmLbl").style.color=i===0?"#8a6a00":m.c; $("mmSave").disabled=false;
+  $("mmLbl").textContent=m.t[LANG==="en"?1:0]; $("mmLbl").style.color=["#8a6a00","#067a28","#0a7cc2","#c24f00","#d10000"][i]; $("mmSave").disabled=false;
   const box=$("mmList");
   if(m.e){ box.hidden=false; box.innerHTML=`<p>${L("¿Cuál de estas emociones describe mejor cómo te sientes? Puedes elegir varias.","Which of these emotions describe how you feel? You can pick more than one.")}</p>
-      <div class="mm-chips">${m.e.map(([es,en])=>`<button class="mm-chip" style="background:${m.c}" aria-pressed="${mmEmo.has(es)}" data-e="${esc(es)}">${esc(LANG==="en"?en:es)}</button>`).join("")}</div>
-      <p class="mm-note">${L("Si necesitas hablar con alguien, acércate a tu tutor/a.","If you need to talk to someone, reach out to your tutor.")}</p>`;
+      <div class="mm-chips">${m.e.map(([es,en])=>`<button class="mm-chip" style="background:${m.c};color:${m.k||"#fff"}" aria-pressed="${mmEmo.has(es)}" data-e="${esc(es)}">${esc(LANG==="en"?en:es)}</button>`).join("")}</div>
+      ${i?`<p class="mm-note">${L("Si necesitas hablar con alguien, acércate a tu tutor/a.","If you need to talk to someone, reach out to your tutor.")}</p>`:""}`;
     box.querySelectorAll(".mm-chip").forEach(c=>c.addEventListener("click",()=>{ sfx.select(); const e=c.dataset.e; mmEmo.has(e)?mmEmo.delete(e):mmEmo.add(e); c.setAttribute("aria-pressed",String(mmEmo.has(e))); })); }
   else { box.hidden=true; box.innerHTML=""; } }
 async function saveMood(){ if(mmSel===null) return; const b=$("mmSave"); b.disabled=true;
