@@ -3152,41 +3152,50 @@ function mmSVG(){ const C=[230,236], Ro=178, Ri=96, P=(a,r)=>[C[0]+r*Math.cos(a*
   return `<svg class="mm-svg" viewBox="0 0 460 262" aria-hidden="false">${segs}${faces}
     <g class="mm-needle" id="mmNeedle"><path d="M224 236 L230 120 L236 236 Z" fill="#3a3a3a"/><circle cx="230" cy="236" r="15" fill="#3a3a3a"/><circle cx="230" cy="236" r="7" fill="#fff"/><circle cx="230" cy="236" r="4" fill="#3a3a3a"/></g></svg>`; }
 let mmSel=null, mmEmo=new Set();
+/* Alumnos: se guarda solo (al elegir color y emociones) y no pueden cerrarlo hasta elegir un color.
+   Docentes: botones Guardar y Ahora no. */
+let mmMust=false, mmOk=false, mmT=0;
 async function openMood(){ const m=$("moodModal"); m.hidden=false; $("mmTitle").textContent=L("¿Cómo te sientes hoy?","How are you feeling today?"); $("mmClose").setAttribute("aria-label",L("Cerrar","Close"));
-  await loadAnimo(); const hoy=animo&&animo.dias&&animo.dias[hoyISO()]; mmSel=hoy?hoy.n:null; mmEmo=new Set(hoy&&hoy.e||[]); renderMood(); }
-function closeMood(){ $("moodModal").hidden=true; }
+  mmMust=!isProf(auth.user); await loadAnimo(); const hoy=animo&&animo.dias&&animo.dias[hoyISO()]; mmSel=hoy?hoy.n:null; mmEmo=new Set(hoy&&hoy.e||[]); mmOk=!!hoy; renderMood(); }
+function closeMood(force){ if(mmMust&&!mmOk&&!force) return; clearTimeout(mmT); $("moodModal").hidden=true; }
 function renderMood(){ const b=$("mmBody");
+  $("mmClose").hidden=mmMust&&!mmOk;
   b.innerHTML=`<p class="mm-q">${L("Toca el color que más se parece a cómo te sientes.","Tap the color that best matches how you feel.")}</p>${mmSVG()}
     <p class="mm-lbl" id="mmLbl" aria-live="polite"></p>
     <div class="mm-list" id="mmList" hidden></div>
     <p class="id-msg" id="mmMsg" hidden></p>
-    <div class="mm-acts"><button class="pbtn yellow" id="mmSave" disabled>${L("Guardar","Save")}</button><button class="pbtn" id="mmSkip">${L("Ahora no","Not now")}</button></div>
-    <p class="mm-note">${L("Tu respuesta la ven solo los docentes de IAEV, para acompañarte mejor.","Only IAEV faculty can see your answer, so they can support you better.")}</p>`;
-  b.querySelectorAll(".mm-seg,.mm-face").forEach(el=>{ const go=()=>{ sfx.select(); mmPick(+el.dataset.i); };
+    <div class="mm-acts">${mmMust?`<button class="pbtn yellow" id="mmDone"${mmOk?"":" disabled"}>${L("Listo","Done")}</button>`:`<button class="pbtn yellow" id="mmSave" disabled>${L("Guardar","Save")}</button><button class="pbtn" id="mmSkip">${L("Ahora no","Not now")}</button>`}</div>
+    <p class="mm-note">${mmMust?L("Se guarda automáticamente. ","It's saved automatically. "):""}${L("Tu respuesta la ven solo los docentes de IAEV, para acompañarte mejor.","Only IAEV faculty can see your answer, so they can support you better.")}</p>`;
+  b.querySelectorAll(".mm-seg,.mm-face").forEach(el=>{ const go=()=>{ sfx.select(); mmPick(+el.dataset.i); if(mmMust) mmAuto(0); };
     el.addEventListener("click",go); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }); });
-  $("mmSave").addEventListener("click",saveMood); $("mmSkip").addEventListener("click",()=>{ sfx.back(); closeMood(); });
+  if(mmMust) $("mmDone").addEventListener("click",()=>{ sfx.select(); closeMood(); if(mmOk) toast(L("¡Gracias! Guardamos cómo te sientes hoy.","Thanks! We saved how you feel today.")); });
+  else { $("mmSave").addEventListener("click",()=>saveMood()); $("mmSkip").addEventListener("click",()=>{ sfx.back(); closeMood(); }); }
   if(mmSel!==null) mmPick(mmSel,true); }
+function mmAuto(ms){ clearTimeout(mmT); mmT=setTimeout(()=>saveMood(true),ms); }
 function mmPick(i,keep){ if(mmSel!==i&&!keep) mmEmo=new Set(); mmSel=i; const m=MM[i];
   $("mmNeedle").style.transform=`rotate(${(180-36*i-18)*-1+90}deg)`;
   const svg=document.querySelector("#mmBody .mm-svg"); svg.classList.add("picked"); svg.querySelectorAll(".mm-seg").forEach(s=>s.classList.toggle("on",+s.dataset.i===i));
-  $("mmLbl").textContent=m.t[LANG==="en"?1:0]; $("mmLbl").style.color=["#8a6a00","#067a28","#0a7cc2","#c24f00","#d10000"][i]; $("mmSave").disabled=false;
+  $("mmLbl").textContent=m.t[LANG==="en"?1:0]; $("mmLbl").style.color=["#8a6a00","#067a28","#0a7cc2","#c24f00","#d10000"][i]; if($("mmSave")) $("mmSave").disabled=false;
   const box=$("mmList");
   if(m.e){ box.hidden=false; box.innerHTML=`<p>${L("¿Cuál de estas emociones describe mejor cómo te sientes? Puedes elegir varias.","Which of these emotions describe how you feel? You can pick more than one.")}</p>
       <div class="mm-chips">${m.e.map(([es,en])=>`<button class="mm-chip" style="background:${m.c};color:${m.k||"#fff"}" aria-pressed="${mmEmo.has(es)}" data-e="${esc(es)}">${esc(LANG==="en"?en:es)}</button>`).join("")}</div>
       ${i?`<p class="mm-note">${L("Si necesitas hablar con alguien, acércate a tu tutor/a.","If you need to talk to someone, reach out to your tutor.")}</p>`:""}`;
-    box.querySelectorAll(".mm-chip").forEach(c=>c.addEventListener("click",()=>{ sfx.select(); const e=c.dataset.e; mmEmo.has(e)?mmEmo.delete(e):mmEmo.add(e); c.setAttribute("aria-pressed",String(mmEmo.has(e))); })); }
+    box.querySelectorAll(".mm-chip").forEach(c=>c.addEventListener("click",()=>{ sfx.select(); const e=c.dataset.e; mmEmo.has(e)?mmEmo.delete(e):mmEmo.add(e); c.setAttribute("aria-pressed",String(mmEmo.has(e))); if(mmMust) mmAuto(700); })); }
   else { box.hidden=true; box.innerHTML=""; } }
-async function saveMood(){ if(mmSel===null) return; const b=$("mmSave"); b.disabled=true;
-  const msg=(t,k)=>{ const m=$("mmMsg"); m.hidden=!t; m.className="id-msg"+(k?" "+k:""); m.textContent=t||""; };
+async function saveMood(auto){ if(mmSel===null) return; const b=$("mmSave"); if(b) b.disabled=true;
+  const msg=(t,k)=>{ const m=$("mmMsg"); if(!m) return; m.hidden=!t; m.className="id-msg"+(k?" "+k:""); m.textContent=t||""; };
   msg(L("Guardando…","Saving…"));
   try{ await fb(); await loadPerfil(); const u=auth.user, p=perfil||{};
     const day={n:mmSel,e:MM[mmSel].e?[...mmEmo].slice(0,16):[],t:Date.now()};
     const d={nombre:(p.nombre||u.displayName||"").slice(0,80),matricula:p.matricula||matFromMail(u.email),cuatrimestre:p.cuatrimestre||"",grupo:p.grupo||"",correo:u.email,actualizado:new Date().toISOString(),dias:{[hoyISO()]:day}};
     await firebase.firestore().collection("animo").doc(u.uid).set(d,{merge:true});
     animo=Object.assign({},animo,d,{dias:Object.assign({},animo&&animo.dias,{[hoyISO()]:day})}); delete animo._err;
-    sfx.select(); closeMood(); toast(L("¡Gracias! Guardamos cómo te sientes hoy.","Thanks! We saved how you feel today."));
-    if(!$("idModal").hidden) renderID(); }
-  catch(e){ console.warn("animo",e); msg(e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."),"err"); b.disabled=false; } }
+    if(!$("idModal").hidden) renderID();
+    if(auto){ mmOk=true; msg(L("✓ Guardado","✓ Saved"),"ok"); if($("mmDone")) $("mmDone").disabled=false; $("mmClose").hidden=false; return; }
+    sfx.select(); closeMood(true); toast(L("¡Gracias! Guardamos cómo te sientes hoy.","Thanks! We saved how you feel today.")); }
+  catch(e){ console.warn("animo",e); msg(e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."),"err");
+    if(b) b.disabled=false;
+    if(auto){ mmOk=true; if($("mmDone")) $("mmDone").disabled=false; $("mmClose").hidden=false; } /* si falla el guardado, no se bloquea la app */ } }
 $("mmClose").addEventListener("click",()=>{ sfx.back(); closeMood(); });
 $("moodModal").addEventListener("click",e=>{ if(e.target.id==="moodModal") closeMood(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("moodModal").hidden) closeMood(); });
