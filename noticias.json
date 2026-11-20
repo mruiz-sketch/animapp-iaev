@@ -1,6 +1,69 @@
 {
- "actualizado": "2026-11-19",
+ "actualizado": "2026-11-20",
  "items": [
+  {
+   "titulo": "Disney estrena el primer tráiler de «Ice Age: Boiling Point», la primera película de la saga en cines en una década",
+   "resumen": "Disney presentó el primer avance de la sexta película de La Era de Hielo, en la que Manny y la manada vuelven al Mundo Perdido para llevar un huevo de dinosaurio a un volcán activo. Dirige John C. Donkin y se estrena en cines el 5 de febrero de 2027.",
+   "fuente": "Cartoon Brew",
+   "fecha": "2026-11-19",
+   "categoria": "Animación",
+   "url": "https://www.cartoonbrew.com/feature-film/ice-age-boiling-point-trailer-269630.html",
+   "apa": "Lang, J. (2026, 19 de noviembre). Disney drops first trailer for 'Ice Age: Boiling Point,' the series' first theatrical feature in a decade. Cartoon Brew. https://www.cartoonbrew.com/feature-film/ice-age-boiling-point-trailer-269630.html"
+  },
+  {
+   "titulo": "Netflix estrena el tráiler de «Living The Dream», del creador de «Apple & Onion», George Gendi",
+   "resumen": "La nueva comedia animada para adultos de George Gendi, producida con Hanna-Barbera Studios Europe y animada por el estudio irlandés Boulder Media, sigue a dos amigos de Londres que manejan las redes sociales de una empresa ecológica. Se estrena el 18 de diciembre.",
+   "fuente": "Cartoon Brew",
+   "fecha": "2026-11-19",
+   "categoria": "Televisión",
+   "url": "https://www.cartoonbrew.com/series/living-the-dream-trailer-george-gendi-netflix-269625.html",
+   "apa": "Lang, J. (2026, 19 de noviembre). Netflix debuts 'Living The Dream' trailer from 'Apple & Onion' creator George Gendi. Cartoon Brew. https://www.cartoonbrew.com/series/living-the-dream-trailer-george-gendi-netflix-269625.html"
+  },
+  {
+   "titulo": "Los directores de «Steps» hablan de trolls motociclistas, mechas de relojería, diseño rococó y de reescribir «Cenicienta»",
+   "resumen": "Alyce Tzue y John Ripa explican cómo construyeron su versión de Cenicienta contada por las hermanastras para Netflix: el diseño rococó, las paletas de color por acto, la persecución con mechas y el trabajo con un equipo repartido en varias zonas horarias. Muy útil para ver decisiones de dirección de arte y color.",
+   "fuente": "Cartoon Brew",
+   "fecha": "2026-11-19",
+   "categoria": "Animación",
+   "url": "https://www.cartoonbrew.com/feature-film/steps-alyce-tzue-john-ripa-interview-269608.html",
+   "apa": "Lang, J. (2026, 19 de noviembre). 'Steps' directors on biker trolls, clockwork mechs, rococo design, and rewriting 'Cinderella'. Cartoon Brew. https://www.cartoonbrew.com/feature-film/steps-alyce-tzue-john-ripa-interview-269608.html"
+  },
+  {
+   "titulo": "La plataforma de creadores HEEBOO presenta su catálogo encabezado por Jorge R. Gutiérrez y Emily Brundige",
+   "resumen": "HEEBOO, plataforma de entretenimiento en la que los creadores conservan la propiedad de sus obras, anunció en la World Animation Summit su primer grupo de proyectos, encabezado por el mexicano Jorge R. Gutiérrez. Sus comunidades fundadoras se lanzarán en enero de 2027.",
+   "fuente": "Animation Magazine",
+   "fecha": "2026-11-19",
+   "categoria": "Animación",
+   "url": "https://www.animationmagazine.net/2026/11/creator-driven-entertainment-platform-heeboo-unveils-exciting-slate-headlined-by-jorge-r-gutierrez/",
+   "apa": "Zahed, R. (2026, 19 de noviembre). Creator-driven platform HEEBOO unveils exciting slate headlined by Jorge R. Gutiérrez, Emily Brundige. Animation Magazine. https://www.animationmagazine.net/2026/11/creator-driven-entertainment-platform-heeboo-unveils-exciting-slate-headlined-by-jorge-r-gutierrez/"
+  },
+  {
+   "titulo": "«Invincible» revela la fecha de estreno de su quinta temporada en un nuevo avance de Burger Mart",
+   "resumen": "Prime Video anunció que la quinta temporada de la serie animada para adultos Invincible llegará el 17 de febrero de 2027. La cuarta temporada fue la más vista de la serie.",
+   "fuente": "Animation Magazine",
+   "fecha": "2026-11-19",
+   "categoria": "Televisión",
+   "url": "https://www.animationmagazine.net/2026/11/invincible-reveals-s5-premiere-date-in-new-burger-mart-teaser/",
+   "apa": "Milligan, M. (2026, 19 de noviembre). 'Invincible' reveals S5 premiere date in new Burger Mart teaser. Animation Magazine. https://www.animationmagazine.net/2026/11/invincible-reveals-s5-premiere-date-in-new-burger-mart-teaser/"
+  },
+  {
+   "titulo": "Disney adelanta el corto «Lilo & Scratch», que se estrenará en cines junto con «Hexed»",
+   "resumen": "Walt Disney Animation Studios mostró un adelanto de un nuevo cortometraje del universo de Lilo & Stitch, dirigido por Malcon Pierce y Fawn Veerasunthorn. Se proyectará antes del largometraje Hexed a partir del 25 de noviembre.",
+   "fuente": "Animation Magazine",
+   "fecha": "2026-11-19",
+   "categoria": "Animación",
+   "url": "https://www.animationmagazine.net/2026/11/disney-teases-lilo-scratch-short-debuting-in-theaters-with-hexed/",
+   "apa": "Animation Magazine. (2026, 19 de noviembre). Disney teases 'Lilo & Scratch' short, debuting in theaters with 'Hexed'. https://www.animationmagazine.net/2026/11/disney-teases-lilo-scratch-short-debuting-in-theaters-with-hexed/"
+  },
+  {
+   "titulo": "Así se creó la entrañable melodía de «The Violinist»",
+   "resumen": "El largometraje 2D de coproducción singapurense, española e italiana, codirigido por Ervin Han y Raúl García y ganador del Cristal en Annecy, se hizo entre unos diez países. El artículo explica cómo se repartieron las secuencias entre estudios y cómo usaron rotoscopia y captura de movimiento para las escenas de violín.",
+   "fuente": "Animation Magazine",
+   "fecha": "2026-11-18",
+   "categoria": "Animación",
+   "url": "https://www.animationmagazine.net/2026/11/crafting-the-violinists-heartfelt-melody/",
+   "apa": "Campbell, K. (2026, 18 de noviembre). Crafting 'The Violinist's heartfelt melody. Animation Magazine. https://www.animationmagazine.net/2026/11/crafting-the-violinists-heartfelt-melody/"
+  },
   {
    "titulo": "Netflix resucita «Grendel» como serie animada para adultos con Bobbypills",
    "resumen": "Netflix adaptará los cómics de Matt Wagner como serie animada para adultos, escrita y dirigida como showrunner por Bobak Esfarjani y animada por el estudio francés Bobbypills, tras cancelar hace cuatro años su versión en acción real.",
@@ -153,69 +216,6 @@
    "categoria": "Televisión",
    "url": "https://www.animationmagazine.net/2026/11/kadokawa-animation-confirms-rezero-starting-life-in-another-world-season-5/",
    "apa": "Milligan, M. (2026, 16 de noviembre). Kadokawa Animation confirms ‘Re:ZERO -Starting Life in Another World-’ season 5. Animation Magazine. https://www.animationmagazine.net/2026/11/kadokawa-animation-confirms-rezero-starting-life-in-another-world-season-5/"
-  },
-  {
-   "titulo": "Exclusiva: el ícono independiente Don Hertzfeldt habla sobre retratar una vida común como un 'rastro de papel' en su aclamado nuevo cortometraje",
-   "resumen": "Hertzfeldt explica cómo creó 'Paper Trail', un corto de 14 minutos que narra una vida a través de dibujos, tareas escolares y documentos, hecho en un año con software que no actualiza desde 2014. También critica la IA generativa por saltarse el aprendizaje que implica hacer arte y aconseja a los jóvenes animadores nutrirse de experiencias variadas.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-15",
-   "categoria": "Animación",
-   "url": "https://www.animationmagazine.net/2026/11/exclusive-indie-icon-don-hertzfeldt-on-depicting-an-average-life-as-a-paper-trail-in-his-widely-acclaimed-new-short/",
-   "apa": "Zahed, R. (2026, 15 de noviembre). Exclusive: Indie icon Don Hertzfeldt on depicting an average life as a 'Paper Trail' in his widely acclaimed new short. Animation Magazine. https://www.animationmagazine.net/2026/11/exclusive-indie-icon-don-hertzfeldt-on-depicting-an-average-life-as-a-paper-trail-in-his-widely-acclaimed-new-short/"
-  },
-  {
-   "titulo": "Nic Cabana, cofundador de Claynosaurz, presentará su nueva plataforma independiente HEEBOO en la World Animation Summit esta semana",
-   "resumen": "Cabana dará una conferencia sobre cómo crear propiedad intelectual original y convertir a los fans en un negocio sostenible, y mostrará HEEBOO, una plataforma con herramientas comunitarias y de negocio para que creadores independientes gestionen sus propias marcas de entretenimiento.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-15",
-   "categoria": "Animación",
-   "url": "https://www.animationmagazine.net/2026/11/claynosaurz-co-founder-nic-cabana-to-unveil-his-new-indie-platform-heeboo-at-the-world-animation-summit-this-week/",
-   "apa": "Zahed, R. (2026, 15 de noviembre). Claynosaurz co-founder Nic Cabana to unveil his new indie platform HEEBOO at the World Animation Summit this week. Animation Magazine. https://www.animationmagazine.net/2026/11/claynosaurz-co-founder-nic-cabana-to-unveil-his-new-indie-platform-heeboo-at-the-world-animation-summit-this-week/"
-  },
-  {
-   "titulo": "El premiado cortometraje animado 'The Apricot' se estrena en YouTube",
-   "resumen": "El corto 2D de Alex Z. Avila, realizado en la beca Spark Animation del Latino Film Institute, ya puede verse gratis en YouTube tras ganar el premio del jurado en el New York International Children's Film Festival, que lo califica para el Oscar. Basado en una historia real, sigue a un niño de 10 años que trabaja en la granja de chabacanos de su abuelo.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-14",
-   "categoria": "Animación",
-   "url": "https://www.animationmagazine.net/2026/11/award-winning-animated-short-the-apricot-makes-youtube-premiere/",
-   "apa": "Milligan, M. (2026, 14 de noviembre). Award-winning animated short 'The Apricot' makes YouTube premiere. Animation Magazine. https://www.animationmagazine.net/2026/11/award-winning-animated-short-the-apricot-makes-youtube-premiere/"
-  },
-  {
-   "titulo": "Los Premios del Cine Europeo presentan una de sus selecciones de animación más fuertes en años",
-   "resumen": "La Academia de Cine Europeo nominó a In Waves, Iron Boy, Jim Queen, Lucy Lost y Viva Carmen, todas producciones francesas, al mejor largometraje animado; la ceremonia será el 16 de enero de 2027 en Atenas.",
-   "fuente": "Cartoon Brew",
-   "fecha": "2026-11-14",
-   "categoria": "Animación",
-   "url": "https://www.cartoonbrew.com/awards/european-animation-award-nominees-269443.html",
-   "apa": "Lang, J. (2026, 14 de noviembre). European Film Awards unveil one of their strongest animation lineups in years. Cartoon Brew. https://www.cartoonbrew.com/awards/european-animation-award-nominees-269443.html"
-  },
-  {
-   "titulo": "'Wildwood' de LAIKA se acerca a los 70 millones de dólares en todo el mundo",
-   "resumen": "La película en stop-motion dirigida por Travis Knight suma unos 69.2 millones de dólares globales y cayó solo 20% en su tercer fin de semana en Norteamérica, el mejor sostenimiento de la taquilla.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-13",
-   "categoria": "Cine",
-   "url": "https://www.animationmagazine.net/2026/11/laikas-wildwood-nears-70-million-worldwide/",
-   "apa": "Animation Magazine. (2026, 13 de noviembre). LAIKA's 'Wildwood' nears $70 million worldwide. https://www.animationmagazine.net/2026/11/laikas-wildwood-nears-70-million-worldwide/"
-  },
-  {
-   "titulo": "Rosa intenso: los directores de 'Flamingo Flamenco' hablan de la nueva película de Studio 100 que despega en el AFM",
-   "resumen": "Raúl García y Rob Sprackling explican cómo la danza de cortejo de los flamencos inspiró esta cinta CG, animada en Maya en 3Doubles Producciones (Tenerife), y comparten su visión sobre el futuro de la animación y la IA.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-13",
-   "categoria": "Animación",
-   "url": "https://www.animationmagazine.net/2026/11/pretty-in-pink-flamingo-flamenco-directors-discuss-the-new-studio-100-movie-taking-flight-at-afm/",
-   "apa": "Zahed, R. (2026, 13 de noviembre). Pretty in pink: 'Flamingo Flamenco' directors discuss the new Studio 100 movie taking flight at AFM. Animation Magazine. https://www.animationmagazine.net/2026/11/pretty-in-pink-flamingo-flamenco-directors-discuss-the-new-studio-100-movie-taking-flight-at-afm/"
-  },
-  {
-   "titulo": "Ficción perruna: las creadoras de 'Doozie's Doghouse' presentan el spin-off",
-   "resumen": "El derivado de Gabby's Dollhouse de DreamWorks mezcla animación y acción real; unas 230 personas trabajaron en la serie, animada por CGCG (Taiwán) y Saffronic (India), ya disponible en Netflix.",
-   "fuente": "Animation Magazine",
-   "fecha": "2026-11-13",
-   "categoria": "Televisión",
-   "url": "https://www.animationmagazine.net/2026/11/pup-fiction-doozies-doghouse-creators-introduce-the-tail-wagging-spinoff/",
-   "apa": "Idelson, K. (2026, 13 de noviembre). Pup fiction: 'Doozie's Doghouse' creators introduce the tail-wagging spinoff. Animation Magazine. https://www.animationmagazine.net/2026/11/pup-fiction-doozies-doghouse-creators-introduce-the-tail-wagging-spinoff/"
   }
  ]
 }
