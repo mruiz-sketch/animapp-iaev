@@ -53,6 +53,11 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
   <div class="row" style="justify-content:space-between"><h1>ANIMAPP · Administrar</h1><a class="btn plain small" href="./#inicio">← Volver a ANIMAPP</a></div>
   <p class="muted">Sube los horarios y el contenido de "Sólo Profesores" como imagen (PNG o JPG), PDF o JSON. Solo las cuentas administradoras pueden guardar; las reglas de Firestore lo verifican.</p>
 
+  <section class="card">
+    <h2>Sesión</h2>
+    <div class="row"><button class="btn red" id="signIn">Iniciar sesión con Google</button><button class="btn plain" id="signOut" hidden>Cerrar sesión</button><span id="who" class="muted"></span></div>
+  </section>
+
   <section class="card" id="gruCard" hidden>
     <h2>Mensaje a grupos</h2>
     <p class="muted" style="margin-bottom:14px">Manda un aviso solo a los alumnos de uno o varios grupos. Les llega como notificación con tu nombre como encabezado; al tocarla, ANIMAPP abre una ventana con tu mensaje. Solo lo reciben quienes activaron «🔔 Activar avisos» y pusieron su cuatrimestre y grupo en su credencial.</p>
@@ -88,10 +93,6 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
 
   <section class="card" id="cfgCard" hidden><h2>Falta configurar</h2><p class="msg err">No hay configuración de Firebase en <b>firebase-config.js</b>.</p></section>
 
-  <section class="card">
-    <h2>Sesión</h2>
-    <div class="row"><button class="btn red" id="signIn">Iniciar sesión con Google</button><button class="btn plain" id="signOut" hidden>Cerrar sesión</button><span id="who" class="muted"></span></div>
-  </section>
 
   <section class="card" id="editCard" hidden>
     <h2>Sección</h2>
