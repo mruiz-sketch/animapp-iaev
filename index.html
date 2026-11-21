@@ -490,7 +490,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .qa-a{padding:4px 16px 16px 54px;font-size:19.5px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
 .prof-top{margin-bottom:22px}.prof-top .sai-btn{text-decoration:none;display:inline-block}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:14px;padding:18px 22px}
 .tpl-list{display:flex;flex-direction:column;gap:22px;padding:6px}.tpl-item{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
-.tpl-item .sai-btn{min-width:min(100%,300px);text-align:center}.panel .tpl-item a.sai-btn{text-decoration:none}.panel .tpl-d,.tpl-d{margin:0;flex:1 1 260px;max-width:60ch}.tpl-note{margin:26px 0 0;color:var(--ink-soft);font-size:16px}.tpl-intro{margin:0 0 22px;max-width:62ch}.psi-off{opacity:.55;cursor:default}
+.tpl-item .sai-btn{min-width:min(100%,300px);text-align:center}.panel .tpl-item a.sai-btn{text-decoration:none}.panel .tpl-d,.tpl-d{margin:0;flex:1 1 260px;max-width:60ch}.tpl-note{margin:26px 0 0;color:var(--ink-soft);font-size:16px}.reg-item{border:3px solid var(--ink);background:#fff;padding:14px 14px 12px;box-shadow:6px 6px 0 var(--iaev-yellow);margin-bottom:14px}.reg-item .tpl-d{margin:0 0 12px}.reg-t{margin:0 0 6px;font-family:var(--display);font-size:15px;line-height:1.45}.reg-btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.reg-sz{font-size:14px;color:var(--ink-soft)}.tpl-intro{margin:0 0 22px;max-width:62ch}.psi-off{opacity:.55;cursor:default}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:14px;text-decoration:none;display:inline-block}
 .bl-strip{display:flex;align-items:center;gap:16px;background:var(--paper);padding:14px;border-left:8px solid var(--cc);box-shadow:0 -3px 0 var(--ink),0 3px 0 var(--ink),-3px 0 0 var(--ink),3px 0 0 var(--ink)}
 .bl-nav{width:40px;height:40px;font-size:15px;flex:none}.bl-nav:disabled{opacity:.35;cursor:default}
@@ -2612,6 +2612,11 @@ const CONTENT={
  },
  qa:{ h:["Preguntas frecuentes","Frequently asked questions"], html:qaHTML },
  titulacion:{ html:titHTML, after:wireTit },
+ reglamento:{ h:["Documentos oficiales","Official documents"], html:()=>{ const base=inClaudeHost()?"https://animapp-iaev.pages.dev/":""; const i=LANG==="en"?1:0;
+   return `<div class="tpl-list">${REGLAMENTOS.map(d=>{ const u=base+"docs/reglamento/"+d.f; return `<div class="tpl-item reg-item"><h3 class="reg-t">${d.t[i]}</h3><p class="tpl-d">${d.d[i]}</p>
+     <div class="reg-btns"><a class="pbtn yellow portal-go-btn sai-btn" href="${u}" target="_blank" rel="noopener">${L("Ver PDF","View PDF")} ↗</a><a class="pbtn portal-go-btn sai-btn" href="${u}" download="${d.f}">${L("Descargar","Download")} ⬇</a><span class="reg-sz">${d.s}</span></div></div>`; }).join("")}</div>
+     <p class="tpl-note">${L("Documentos publicados en el Periódico Oficial «La Sombra de Arteaga».","Documents published in the official gazette «La Sombra de Arteaga».")}</p>`; },
+   after:()=>document.querySelectorAll(".reg-btns a").forEach(b=>b.addEventListener("click",()=>sfx.select())) },
  software:{ h:["Software por cuatrimestre","Software by term"], html:()=>SOFTWARE.length?`<div class="sw-list">${SOFTWARE.map(c=>`<div class="sw-term"><h3>${c.t[LANG==="en"?1:0]}</h3><ul>${c.items.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`:`<p class="tpl-note">${L("Muy pronto encontrarás aquí la lista de programas que se usan en cada cuatrimestre.","Coming soon: the list of programs used in each term.")}</p>` },
  psicologia:{ h:["Atención psicológica","Mental health support"], html:()=>`<p class="tpl-intro">${L("No estás solo. Si te sientes triste, con ansiedad, estrés o simplemente necesitas hablar con alguien, aquí hay personas que te pueden escuchar.","You are not alone. If you feel sad, anxious, stressed or just need to talk to someone, there are people here who can listen.")}</p>
    <div class="tpl-list">${PSICO.map(t=>{ const u=t.url(), lbl=t.t[LANG==="en"?1:0];
@@ -2944,6 +2949,12 @@ const PROF_PORTALS=[
  {src:"https://sai.upsrj.edu.mx/docentes.php",url:"https://sai.upsrj.edu.mx/docentes.php",t:["SAI Docentes","SAI · Faculty"]},
  {src:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",url:"http://131.196.245.78/SADMIN/Account/Login?ReturnUrl=%2fSADMIN%2f",t:["SRA","SRA"],insecure:true}];
 /* Atención psicológica. PSICO_UPSRJ: enlace o teléfono del psicólogo de la universidad (pendiente) */
+const REGLAMENTOS=[
+ {f:"reglamento-escolar-upsrj.pdf",s:"PDF · 2 MB",t:["Reglamento Escolar de la UPSRJ","UPSRJ School Regulations"],d:["Ingreso; derechos, obligaciones y sanciones del alumnado; reconocimientos y becas; estancias, estadías y tutorías; egreso y titulación.","Admission; student rights, duties and sanctions; awards and scholarships; internships and tutoring; graduation and degree."]},
+ {f:"reglamento-interior-upsrj.pdf",s:"PDF · 4 MB",t:["Reglamento Interior de la UPSRJ","UPSRJ Internal Regulations"],d:["Organización de la universidad y funciones de cada área.","How the university is organized and what each area does."]},
+ {f:"codigo-de-conducta-upsrj.pdf",s:"PDF · 3.4 MB",t:["Código de Conducta de la UPSRJ","UPSRJ Code of Conduct"],d:["Valores y conductas esperadas en la comunidad universitaria.","Values and expected behavior in the university community."]},
+ {f:"becas-embajadores-queretaro.pdf",s:"PDF · 0.5 MB",t:["Becas Embajadores Querétaro: acuerdo y reglas de operación","Becas Embajadores Querétaro: agreement and operating rules"],d:["Programa estatal de becas de movilidad: quién puede participar, requisitos, documentos y procedimiento.","State mobility scholarship program: who can apply, requirements, documents and process."]}
+];
 const PSICO_UPSRJ="";
 const PSICO=[
  {url:()=>PSICO_UPSRJ,c:"blue",t:["Psicólogo de la UPSRJ","UPSRJ psychologist"],d:["Contacto directo con el psicólogo de la universidad. Su consultorio está en el Learning Center (punto 11 del mapa).","Direct contact with the university psychologist. The office is in the Learning Center (point 11 on the map)."]},
