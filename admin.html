@@ -52,7 +52,6 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
 <main>
   <div class="row" style="justify-content:space-between"><h1>ANIMAPP · Administrar</h1><a class="btn plain small" href="./#inicio">← Volver a ANIMAPP</a></div>
   <p class="muted">Sube los horarios y el contenido de "Sólo Profesores" como imagen (PNG o JPG), PDF o JSON. Solo las cuentas administradoras pueden guardar; las reglas de Firestore lo verifican.</p>
-  <section class="card"><h2>Generador de horarios</h2><div class="row" style="justify-content:space-between"><p class="muted" style="margin:0">Arma el horario de un grupo con las materias del plan y publícalo directo en su pestaña de cuatrimestre.</p><a class="btn red" href="./generador-horarios.html" target="_blank" rel="opener">Abrir generador ↗</a></div></section>
 
   <section class="card" id="gruCard" hidden>
     <h2>Mensaje a grupos</h2>
@@ -84,6 +83,8 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
       <div class="row"><button class="btn red" id="avSend" disabled>Enviar aviso</button></div>
     </div>
   </section>
+
+  <section class="card"><h2>Generador de horarios</h2><div class="row" style="justify-content:space-between"><p class="muted" style="margin:0">Arma el horario de un grupo con las materias del plan y publícalo directo en su pestaña de cuatrimestre.</p><a class="btn red" href="./generador-horarios.html" target="_blank" rel="opener">Abrir generador ↗</a></div></section>
 
   <section class="card" id="cfgCard" hidden><h2>Falta configurar</h2><p class="msg err">No hay configuración de Firebase en <b>firebase-config.js</b>.</p></section>
 
