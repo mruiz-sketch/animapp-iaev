@@ -167,7 +167,7 @@ input[type=text],select{font:inherit;color:var(--fg);background:var(--bg);border
   <header class="apphead">
     <div>
       <h1 class="apptitle">Horarios IAEV</h1>
-      <p>Arma el horario de un grupo con las materias del mapa curricular de Ingeniería en Animación y Efectos Visuales. <a href="./admin.html">← Administrar ANIMAPP</a></p>
+      <p>Arma el horario de un grupo con las materias del mapa curricular de Ingeniería en Animación y Efectos Visuales. <a href="./admin.html" id="backAnimapp">← Volver a ANIMAPP</a></p>
     </div>
     <div class="actions">
       <button class="btn danger" id="clearBtn" type="button">Limpiar horario</button>
@@ -562,7 +562,7 @@ $('clearBtn').onclick=e=>{const b=e.currentTarget;
 /* ---- exportar (PDF, PNG, JPEG) ---- */
 const PER={'JANUARY - APRIL':['ENE-ABR','Enero – Abril',1],'MAY - AUGUST':['MAY-AGO','Mayo – Agosto',2],'SEPTEMBER - DECEMBER':['SEP-DIC','Septiembre – Diciembre',3]};
 const fileBase=()=>`Horario_IAEV-PA-${st.num}_${st.q==='P'?'Prope':st.q+'C'}_${PER[st.period][0]}-${st.year}`;
-let hcP=null;const hasClaude=()=>hcP||(hcP=new Promise(r=>{let n=0;(function t(){if(window.claude&&window.claude.use)return r(true);if(++n>20)return r(false);setTimeout(t,100)})()}));
+let hcP=null;const hasClaude=()=>hcP||(hcP=new Promise(r=>{if(window.top===window)return r(false);let n=0;(function t(){if(window.claude&&window.claude.use)return r(true);if(++n>20)return r(false);setTimeout(t,100)})()}));
 let dlP=null;const getDl=()=>dlP||(dlP=hasClaude().then(ok=>ok?window.claude.use('downloads'):null).catch(()=>null));
 async function snap(){await document.fonts.ready;return html2canvas($('sheet'),{scale:2,backgroundColor:'#ffffff',useCORS:true,windowWidth:1300})}
 const toBlob=(c,type,q)=>new Promise(r=>c.toBlob(r,type,q));
@@ -833,6 +833,9 @@ function all(){syncInputs();renderPalette();renderSheet();save()}
 all();
 })();
 </script>
-
+<script>
+// Si el generador se abrió en otra pestaña desde ANIMAPP, «Volver» la cierra: ANIMAPP sigue cargado y no se recarga.
+document.getElementById('backAnimapp').addEventListener('click',e=>{ if(window.opener&&!window.opener.closed){ e.preventDefault(); try{window.opener.focus()}catch(_){} window.close(); } });
+</script>
 </body>
 </html>
