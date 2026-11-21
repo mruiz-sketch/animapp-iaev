@@ -367,7 +367,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bw-grp{margin:0 0 18px;border:3px solid var(--ink);background:#fff}
 .bw-gh{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 10px;background:var(--paper);border-bottom:3px solid var(--ink);font-size:16px}
 .bw-gh b{font-family:var(--display);font-size:13px}
-.bw-gh input{font:16px var(--body);padding:4px 8px;border:2px solid var(--ink);min-width:12ch;flex:1;max-width:260px}
+.bw-gh input{font:16px var(--body);padding:4px 8px;border:2px solid var(--ink);min-width:0;width:100%;flex:1;max-width:260px}.bw-gh label{min-width:0;max-width:100%}
 .bw-gh button{font:600 14px var(--body);padding:4px 10px;border:2px solid var(--ink);background:var(--iaev-yellow);cursor:pointer}
 .bw-scroll{overflow-x:auto}
 .bw-t{border-collapse:collapse;font-size:14px;min-width:100%}
@@ -1920,6 +1920,7 @@ const SEC_EN={blog:["Blog","News, articles and updates about the program, writte
  mapas:["Maps","Find the university's buildings, labs, classrooms and spaces."],
  material:["Supplies & Equipment","Supply lists by course, plus computer, tablet and software requirements."],
  software:["Software","The programs you will use in each term of the program."],
+ bienestar:["Student wellbeing","Each student's mood meter by term and group."],
  psicologia:["Mental Health Support","University psychological support and free lines to talk with someone whenever you need it."],
  upsrj:["UPSRJ Website","Open the official website of the Universidad Politécnica de Santa Rosa Jáuregui."],
  sai:["SAI","Access the university's Integrated Administration System to check grades and paperwork."],
@@ -2233,9 +2234,11 @@ const SECTIONS=[
  {id:"profesores",t:"Sólo Profesores",d:"Espacio de recursos y avisos exclusivo para el personal docente.",pro:true}
 ];
 
+ICONS32.bienestar=ICONS32.psicologia; if(ICONS.profesores&&!ICONS.bienestar) ICONS.bienestar=ICONS.profesores;
 const SUBSECTIONS=[
  {id:"plan-estudios",t:"Plan de estudios",d:"Consulta el mapa curricular de la carrera: materias por cuatrimestre, créditos y seriación.",parent:"nosotros"},
  {id:"qa",t:"Q&A",d:"Preguntas frecuentes sobre la carrera, inscripciones, materiales y vida estudiantil.",parent:"nosotros"},
+ {id:"bienestar",t:"Bienestar de alumnos",d:"Mood meter de cada alumno por cuatrimestre y grupo.",parent:"profesores"},
  {id:"academia",t:"Nuestros Profesores",d:"Conoce a los profesores de IAEV, sus áreas y proyectos.",parent:"nosotros"}
 ];
 Object.assign(SEC_EN,{"plan-estudios":["Curriculum","Check the program's curriculum map: courses by term, credits and prerequisites."],
@@ -3000,8 +3003,9 @@ function renderSection(id){
   iconSVG($("readBtn").querySelector("svg"),"speak");
   $("readBtn").addEventListener("click",()=>{ if(synth&&synth.speaking){synth.cancel();return} say($("longText").innerText,true) });
   renderContent(id);
-  { const top=$("secTop"); if(id==="profesores"){ top.hidden=false; top.innerHTML=`<h2 class="sec-h2">${L("Portales docentes","Faculty portals")}</h2><div class="sai-btns">${PROF_PORTALS.map((p,k)=>`<a class="pbtn yellow portal-go-btn sai-btn" data-prof="${k}" href="${p.url}" target="_blank" rel="noopener">${p.t[LANG==="en"?1:0]} ↗</a>`).join("")}</div>`;
-      top.querySelectorAll("[data-prof]").forEach(b=>b.addEventListener("click",()=>sfx.select())); } else { top.hidden=true; top.innerHTML=""; } }
+  { const top=$("secTop"); if(id==="profesores"){ top.hidden=false; top.innerHTML=`<h2 class="sec-h2">${L("Portales docentes","Faculty portals")}</h2><div class="sai-btns">${PROF_PORTALS.map((p,k)=>`<a class="pbtn yellow portal-go-btn sai-btn" data-prof="${k}" href="${p.url}" target="_blank" rel="noopener">${p.t[LANG==="en"?1:0]} ↗</a>`).join("")}</div>
+      <h2 class="sec-h2 sec-h2-more">${L("Bienestar de alumnos","Student wellbeing")}</h2><div class="sai-btns"><a class="pbtn blue portal-go-btn sai-btn" data-prof="b" href="#bienestar">${L("Ver mood meter de alumnos →","See students' mood meter →")}</a></div>`;
+      top.querySelectorAll("[data-prof]").forEach(b=>b.addEventListener("click",e=>{ sfx.select(); if(b.dataset.prof==="b"){ e.preventDefault(); go("bienestar"); } })); } else { top.hidden=true; top.innerHTML=""; } }
   gate(id);
   if(id==="mapas"){ $("secBody").innerHTML='<p class="short">'+L('Explora el campus de la UPSRJ: pasa el cursor sobre un edificio para ver su nombre y haz clic en un lugar para que los coyotes caminen hasta allá. También puedes elegir un destino en la lista de lugares.','Explore the UPSRJ campus: hover over a building to see its name and click a place so the coyotes walk there. You can also pick a destination from the list of places.')+'</p>' }
 }
@@ -3234,7 +3238,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("idModal").hidd
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const escBr=t=>esc(t).replace(/\n/g,"<br>");
 const safeUrl=u=>/^https?:\/\//i.test(u||"")?esc(u):"#";
-function needOf(id){ return id==="profesores"?"prof":(id==="horarios"||/^horario-\d$/.test(id))?"upsrj":null; }
+function needOf(id){ return id==="profesores"||id==="bienestar"?"prof":(id==="horarios"||/^horario-\d$/.test(id))?"upsrj":null; }
 function refreshGated(){ if(current!=="section") return; const id=location.hash.slice(1); if(needOf(id)) renderSection(id); }
 function lockHTML(need,msg){ return `<div class="lock"><svg class="px" id="lockIco"></svg>
   <h2>${need==="prof"?L("Sección solo para docentes","Faculty-only section"):L("Sección para la comunidad UPSRJ","UPSRJ community section")}</h2><p>${msg}</p>
@@ -3248,11 +3252,12 @@ function gate(id){
   else if(need==="prof"&&!profEmails().includes((auth.user.email||"").toLowerCase())) msg=L(`Tu cuenta (${esc(auth.user.email)}) no está registrada como docente de la Academia IAEV.`,`Your account (${esc(auth.user.email)}) isn't registered as IAEV Academy faculty.`);
   if(msg!==null){ sb.innerHTML=lockHTML(need,msg); iconSVG($("lockIco"),"lock"); $("lockLogin")?.addEventListener("click",()=>{ sfx.select(); signIn(); }); return; }
   if(id==="horarios") return;
+  if(id==="bienestar"){ $("secTop").hidden=true; sb.innerHTML=""; loadBienestar(sb,id); return; }
   sb.innerHTML=`<p class="cal-none">${L("Cargando…","Loading…")}</p>`;
   const db=firebase.firestore(), ref=id==="profesores"?db.collection("profesores").doc("contenido"):db.collection("horarios").doc(id.split("-")[1]);
   ref.get().then(d=>{ if(location.hash.slice(1)!==id) return; const v=d.exists?d.data():null;
       const hasF=v&&Array.isArray(v.archivos)&&v.archivos.length, hasJ=v&&(id==="profesores"?((v.avisos||[]).length||(v.recursos||[]).length):(v.grupos||[]).length);
-      if(id==="profesores") setTimeout(()=>{ loadProfCal(sb,id); loadBienestar(sb,id); },0);
+      if(id==="profesores") setTimeout(()=>loadProfCal(sb,id),0);
       if(hasF){ showFiles(sb,ref,v,id); if(hasJ) sb.insertAdjacentHTML("beforeend",id==="profesores"?profHTML(v):horarioHTML({...v,actualizado:null})); return; }
       sb.innerHTML=id==="profesores"?profHTML(v):horarioHTML(v); })
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
