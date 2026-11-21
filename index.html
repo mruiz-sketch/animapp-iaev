@@ -3406,6 +3406,15 @@ function gate(id){
     .catch(e=>{ if(location.hash.slice(1)!==id) return; sb.innerHTML=lockHTML(need,e&&e.code==="permission-denied"?L("Tu cuenta no tiene permiso para ver esta sección.","Your account doesn't have access to this section."):L("No se pudo cargar la información. Revisa tu conexión e intenta de nuevo.","Couldn't load the information. Check your connection and try again.")); iconSVG($("lockIco"),"lock"); });
 }
 /* Archivos (PNG/JPG/PDF) guardados en Firestore en partes base64: doc.archivos=[{id,titulo,tipo,nombre,partes}], partes en <doc>/partes/<id>-<k> {d} */
+/* Imagen publicada → PDF tamaño carta (jsPDF se carga solo al pedirlo) */
+function imgPDF(btn,url,tipo,name){ const t=btn.textContent; btn.disabled=true; btn.textContent=L("Generando PDF…","Making PDF…");
+  (window.jspdf?Promise.resolve():new Promise((ok,ko)=>{const e=document.createElement("script");e.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";e.onload=ok;e.onerror=ko;document.head.appendChild(e);}))
+  .then(()=>new Promise((ok,ko)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=ko;im.src=url;}))
+  .then(im=>{ const w=im.naturalWidth,h=im.naturalHeight,pdf=new jspdf.jsPDF({orientation:w>h?"landscape":"portrait",unit:"pt",format:"letter"});
+    const pw=pdf.internal.pageSize.getWidth(),ph=pdf.internal.pageSize.getHeight(),m=24,k=Math.min((pw-2*m)/w,(ph-2*m)/h);
+    pdf.addImage(im,tipo==="image/png"?"PNG":"JPEG",(pw-w*k)/2,(ph-h*k)/2,w*k,h*k); pdf.save(name); btn.textContent=t; })
+  .catch(()=>{ btn.textContent=L("No se pudo generar el PDF","Couldn't make the PDF"); setTimeout(()=>btn.textContent=t,3000); })
+  .finally(()=>{ btn.disabled=false; }); }
 let fileURLs=[];
 function showFiles(sb,ref,v,id){
   fileURLs.forEach(u=>URL.revokeObjectURL(u)); fileURLs=[];
@@ -3419,7 +3428,8 @@ function showFiles(sb,ref,v,id){
       const dl=`<a class="pbtn yellow fl-dl" href="${url}" download="${esc(a.nombre||"archivo")}">${L("⬇ Descargar","⬇ Download")}</a>`;
       if(a.tipo==="application/pdf"){ box.innerHTML=`<a class="fl-pages" href="${url}" target="_blank" rel="noopener" aria-label="${esc(L("Abrir PDF: ","Open PDF: ")+(a.titulo||a.nombre))}"><p class="cal-none">${L("Preparando vista…","Preparing preview…")}</p></a><div class="fl-act"><a class="pbtn fl-dl" href="${url}" target="_blank" rel="noopener">${L("Abrir PDF ↗","Open PDF ↗")}</a>${dl}</div>`;
         pdfFit(box.querySelector(".fl-pages"),u8,url,a.titulo||a.nombre); }
-      else box.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img class="fl-img" src="${url}" alt="${esc(a.titulo||a.nombre)}"></a><div class="fl-act">${dl}</div>`;
+      else{ box.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img class="fl-img" src="${url}" alt="${esc(a.titulo||a.nombre)}"></a><div class="fl-act">${dl}<button type="button" class="pbtn fl-dl" data-pdf>${L("⬇ Descargar PDF","⬇ Download PDF")}</button></div>`;
+        box.querySelector("[data-pdf]").onclick=e=>imgPDF(e.currentTarget,url,a.tipo,(a.nombre||a.titulo||"horario").replace(/\.[^.]+$/,"")+".pdf"); }
     }catch(e){ box.innerHTML=`<p class="cal-none">${L("No se pudo cargar este archivo.","Couldn't load this file.")}</p>`; } });
 }
 /* PDF a lo ancho de la pantalla: cada página se dibuja con PDF.js para que el horario se vea completo en celular.
