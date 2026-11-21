@@ -5,6 +5,13 @@
 //      y al tocarlo se abre ANIMAPP con una ventana del aviso (/?aviso=…)
 import { json, DOCENTES, usuario, enviar, firestore, okGrupo } from "../_lib/google.js";
 
+// Encabezado de los mensajes a grupos: título y nombre de cada docente
+const FIRMAS = {
+  "ezermeno@upsrj.edu.mx": "Mtra. Elia", "acarrizalez@upsrj.edu.mx": "Prof. Aziz", "mruiz@upsrj.edu.mx": "Mtra. Melanie",
+  "chernandez@upsrj.edu.mx": "Mtra. Carmina", "jsalgado@upsrj.edu.mx": "Mtro. Juan Carlos", "jzamora@upsrj.edu.mx": "Mtro. Francisco",
+  "iraragon@upsrj.edu.mx": "Prof. Isaí", "ghernandez@upsrj.edu.mx": "Mtro. Germán", "vibarra@upsrj.edu.mx": "Mtro. Víctor",
+};
+const firma = u => FIRMAS[u.email] || (u.name || u.email.split("@")[0]).split(/\s+/)[0];
 const b64u = s => btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
 export async function onRequest({ request, env }) {
@@ -17,7 +24,7 @@ export async function onRequest({ request, env }) {
     if (request.method === "GET") {
       const docs = await db.query("avisos_tokens", null, 5000);
       const grupos = {}; docs.forEach(d => { const g = d.data.grupo; if (okGrupo(g)) grupos[g] = (grupos[g] || 0) + 1; });
-      return json(200, { suscritos: docs.length, grupos, nombre: (u.name || u.email.split("@")[0]).split(/\s+/)[0] });
+      return json(200, { suscritos: docs.length, grupos, nombre: firma(u) });
     }
     if (request.method !== "POST") return json(405, { error: "Usa POST" });
     const b = await request.json().catch(() => ({}));
@@ -26,7 +33,7 @@ export async function onRequest({ request, env }) {
       const texto = String(b.body || "").trim().slice(0, 500);
       if (!grupos.length) return json(400, { error: "Elige al menos un grupo" });
       if (!texto) return json(400, { error: "Escribe el mensaje" });
-      const nombre = (u.name || u.email.split("@")[0]).split(/\s+/)[0].slice(0, 30);
+      const nombre = firma(u).slice(0, 40);
       const url = "/?aviso=" + b64u(JSON.stringify({ n: nombre, m: texto, g: grupos, t: Date.now() }));
       const ids = [];
       for (const g of grupos) ids.push(await enviar(env, { title: nombre, body: texto, url, tag: "grupo-" + Date.now(), topic: "g-" + g }));
