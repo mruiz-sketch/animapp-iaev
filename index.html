@@ -490,22 +490,29 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .qa-a{padding:4px 16px 16px 54px;font-size:19.5px}.qa-a p{margin:0}.qa-a ul{margin:0;padding-left:20px}
 .prof-top{margin-bottom:22px}.prof-top .sai-btn{text-decoration:none;display:inline-block}.sai-btns{display:flex;flex-wrap:wrap;gap:22px;padding:6px}.sai-btn{font-size:14px;padding:18px 22px}
 .tpl-list{display:flex;flex-direction:column;gap:22px;padding:6px}.tpl-item{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px}
-.tpl-item .sai-btn{min-width:min(100%,300px);text-align:center}.panel .tpl-item a.sai-btn{text-decoration:none}.panel .tpl-d,.tpl-d{margin:0;flex:1 1 260px;max-width:60ch}.tpl-note{margin:26px 0 0;color:var(--ink-soft);font-size:16px}.rc-wrap{display:grid;gap:22px;margin:0 0 8px}
-.rc{position:relative;border:3px solid var(--ink);background:#fff;box-shadow:6px 6px 0 #1fb5c0;overflow:hidden}
-.rc-view{overflow:hidden}
-.rc-track{display:flex;transition:transform .5s cubic-bezier(.4,.1,.2,1)}
-.rc-slide{flex:0 0 100%;min-height:300px;box-sizing:border-box;padding:26px 56px 70px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
-  background:linear-gradient(170deg,transparent 78%,#5fd3d6 78.3%,#1fb5c0 86%,#0e8f9c 100%)}
-.rc-slide h3{margin:0 0 12px;font-family:var(--display);font-size:clamp(20px,5vw,30px);line-height:1.35;text-transform:uppercase}
-.rc-slide h4{margin:0 0 10px;font-family:var(--display);font-size:15px;color:var(--iaev-red)}
-.rc-slide p{margin:0;font-size:17px;line-height:1.5;max-width:58ch}
-.rc-cover p{font-weight:700;font-size:16px}
-.rc-btn{position:absolute;top:calc(50% - 30px);width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);background:rgba(255,255,255,.92);font-size:14px;cursor:pointer;display:grid;place-items:center}
+.tpl-item .sai-btn{min-width:min(100%,300px);text-align:center}.panel .tpl-item a.sai-btn{text-decoration:none}.panel .tpl-d,.tpl-d{margin:0;flex:1 1 260px;max-width:60ch}.tpl-note{margin:26px 0 0;color:var(--ink-soft);font-size:16px}.rc-wrap{display:grid;gap:26px;margin:0 0 8px}
+.rc{--rc:var(--iaev-red);position:relative;border:4px solid var(--ink);background:var(--card);box-shadow:8px 8px 0 var(--ink);overflow:hidden}
+.rc[data-ci="1"]{--rc:var(--iaev-blue)}
+.rc-bar{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--rc);border-bottom:4px solid var(--ink);color:#fff;font-family:var(--display);font-size:12px;line-height:1.4}
+.rc[data-ci="1"] .rc-bar{color:var(--ink)}
+.rc-bar b{margin-left:auto;font-weight:400;white-space:nowrap}
+.rc-view{overflow:hidden;background:var(--card) repeating-linear-gradient(0deg,transparent 0 23px,var(--paper) 23px 24px)}
+.rc-track{display:flex;transition:transform .45s steps(6,end)}
+.rc-slide{flex:0 0 100%;min-height:280px;box-sizing:border-box;padding:24px 58px 26px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.rc-slide h3{margin:0 0 14px;font-family:var(--display);font-size:clamp(18px,4.6vw,26px);line-height:1.45;text-transform:uppercase;text-shadow:2px 2px 0 #f2b8bd}
+.rc[data-ci="1"] .rc-slide h3{text-shadow:2px 2px 0 #f5df8c}
+.rc-slide h4{margin:0 0 12px;padding:6px 10px;background:var(--rc);color:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);font-family:var(--display);font-size:13px}
+.rc[data-ci="1"] .rc-slide h4{color:var(--ink)}
+.rc-slide p{margin:0;font-size:17px;line-height:1.55;max-width:58ch}
+.rc-cover p{font-weight:700;font-size:16px;color:var(--ink-soft)}
+.rc-btn{position:absolute;top:calc(50% + 4px);transform:translateY(-50%);width:38px;height:38px;border:3px solid var(--ink);background:var(--iaev-yellow);box-shadow:3px 3px 0 var(--ink);font-size:13px;cursor:pointer;display:grid;place-items:center;padding:0;color:var(--ink)}
+.rc-btn:active{transform:translate(2px,calc(-50% + 2px));box-shadow:1px 1px 0 var(--ink)}
 .rc-prev{left:8px}.rc-next{right:8px}
-.rc-dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:7px}
-.rc-dots button{width:10px;height:10px;border-radius:50%;border:2px solid #fff;background:rgba(255,255,255,.45);padding:0;cursor:pointer}
-.rc-dots button[aria-current]{background:#fff}
-@media (max-width:480px){.rc-slide{padding:22px 46px 64px;min-height:340px}.rc-slide p{font-size:15.5px}.rc-btn{width:32px;height:32px}.rc-prev{left:5px}.rc-next{right:5px}}
+.rc-dots{display:flex;justify-content:center;gap:8px;padding:10px 0 12px;border-top:3px dashed var(--paper-2);background:var(--card)}
+.rc-dots button{width:12px;height:12px;border:2px solid var(--ink);background:var(--card);padding:0;cursor:pointer}
+.rc-dots button[aria-current]{background:var(--rc)}
+@media (max-width:480px){.rc-slide{padding:20px 46px 22px;min-height:300px}.rc-slide p{font-size:15.5px}.rc-btn{width:32px;height:32px}.rc-prev{left:5px}.rc-next{right:5px}.rc-bar{font-size:11px}}
+@media (prefers-reduced-motion:reduce){.rc-track{transition:none}}
 .reg-item{border:3px solid var(--ink);background:#fff;padding:14px 14px 12px;box-shadow:6px 6px 0 var(--iaev-yellow);margin-bottom:14px}.reg-item .tpl-d{margin:0 0 12px}.reg-t{margin:0 0 6px;font-family:var(--display);font-size:15px;line-height:1.45}.reg-btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}.reg-sz{font-size:14px;color:var(--ink-soft)}.tpl-intro{margin:0 0 22px;max-width:62ch}.psi-off{opacity:.55;cursor:default}
 .pdf-btns{display:flex;flex-wrap:wrap;gap:18px;margin:4px 4px 26px}.pdf-btn{font-size:14px;text-decoration:none;display:inline-block}
 .bl-strip{display:flex;align-items:center;gap:16px;background:var(--paper);padding:14px;border-left:8px solid var(--cc);box-shadow:0 -3px 0 var(--ink),0 3px 0 var(--ink),-3px 0 0 var(--ink),3px 0 0 var(--ink)}
@@ -2988,11 +2995,11 @@ const REG_CARR=[
   ["Artículo 230. II.","De mil quinientos hasta ocho mil veces el valor diario de la Unidad de Medida y Actualización en los demás casos previstos en el artículo anterior. Se aplicará multa adicional de hasta setecientas veces el valor diario de la Unidad de Medida y Actualización, a quien persista en la infracción. Las sanciones previstas en este Capítulo se impondrán además de la indemnización que corresponda por daños y perjuicios a los afectados, en los términos de lo dispuesto en los artículos 213 y 216 Bis de esta Ley y sin perjuicio de las sanciones penales correspondientes."]]}
 ];
 function regCarrHTML(){ return `<div class="rc-wrap">${REG_CARR.map((c,ci)=>{ const sl=[[null,c.t,c.s]].concat(c.sl);
-  return `<section class="rc" data-ci="${ci}" aria-roledescription="carrusel" aria-label="${esc(c.t)}"><div class="rc-view"><div class="rc-track">${sl.map((x,k)=>`<div class="rc-slide${k?"":" rc-cover"}" role="group" aria-roledescription="diapositiva" aria-label="${k+1} / ${sl.length}">${k?`<h4>${esc(x[0])}</h4><p>${esc(x[1])}</p>`:`<h3>${esc(x[1])}</h3><p>${esc(x[2])}</p>`}</div>`).join("")}</div></div>
+  return `<section class="rc" data-ci="${ci}" aria-roledescription="carrusel" aria-label="${esc(c.t)}"><div class="rc-bar"><span>${esc(c.s)}</span><b class="rc-n">1/${sl.length}</b></div><div class="rc-view"><div class="rc-track">${sl.map((x,k)=>`<div class="rc-slide${k?"":" rc-cover"}" role="group" aria-roledescription="diapositiva" aria-label="${k+1} / ${sl.length}">${k?`<h4>${esc(x[0])}</h4><p>${esc(x[1])}</p>`:`<h3>${esc(x[1])}</h3><p>${esc(x[2])}</p>`}</div>`).join("")}</div></div>
     <button class="rc-btn rc-prev" aria-label="${L("Anterior","Previous")}">◀</button><button class="rc-btn rc-next" aria-label="${L("Siguiente","Next")}">▶</button>
     <div class="rc-dots">${sl.map((_,k)=>`<button aria-label="${k+1}"${k?"":' aria-current="true"'}></button>`).join("")}</div></section>`; }).join("")}</div>`; }
 function wireRegCarr(){ document.querySelectorAll(".rc").forEach(rc=>{ const tr=rc.querySelector(".rc-track"), n=tr.children.length, dots=[...rc.querySelectorAll(".rc-dots button")]; let i=0, t=0, x0=null;
-  const show=k=>{ i=(k+n)%n; tr.style.transform=`translateX(${-100*i}%)`; dots.forEach((d,j)=>d.toggleAttribute("aria-current",j===i)); };
+  const show=k=>{ i=(k+n)%n; tr.style.transform=`translateX(${-100*i}%)`; dots.forEach((d,j)=>d.toggleAttribute("aria-current",j===i)); rc.querySelector(".rc-n").textContent=(i+1)+"/"+n; };
   const auto=()=>{ clearInterval(t); if(!matchMedia("(prefers-reduced-motion: reduce)").matches) t=setInterval(()=>{ if(!document.body.contains(rc)) return clearInterval(t); show(i+1); },7000); };
   rc.querySelector(".rc-prev").onclick=()=>{ sfx.select(); show(i-1); auto(); }; rc.querySelector(".rc-next").onclick=()=>{ sfx.select(); show(i+1); auto(); };
   dots.forEach((d,j)=>d.onclick=()=>{ sfx.select(); show(j); auto(); });
