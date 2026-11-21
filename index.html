@@ -378,6 +378,19 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bw-t th.d.we{background:#f3f4f7}
 .bw-t td.c{width:22px;height:30px}
 .bw-t td.c.x{cursor:help}@media (max-width:560px){.bw-t th.n,.bw-t td.n{min-width:130px;max-width:150px}}
+.bw-name{all:unset;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;color:var(--ink)}.bw-name:hover,.bw-name:focus-visible{color:var(--iaev-red);outline:2px solid var(--iaev-red);outline-offset:2px}
+#bwmBody{padding:16px 18px 20px}
+.bwr-meta{margin:0 0 10px;font-size:16px;color:var(--ink-soft);word-break:break-word}
+.bwr-k{margin:0 0 8px;font-size:17px}
+.bwr-warn{margin:0 0 10px;padding:8px 10px;background:#ffe3e3;border-left:6px solid #d10000;font-size:16px;font-weight:600}
+.bwr-h{margin:16px 0 8px;font-family:var(--display);font-size:13px;color:var(--iaev-red)}
+.bwr-bar{display:flex;height:22px;border:3px solid var(--ink)}.bwr-bar span{display:block}
+.bwr-leg{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:15px}
+.bwr-leg i,.bwr-list i{display:inline-block;width:14px;height:14px;border:1px solid var(--ink);margin-right:6px;vertical-align:-2px}
+.bwr-emo{display:flex;flex-wrap:wrap;gap:6px;margin:0}.bwr-emo span{padding:4px 8px;background:var(--paper);border:2px solid var(--ink);font-size:15px}
+.bwr-list{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto;border:2px solid #d6dae2}
+.bwr-list li{display:flex;gap:8px;align-items:baseline;padding:7px 10px;border-bottom:1px solid #e3e6ec;font-size:15px}
+.bwr-list .d{min-width:11ch;white-space:nowrap;color:var(--ink-soft)}
 .bw-alert{display:inline-block;margin-left:6px;font-size:12.5px;font-weight:700;color:#b3000c}
 .id-acts{display:flex;flex-wrap:wrap;gap:14px}.id-admin{text-decoration:none;background:var(--iaev-blue);color:#fff}
 .id-out{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 4px}
@@ -1867,6 +1880,13 @@ requestAnimationFrame(frame);
   </div>
 </div>
 
+<div class="modal" id="bwModal" hidden role="dialog" aria-modal="true" aria-labelledby="bwmTitle">
+  <div class="id-panel mm-panel">
+    <div class="id-head"><span id="bwmTitle">Resumen</span><button class="id-x" id="bwmClose" aria-label="Cerrar">X</button></div>
+    <div id="bwmBody"></div>
+  </div>
+</div>
+
 <div class="modal" id="moodModal" hidden role="dialog" aria-modal="true" aria-labelledby="mmTitle">
   <div class="id-panel mm-panel">
     <div class="id-head"><span id="mmTitle">¿Cómo te sientes hoy?</span><button class="id-x" id="mmClose" aria-label="Cerrar">X</button></div>
@@ -3326,7 +3346,7 @@ function drawBienestar(){ const box=$("bwBox"); if(!box||!bwData) return;
         <label style="display:flex;gap:6px;align-items:center;flex:1">${L("Tutor/a:","Tutor:")}<input data-k="${esc(k)}" class="bwTutIn" value="${esc(bwTut[k]||"")}" placeholder="${esc(L("Nombre del tutor","Tutor's name"))}"></label><button class="bwTutSave" data-k="${esc(k)}">${L("Guardar","Save")}</button></div>
         <div class="bw-scroll"><table class="bw-t"><thead><tr><th class="n" scope="col">${L("Alumno/a","Student")}</th>${[...Array(days)].map((_,d)=>{ const wd=new Date(Y,M,d+1).getDay(); return `<th class="d${wd===0||wd===6?" we":""}" scope="col">${d+1}</th>`; }).join("")}</tr></thead><tbody>
         ${al.map(x=>{ const dd=x.dias||{}, alert=last7.filter(k=>dd[k]&&(dd[k].n===2||dd[k].n===4)).length;
-          return `<tr><td class="n">${esc(x.nombre||L("(sin nombre)","(no name)"))}${x.matricula?` · ${esc(x.matricula)}`:""}${alert>=3?`<span class="bw-alert" title="${esc(L("Días en azul o rojo en los últimos 7 días","Blue or red days in the last 7 days"))}">⚠ ${alert}</span>`:""}<small>${esc(x.correo||"")}</small></td>
+          return `<tr><td class="n"><button class="bw-name" data-uid="${esc(x.uid)}" title="${esc(L("Ver resumen","See summary"))}">${esc(x.nombre||L("(sin nombre)","(no name)"))}</button>${x.matricula?` · ${esc(x.matricula)}`:""}${alert>=3?`<span class="bw-alert" title="${esc(L("Días en azul o rojo en los últimos 7 días","Blue or red days in the last 7 days"))}">⚠ ${alert}</span>`:""}<small>${esc(x.correo||"")}</small></td>
             ${[...Array(days)].map((_,d)=>{ const v=dd[ds(d+1)]; if(!v) return `<td class="c"></td>`; const m=MM[v.n]||MM[0];
               const tip=`${d+1} ${mes}: ${m.t[LANG==="en"?1:0]}${v.e&&v.e.length?" — "+v.e.join(", "):""}`;
               return `<td class="c x" style="background:${m.c}" title="${esc(tip)}" aria-label="${esc(tip)}"></td>`; }).join("")}</tr>`; }).join("")}
@@ -3335,10 +3355,37 @@ function drawBienestar(){ const box=$("bwBox"); if(!box||!bwData) return;
   $("bwPrev").onclick=()=>{ sfx.select(); bwMonth=M?[Y,M-1]:[Y-1,11]; drawBienestar(); };
   $("bwNext").onclick=()=>{ sfx.select(); bwMonth=M<11?[Y,M+1]:[Y+1,0]; drawBienestar(); };
   $("bwCua").onchange=e=>{ bwCua=e.target.value; drawBienestar(); };
+  box.querySelectorAll(".bw-name").forEach(b=>b.onclick=()=>{ sfx.select(); bwResumen(b.dataset.uid); });
   box.querySelectorAll(".bwTutSave").forEach(b=>b.onclick=async()=>{ const k=b.dataset.k, v=box.querySelector(`.bwTutIn[data-k="${CSS.escape(k)}"]`).value.trim().slice(0,80);
     b.disabled=true; try{ await firebase.firestore().collection("profesores").doc("tutores").set({tutores:{[k]:v}},{merge:true}); bwTut[k]=v; toast(L("Tutor guardado.","Tutor saved.")); }
     catch(e){ toast(L("No se pudo guardar el tutor.","Couldn't save the tutor.")); } finally{ b.disabled=false; } });
 }
+/* Resumen general de un alumno (al tocar su nombre en Bienestar) */
+function bwResumen(uid){ const x=(bwData||[]).find(a=>a.uid===uid); if(!x) return;
+  const dd=x.dias||{}, fechas=Object.keys(dd).filter(k=>dd[k]&&MM[dd[k].n]).sort(), tot=fechas.length, T=i=>MM[i].t[LANG==="en"?1:0];
+  const fmt=k=>{ const [y,m,d]=k.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString(LANG==="en"?"en-US":"es-MX",{weekday:"short",day:"numeric",month:"short"}); };
+  const cnt=MM.map((_,i)=>fechas.filter(k=>dd[k].n===i).length);
+  const emo={}; fechas.forEach(k=>(dd[k].e||[]).forEach(e=>emo[e]=(emo[e]||0)+1));
+  const top=Object.entries(emo).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  let racha=0; for(let k=fechas.length-1;k>=0;k--){ const n=dd[fechas[k]].n; if(n===2||n===3||n===4) racha++; else break; }
+  const ult=fechas.slice(-14).reverse(), key=(x.cuatrimestre||"?")+"|"+String(x.grupo||"?").toUpperCase(), tut=bwTut[key];
+  $("bwmTitle").textContent=x.nombre||L("Alumno/a","Student"); $("bwmClose").setAttribute("aria-label",L("Cerrar","Close"));
+  $("bwmBody").innerHTML=`<div class="bwr">
+    <p class="bwr-meta">${x.matricula?`<b>${esc(x.matricula)}</b> · `:""}${esc(x.correo||"")}<br>${x.cuatrimestre?esc(x.cuatrimestre)+L("º cuatrimestre","th term"):L("Sin cuatrimestre","No term")} · ${x.grupo?L("Grupo ","Group ")+esc(String(x.grupo).toUpperCase()):L("Sin grupo","No group")}${tut?` · ${L("Tutor/a: ","Tutor: ")}${esc(tut)}`:""}</p>
+    ${!tot?`<p class="cal-none">${L("Todavía no ha respondido el mood meter.","Hasn't answered the mood meter yet.")}</p>`:`
+    <p class="bwr-k"><b>${tot}</b> ${L(tot===1?"día registrado":"días registrados",tot===1?"day recorded":"days recorded")} · ${L("del","from")} ${fmt(fechas[0])} ${L("al","to")} ${fmt(fechas[tot-1])}</p>
+    ${racha>=2?`<p class="bwr-warn">⚠ ${racha} ${L("respuestas seguidas en triste, ansiedad o enojo (las más recientes).","answers in a row in sad, anxiety or anger (most recent).")}</p>`:""}
+    <h3 class="bwr-h">${L("¿Cómo se ha sentido?","How has it been feeling?")}</h3>
+    <div class="bwr-bar" role="img" aria-label="${esc(MM.map((m,i)=>T(i)+": "+cnt[i]).join(", "))}">${MM.map((m,i)=>cnt[i]?`<span style="background:${m.c};flex:${cnt[i]}"></span>`:"").join("")}</div>
+    <ul class="bwr-leg">${MM.map((m,i)=>`<li><i style="background:${m.c}"></i>${esc(T(i))} <b>${cnt[i]}</b> <small>(${Math.round(cnt[i]*100/tot)}%)</small></li>`).join("")}</ul>
+    ${top.length?`<h3 class="bwr-h">${L("Emociones que más ha elegido","Most chosen emotions")}</h3><p class="bwr-emo">${top.map(([e,n])=>`<span>${esc(e)} <b>×${n}</b></span>`).join("")}</p>`:""}
+    <h3 class="bwr-h">${L("Últimas respuestas","Latest answers")}</h3>
+    <ul class="bwr-list">${ult.map(k=>{ const v=dd[k]; return `<li><i style="background:${MM[v.n].c}"></i><span class="d">${esc(fmt(k))}</span><span><b>${esc(T(v.n))}</b>${v.e&&v.e.length?" — "+esc(v.e.join(", ")):""}</span></li>`; }).join("")}</ul>`}
+  </div>`;
+  $("bwModal").hidden=false; $("bwmClose").focus(); }
+$("bwmClose").addEventListener("click",()=>{ sfx.back(); $("bwModal").hidden=true; });
+$("bwModal").addEventListener("click",e=>{ if(e.target.id==="bwModal") $("bwModal").hidden=true; });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("bwModal").hidden) $("bwModal").hidden=true; });
 /* Calendario docente: profesores/calendario { eventos:[{s,e,t}], actualizado } (se importa desde admin.html con el .ics) */
 function loadProfCal(sb,id){
   firebase.firestore().collection("profesores").doc("calendario").get().then(d=>{ if(location.hash.slice(1)!==id) return;
