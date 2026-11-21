@@ -43,6 +43,10 @@ progress{width:100%;height:14px}
 textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
 .av-prev{background:#26242a;color:#fff;padding:12px 14px;border-radius:12px;display:flex;gap:12px;align-items:flex-start;max-width:420px}
 .av-prev img{width:40px;height:40px;border-radius:8px;flex:none}.av-prev b{display:block}.av-prev span{opacity:.85;font-size:15px}
+.gru-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.gru-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:2px solid #26242a;background:#fff;cursor:pointer;font-size:15px}
+.gru-chip small{color:#5c6070}
+.gru-chip:has(input:checked){background:#ebc232}
 </style></head>
 <body>
 <main>
@@ -127,6 +131,18 @@ textarea.short{min-height:90px;font:inherit;font-weight:400;line-height:1.4}
       <input type="file" id="icsFile" accept=".ics,text/calendar" hidden>
       <p class="muted" id="icsInfo"></p>
       <div class="row"><button class="btn" id="icsSave" disabled>Guardar calendario</button></div>
+    </div>
+  </section>
+
+  <section class="card" id="gruCard" hidden>
+    <h2>Mensaje a grupos</h2>
+    <p class="muted" style="margin-bottom:14px">Manda un aviso solo a los alumnos de uno o varios grupos. Les llega como notificación con tu nombre como encabezado; al tocarla, ANIMAPP abre una ventana con tu mensaje. Solo lo reciben quienes activaron «🔔 Activar avisos» y pusieron su cuatrimestre y grupo en su credencial.</p>
+    <div class="row"><button class="btn" id="gruOpen">✉️ Escribir mensaje a grupos</button></div>
+    <div class="stack" id="gruForm" hidden style="margin-top:14px">
+      <div class="fld">Grupos <div id="gruList" class="gru-list"><span class="muted">Cargando grupos…</span></div></div>
+      <label class="fld">Mensaje <textarea class="short" id="gruMsg" maxlength="500" placeholder="Ej. Mañana la clase de Storyboard será en el Laboratorio de Animación."></textarea></label>
+      <div><p class="muted" style="margin-bottom:6px">Así se verá:</p><div class="av-prev"><img src="icons/icon-192.png" alt=""><div><b id="gruPT">Tu nombre</b><span id="gruPB"></span></div></div></div>
+      <div class="row"><button class="btn red" id="gruSend" disabled>Enviar mensaje</button></div>
     </div>
   </section>
 
@@ -263,18 +279,34 @@ else (async()=>{
   ["avT","avB"].forEach(k=>$(k).addEventListener("input",avPrev));
   async function avCount(){ $("avInfo").textContent="Revisando cuántos dispositivos tienen los avisos activados…";
     try{ const j=await avCall("GET"); $("avInfo").textContent=`Dispositivos con avisos activados: ${j.suscritos}.`; }
-    catch(e){ $("avInfo").textContent=/FIREBASE_SERVICE_ACCOUNT|404|Failed to fetch/.test(e.message)?"Los avisos aún no están conectados en Netlify (falta la clave de cuenta de servicio).":"No se pudo consultar: "+e.message; } }
+    catch(e){ $("avInfo").textContent=/FIREBASE_SERVICE_ACCOUNT|404|Failed to fetch/.test(e.message)?"Los avisos aún no están conectados (falta la clave de cuenta de servicio en Cloudflare).":"No se pudo consultar: "+e.message; } }
   $("avSend").onclick=async()=>{ const title=$("avT").value.trim(); if(!title) return;
     if(!confirm(`¿Enviar este aviso a todos los dispositivos suscritos?\n\n${title}\n${$("avB").value.trim()}`)) return;
     $("avSend").disabled=true;
     try{ await avCall("POST",{title,body:$("avB").value.trim(),url:$("avU").value}); msg("Aviso enviado. Llegará en unos segundos a quienes activaron los avisos.","ok"); $("avT").value=""; $("avB").value=""; avPrev(); }
     catch(e){ msg("No se pudo enviar el aviso: "+e.message,"err"); $("avSend").disabled=false; } };
+  /* --- mensaje a grupos --- */
+  let gruNombre="";
+  const gruSel=()=>[...document.querySelectorAll("#gruList input:checked")].map(x=>x.value);
+  function gruPrev(){ $("gruPT").textContent=gruNombre||"Tu nombre"; $("gruPB").textContent=$("gruMsg").value.trim(); const n=gruSel().length;
+    $("gruSend").disabled=!n||!$("gruMsg").value.trim(); $("gruSend").textContent=n?`Enviar mensaje a ${n} grupo${n>1?"s":""}`:"Enviar mensaje"; }
+  $("gruMsg").addEventListener("input",gruPrev);
+  $("gruOpen").onclick=async()=>{ const f=$("gruForm"); f.hidden=!f.hidden; if(f.hidden) return; $("gruList").innerHTML='<span class="muted">Cargando grupos…</span>';
+    try{ const j=await avCall("GET"); gruNombre=j.nombre||""; const gs=Object.entries(j.grupos||{}).sort((a,b)=>{ const [ca,ga]=a[0].split("-"),[cb,gb]=b[0].split("-"); return (+ca)-(+cb)||ga.localeCompare(gb); });
+      $("gruList").innerHTML=gs.length?gs.map(([g,n])=>`<label class="gru-chip"><input type="checkbox" value="${g}"> <b>${g.replace("-","º · ")}</b> <small>${n} disp.</small></label>`).join(""):'<span class="muted">Todavía ningún alumno con grupo en su credencial ha activado los avisos.</span>';
+      document.querySelectorAll("#gruList input").forEach(x=>x.onchange=gruPrev); gruPrev(); $("gruMsg").focus(); }
+    catch(e){ $("gruList").innerHTML=`<span class="muted">No se pudieron cargar los grupos: ${e.message}</span>`; } };
+  $("gruSend").onclick=async()=>{ const grupos=gruSel(), body=$("gruMsg").value.trim(); if(!grupos.length||!body) return;
+    if(!confirm(`¿Enviar este mensaje a ${grupos.length===1?"el grupo":"los grupos"} ${grupos.join(", ")}?\n\n${gruNombre}: ${body}`)) return;
+    $("gruSend").disabled=true;
+    try{ const j=await avCall("POST",{grupos,body}); msg(`Mensaje enviado a ${j.enviados} grupo${j.enviados>1?"s":""}. Llegará en unos segundos.`,"ok"); $("gruMsg").value=""; document.querySelectorAll("#gruList input").forEach(x=>x.checked=false); gruPrev(); }
+    catch(e){ msg("No se pudo enviar el mensaje: "+e.message,"err"); gruPrev(); } };
   window.avPrefill=(t,b,u)=>{ $("avT").value=t; $("avB").value=b; $("avU").value=u; avPrev(); };
   icsCard("",()=>db.collection("profesores").doc("calendario"),"Calendario docente guardado ({n} eventos). Ya se ve en Sólo Profesores.");
   icsCard("2",()=>db.collection("publico").doc("calendario"),"Calendario de alumnos guardado ({n} eventos). Ya se ve en la sección Calendario. Si quieres avisar a la comunidad, el aviso ya quedó listo abajo en «Enviar aviso».");
   const jsonVis=()=>{ $("jsonBox").hidden=isH(); }; jsonVis();
   $("target").onchange=()=>{ $("json").value=""; jsonVis(); refresh(); };
-  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; $("avCard").hidden=!u; if(u){ refresh(); avCount(); } });
+  auth.onAuthStateChanged(u=>{ $("signIn").hidden=!!u; $("signOut").hidden=!u; $("who").textContent=u?u.email:""; $("editCard").hidden=!u; $("calCard").hidden=!u; $("calCard2").hidden=!u; $("avCard").hidden=!u; $("gruCard").hidden=!u; if(u){ refresh(); avCount(); } });
   $("signIn").onclick=async()=>{ const p=new firebase.auth.GoogleAuthProvider(); p.setCustomParameters({hd:"upsrj.edu.mx",prompt:"select_account"});
     try{ await auth.signInWithPopup(p); }catch(e){ if(!/popup-closed|cancelled-popup/.test(e.code||"")) msg("No se pudo iniciar sesión: "+(e.message||e),"err"); } };
   $("signOut").onclick=()=>auth.signOut();

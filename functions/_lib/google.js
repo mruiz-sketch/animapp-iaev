@@ -98,16 +98,16 @@ export function firestore(env) {
 }
 
 // ---------- Mensajes (FCM) ----------
-export async function enviar(env, { title, body, url, tag }) {
+export async function enviar(env, { title, body, url, tag, topic }) {
   const data = {
     title: String(title || "ANIMAPP IAEV").slice(0, 80),
     body: String(body || "").slice(0, 240),
-    url: /^\/[^/]/.test(url || "") || url === "/" ? url : "/",
+    url: /^\/[^/]/.test(url || "") || url === "/" ? String(url).slice(0, 1800) : "/",
     tag: String(tag || "animapp").slice(0, 40),
   };
   const r = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId(env)}/messages:send`, {
     method: "POST", headers: { authorization: "Bearer " + await accessToken(env), "content-type": "application/json" },
-    body: JSON.stringify({ message: { topic: TOPIC, data, webpush: { headers: { Urgency: "high", TTL: "172800" } } } }),
+    body: JSON.stringify({ message: { topic: topic || TOPIC, data, webpush: { headers: { Urgency: "high", TTL: "172800" } } } }),
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error("FCM: " + (j.error?.message || r.status));
@@ -115,11 +115,17 @@ export async function enviar(env, { title, body, url, tag }) {
   return j.name;
 }
 // Alta/baja de un dispositivo en el tema (misma API que usa firebase-admin)
-export async function tema(env, token, alta) {
+// Grupo del alumno: "<cuatrimestre>-<GRUPO>", p. ej. "3-A". Tema FCM: "g-3-A".
+export function grupoKey(c, g) {
+  const cu = String(c ?? "").replace(/\D/g, "").slice(0, 2), gr = String(g ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+  return cu && gr ? cu + "-" + gr : "";
+}
+export const okGrupo = k => /^\d{1,2}-[A-Z0-9]{1,6}$/.test(String(k || ""));
+export async function tema(env, token, alta, topic) {
   const r = await fetch("https://iid.googleapis.com/iid/v1:" + (alta ? "batchAdd" : "batchRemove"), {
     method: "POST",
     headers: { authorization: "Bearer " + await accessToken(env), access_token_auth: "true", "content-type": "application/json" },
-    body: JSON.stringify({ to: "/topics/" + TOPIC, registration_tokens: [token] }),
+    body: JSON.stringify({ to: "/topics/" + (topic || TOPIC), registration_tokens: [token] }),
   });
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error("FCM tema: " + (j.error || r.status));
@@ -134,7 +140,7 @@ export async function usuario(idToken) {
   const j = await r.json().catch(() => ({}));
   const u = j.users?.[0];
   if (!r.ok || !u) { const e = new Error("Sesión no válida; vuelve a iniciar sesión."); e.status = 401; throw e; }
-  return { email: String(u.email || "").toLowerCase(), verified: !!u.emailVerified };
+  return { email: String(u.email || "").toLowerCase(), verified: !!u.emailVerified, name: String(u.displayName || "").trim() };
 }
 export async function sha40(t) {
   const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));

@@ -415,6 +415,7 @@ i.cat-ini,i.cat-eva,i.cat-tra,i.cat-des,i.cat-evt,i.cat-cap,i.cat-cum{background
 .bw-t td.c.x{cursor:help}@media (max-width:560px){.bw-t th.n,.bw-t td.n{min-width:130px;max-width:150px}}
 .bw-name{all:unset;cursor:pointer;font-weight:600;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;color:var(--ink)}.bw-name:hover,.bw-name:focus-visible{color:var(--iaev-red);outline:2px solid var(--iaev-red);outline-offset:2px}
 #bwmBody{padding:16px 18px 20px}
+.avm-msg{margin:0 0 14px;font-size:19px;line-height:1.55;white-space:normal;word-break:break-word}.avm-meta{margin:0;font-size:15px;color:var(--ink-soft)}#avmBody{padding:18px 18px 20px}
 .bwr-meta{margin:0 0 10px;font-size:16px;color:var(--ink-soft);word-break:break-word}
 .bwr-k{margin:0 0 8px;font-size:17px}
 .bwr-warn{margin:0 0 10px;padding:8px 10px;background:#ffe3e3;border-left:6px solid #d10000;font-size:16px;font-weight:600}
@@ -1938,6 +1939,13 @@ requestAnimationFrame(frame);
   </div>
 </div>
 
+<div class="modal" id="avisoModal" hidden role="dialog" aria-modal="true" aria-labelledby="avmTitle">
+  <div class="id-panel mm-panel">
+    <div class="id-head"><span id="avmTitle">Aviso</span><button class="id-x" id="avmClose" aria-label="Cerrar">X</button></div>
+    <div id="avmBody"></div>
+  </div>
+</div>
+
 <div class="modal" id="bwModal" hidden role="dialog" aria-modal="true" aria-labelledby="bwmTitle">
   <div class="id-panel mm-panel">
     <div class="id-head"><span id="bwmTitle">Resumen</span><button class="id-x" id="bwmClose" aria-label="Cerrar">X</button></div>
@@ -3182,7 +3190,7 @@ function onAuth(u){
   auth.user=u||null; auth.phase=u?"in":"out"; renderLogin(); refreshGated();
   if(!u){ perfil=null; perfilUid=null; renderAvatar(); }
   if(!$("idModal").hidden) renderID();
-  if(u) loadPerfil().then(()=>{ if(!$("idModal").hidden) renderID(); });
+  if(u) loadPerfil().then(()=>{ if(!$("idModal").hidden) renderID(); setTimeout(avSyncGrupo,1500); });
   if(!u){ animo=null; animoUid=null; } else { loadAnimo().then(()=>{ if(!$("idModal").hidden) renderID(); }); moodOnOpen(u); }
 }
 async function signIn(){
@@ -3354,7 +3362,8 @@ function moodOnOpen(u){ if(!u) return; let shown=""; try{ shown=sessionStorage.g
     if(a&&a.dias&&a.dias[hoyISO()]) return; /* ya respondió hoy */
     if(a&&a._err&&a._err!=="permission-denied") return; /* sin conexión: no insistir */
     try{ sessionStorage.setItem("mm-open",u.uid+"|"+hoyISO()); }catch(e){}
-    setTimeout(()=>{ if(auth.user&&auth.user.uid===u.uid&&$("moodModal").hidden) openMood(); },900); }); }
+    const abrir=()=>{ if(!auth.user||auth.user.uid!==u.uid||!$("moodModal").hidden) return; if(!$("avisoModal").hidden) return setTimeout(abrir,1000); openMood(); };
+    setTimeout(abrir,900); }); }
 function perfilRef(){ return firebase.firestore().collection("perfiles").doc(auth.user.uid); }
 function saveErr(e){ return e&&e.code==="permission-denied"?L("No se pudo guardar: falta publicar las reglas nuevas de Firestore.","Couldn't save: the new Firestore rules haven't been published."):L("No se pudo guardar. Revisa tu conexión e intenta de nuevo.","Couldn't save. Check your connection and try again."); }
 async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.replace(/\s+/g," ").trim(), mat=$("idMat").value.replace(/\s+/g,"").trim();
@@ -3362,7 +3371,7 @@ async function saveID(){ const b=$("idSave"); const nombre=$("idName").value.rep
   b.disabled=true; idMsg(L("Guardando…","Saving…"));
   try{ await fb(); const d={nombre,matricula:mat,correo:auth.user.email,actualizado:new Date().toISOString()};
     if($("idCua")){ d.cuatrimestre=$("idCua").value; d.grupo=$("idGrp").value.replace(/\s+/g," ").trim().toUpperCase().slice(0,12); }
-    await perfilRef().set(d,{merge:true}); perfil=Object.assign({},perfil,d); delete perfil._err; sfx.select(); idMsg(L("¡Listo! Tu credencial está actualizada.","Done! Your ID card is updated."),"ok"); }
+    await perfilRef().set(d,{merge:true}); perfil=Object.assign({},perfil,d); delete perfil._err; avSyncGrupo(); sfx.select(); idMsg(L("¡Listo! Tu credencial está actualizada.","Done! Your ID card is updated."),"ok"); }
   catch(e){ console.warn(e); idMsg(saveErr(e),"err"); } finally{ b.disabled=false; } }
 function shrinkPhoto(file){ return new Promise((ok,ko)=>{ const url=URL.createObjectURL(file), im=new Image();
   im.onload=()=>{ const W=240,H=292, r=Math.max(W/im.width,H/im.height), w=im.width*r, h=im.height*r;
@@ -3493,6 +3502,23 @@ function drawBienestar(){ const box=$("bwBox"); if(!box||!bwData) return;
     b.disabled=true; try{ await firebase.firestore().collection("profesores").doc("tutores").set({tutores:{[k]:v}},{merge:true}); bwTut[k]=v; toast(L("Tutor guardado.","Tutor saved.")); }
     catch(e){ toast(L("No se pudo guardar el tutor.","Couldn't save the tutor.")); } finally{ b.disabled=false; } });
 }
+/* Aviso de un profe a grupos: la notificación abre ANIMAPP con /?aviso=… ; al cerrar la ventana queda en el inicio */
+function avisoDesdeURL(){ let q; try{ q=new URLSearchParams(location.search).get("aviso"); }catch(e){} if(!q) return;
+  let a=null; try{ const b=atob(q.replace(/-/g,"+").replace(/_/g,"/")); a=JSON.parse(new TextDecoder().decode(Uint8Array.from(b,c=>c.charCodeAt(0)))); }catch(e){}
+  try{ history.replaceState(null,"",location.pathname); }catch(e){}
+  if(!a||!a.m) return;
+  const f=a.t?new Date(a.t).toLocaleString(LANG==="en"?"en-US":"es-MX",{weekday:"long",day:"numeric",month:"long",hour:"numeric",minute:"2-digit"}):"";
+  $("avmTitle").textContent="📣 "+L("Aviso de ","Message from ")+(a.n||L("tu profe","your teacher"));
+  $("avmBody").innerHTML=`<div class="avm"><p class="avm-msg">${esc(a.m).replace(/\n/g,"<br>")}</p>
+    <p class="avm-meta">${a.g&&a.g.length?L("Para: ","To: ")+a.g.map(g=>L("grupo ","group ")+esc(g)).join(", ")+(f?" · ":""):""}${esc(f)}</p>
+    <div class="mm-acts"><button class="pbtn yellow" id="avmOk">${L("Entendido","Got it")}</button></div></div>`;
+  $("avisoModal").hidden=false; $("avmOk").onclick=cerrarAviso; setTimeout(()=>$("avmOk").focus(),50); }
+function cerrarAviso(){ sfx.back(); $("avisoModal").hidden=true;
+  try{ const intro=$("intro"); if(intro&&!intro.hidden&&getComputedStyle(intro).display!=="none"&&intro.classList.contains("active")!==false&&$("startBtn").offsetParent) $("startBtn").click(); else if(location.hash&&location.hash!=="#inicio") $("homeBtn").click(); }catch(e){} }
+$("avmClose").addEventListener("click",cerrarAviso);
+$("avisoModal").addEventListener("click",e=>{ if(e.target.id==="avisoModal") cerrarAviso(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("avisoModal").hidden) cerrarAviso(); });
+setTimeout(avisoDesdeURL,400);
 /* Resumen general de un alumno (al tocar su nombre en Bienestar) */
 function bwResumen(uid){ const x=(bwData||[]).find(a=>a.uid===uid); if(!x) return;
   const dd=x.dias||{}, fechas=Object.keys(dd).filter(k=>dd[k]&&MM[dd[k].n]).sort(), tot=fechas.length, T=i=>MM[i].t[LANG==="en"?1:0];
@@ -3945,8 +3971,15 @@ function renderAvisos(){ const b=$("avisosBtn"); if(!b) return; const on=avIsOn(
 async function avMessaging(){ await fb(); if(!firebase.messaging) await loadJS(FB_BASE+"firebase-messaging-compat.js"); return firebase.messaging(); }
 async function avToken(){ const reg=await navigator.serviceWorker.register("sw.js"); await navigator.serviceWorker.ready;
   const m=await avMessaging(); const t=await m.getToken({vapidKey:FB_CFG.vapidKey,serviceWorkerRegistration:reg}); if(!t) throw new Error("sin token"); return t; }
-async function avPost(token,accion){ const r=await fetch(AV_FN,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({token,accion,lang:LANG})});
-  if(!r.ok){ let e=""; try{ e=(await r.json()).error }catch(_){} throw new Error("servidor "+r.status+" "+e); } }
+/* Grupo del alumno (de su credencial) para los mensajes que los profes mandan a grupos: "3-A" */
+const avGrupo=()=>{ if(!auth.user||!perfil) return ""; const c=String(perfil.cuatrimestre||"").replace(/\D/g,"").slice(0,2), g=String(perfil.grupo||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6); return c&&g?c+"-"+g:""; };
+async function avPost(token,accion){ const grupo=accion==="alta"?avGrupo():"";
+  const r=await fetch(AV_FN,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({token,accion,lang:LANG,grupo})});
+  if(!r.ok){ let e=""; try{ e=(await r.json()).error }catch(_){} throw new Error("servidor "+r.status+" "+e); }
+  if(accion==="alta") avSet(AV_KEY+"-g",grupo||"-"); }
+/* Si cambia el grupo de la credencial (o se inicia sesión), se actualiza la suscripción del dispositivo */
+async function avSyncGrupo(){ try{ if(!avIsOn()||inClaudeHost()||!avSupported()) return; const t=avGet(AV_KEY+"-t"); if(!t) return;
+  if((avGrupo()||"-")!==avGet(AV_KEY+"-g")) await avPost(t,"alta"); }catch(e){ console.warn("avisos grupo",e); } }
 async function avOn(){ const t=await avToken(); await avPost(t,"alta"); avSet(AV_KEY,"on"); avSet(AV_KEY+"-t",t); }
 async function avOff(){ const t=avGet(AV_KEY+"-t"); avSet(AV_KEY,""); avSet(AV_KEY+"-t","");
   try{ if(t) await avPost(t,"baja"); }catch(e){} try{ const m=await avMessaging(); await m.deleteToken(); }catch(e){} }
